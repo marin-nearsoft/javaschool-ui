@@ -1,8 +1,8 @@
 const config = {
-    "host": "",
-    "port": "",
+    "host": "http://localhost",
+    "port": "8080",
     "rest" : {
-        "size" : "",
+        "size" : "/api/size",
         "type" : "",
         "time" : "",
         "transport" : "",
