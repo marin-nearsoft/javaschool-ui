@@ -1,0 +1,24 @@
+package com.javaschool.webservices.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.javaschool.webservices.service.PackageService;
+
+@RestController
+@RequestMapping("packageInformation")
+public class PackageController {	
+	
+	@Autowired
+	private PackageService packageService;
+		
+		@GetMapping("/getSizes")
+		public List<String> test() {
+			return packageService.getSizes();
+		}
+
+}
