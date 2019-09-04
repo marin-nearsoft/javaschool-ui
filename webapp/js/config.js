@@ -1,5 +1,5 @@
 const config = {
-    "host": "localhost",
+    "host": "http://localhost",
     "port": "8080",
     "rest" : {
         "size" : "/size",
