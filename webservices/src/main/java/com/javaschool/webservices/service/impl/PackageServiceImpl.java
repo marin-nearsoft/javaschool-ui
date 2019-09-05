@@ -12,11 +12,25 @@ public class PackageServiceImpl implements PackageService {
 
 	@Override
 	public List<String> getSizes() {
-		List<String> list = new LinkedList<>();
-		list.add("test1");
-		list.add("test2");		
+		List<String> sizesList = new LinkedList<>();
 		
-		return list;
+		sizesList.add("SMALL");
+		sizesList.add("MEDIUM");		
+		sizesList.add("LARGE");
+		sizesList.add("EXTRA LARGE");
+		
+		return sizesList;
+	}
+
+	@Override
+	public List<String> getTypes() {
+		List<String> typesList = new LinkedList<String>(); 
+
+		typesList.add("BOX");
+		typesList.add("LETTER");
+		typesList.add("OTHER");
+		
+		return typesList;
 	}
 
 }

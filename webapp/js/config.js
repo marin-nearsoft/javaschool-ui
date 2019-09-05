@@ -3,7 +3,7 @@ const config = {
     "port": "8080",
     "rest" : {
         "size" : "/shippingRestAPI/packageInformation/getSizes",
-        "type" : "",
+        "type" : "/shippingRestAPI/packageInformation/getTypes",
         "time" : "",
         "transport" : "",
         "city" : "",

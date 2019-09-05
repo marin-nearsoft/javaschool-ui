@@ -17,8 +17,13 @@ public class PackageController {
 	private PackageService packageService;
 		
 		@GetMapping("/getSizes")
-		public List<String> test() {
+		public List<String> getSizes() {
 			return packageService.getSizes();
+		}
+		
+		@GetMapping("/getTypes")
+		public List<String> getTypes(){
+			return packageService.getTypes();
 		}
 
 }
