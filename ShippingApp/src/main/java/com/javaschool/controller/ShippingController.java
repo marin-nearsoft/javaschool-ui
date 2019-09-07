@@ -1,6 +1,6 @@
 package com.javaschool.controller;
 
-import com.javaschool.model.ShippingService;
+import com.javaschool.service.ShippingService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

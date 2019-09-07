@@ -1,6 +1,6 @@
 package com.javaschool.queue;
 
-import com.javaschool.model.ShippingService;
+import com.javaschool.service.ShippingService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

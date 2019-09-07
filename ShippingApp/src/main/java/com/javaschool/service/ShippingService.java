@@ -1,4 +1,4 @@
-package com.javaschool.model;
+package com.javaschool.service;
 
 
 import java.util.List;

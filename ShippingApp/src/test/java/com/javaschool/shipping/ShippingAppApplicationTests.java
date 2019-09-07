@@ -1,14 +1,10 @@
 package com.javaschool.shipping;
 
-import com.javaschool.model.ShippingService;
-import com.javaschool.model.ShippingServiceImpl;
+import com.javaschool.service.ShippingService;
+import com.javaschool.service.ShippingServiceImpl;
 import com.javaschool.queue.QueueSender;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
