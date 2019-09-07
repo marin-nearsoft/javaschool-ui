@@ -31,28 +31,28 @@ $(document).ready(function(){
     }
 
     rest('GET', config.rest.city, _getCities);
-    rest('GET', config.rest.size, _sizes);
-    rest('GET', config.rest.shippingInformation, _fillShippingInformation)
+    rest('GET', config.rest.type, _types);
+    rest('GET', config.rest.shippingInformation, _fillShippingInformation);
 
     function _sizes(sizes){
         _fillSelect(sizes, $('#sizeSelect'));
     }
 
     $('.city-select').change(_changeCity);
-    $('#sizeSelect').change(_fillTypeSelect);
-    $('#typeSelect').change(_fillTimeSelect);
-    $('#timeSelect').change(_fillTransportSelect);
+    $('#typeSelect').change(_fillSizeSelect);
+    $('#sizeSelect').change(_fillTransportSelect);
+    $('#transportSelect').change(_fillTimeSelect);
 
-    function _fillTypeSelect(){
-        rest('GET', config.rest.type, _types);
+    function _fillTimeSelect() {
+        rest('GET', config.rest.time, _times);
     }
 
     function _types(sizes){
         _fillSelect(sizes, $('#typeSelect'));
     }
 
-    function _fillTimeSelect(){
-        rest('GET', config.rest.time, _times);
+    function _fillSizeSelect() {
+        rest('GET', config.rest.size, _sizes);
     }
 
     function _times(times){
