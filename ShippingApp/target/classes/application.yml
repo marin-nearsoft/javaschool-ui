@@ -1,2 +1,7 @@
 server:
   port: 8080
+
+config-rabbit:
+  queue: shippingQueue
+  exchange: shippingExchange
+  routing-key: infoShipping

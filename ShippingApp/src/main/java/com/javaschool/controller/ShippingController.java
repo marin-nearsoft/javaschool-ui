@@ -1,7 +1,6 @@
 package com.javaschool.controller;
 
 import com.javaschool.model.ShippingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,24 +11,30 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET})
 public class ShippingController {
-    @Autowired
+
     private ShippingService shippingService;
 
+    public ShippingController(final ShippingService shippingService) {
+        this.shippingService = shippingService;
+    }
+
     @RequestMapping("/size")
-    public List getSize() {
+    public List<String> getSize() {
         return shippingService.getSize();
     }
 
     @RequestMapping("/type")
-    public List getType() {
+    public List<String> getType() {
         return shippingService.getType();
     }
 
     @RequestMapping("/time")
-    public List getTime() {
+    public List<String> getTime() {
         return shippingService.getTime();
     }
 
     @RequestMapping("/transport")
-    public List getTransport() { return shippingService.getTransport(); }
+    public List<String> getTransport() {
+        return shippingService.getTransport();
+    }
 }

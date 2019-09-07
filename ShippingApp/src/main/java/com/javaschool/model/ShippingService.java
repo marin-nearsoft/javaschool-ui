@@ -3,13 +3,13 @@ package com.javaschool.model;
 
 import java.util.List;
 
-public interface ShippingService  {
+public interface ShippingService {
 
-    List getSize();
+    List<String> getSize();
 
-    List getType();
+    List<String> getType();
 
-    List getTime();
+    List<String> getTime();
 
-    List getTransport();
+    List<String> getTransport();
 }

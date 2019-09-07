@@ -1,5 +1,6 @@
 package com.javaschool.model;
 
+import com.javaschool.queue.QueueSender;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -7,37 +8,34 @@ import java.util.List;
 
 @Service
 public class ShippingServiceImpl implements ShippingService {
+
+    private QueueSender queueSender;
+
+    public ShippingServiceImpl(final QueueSender queueSender) {
+        this.queueSender = queueSender;
+    }
+
     @Override
-    public List getSize() {
-        ArrayList<String> sizes = new ArrayList<>();
-        sizes.add("Small");
-        sizes.add("Medium");
-        sizes.add("Large");
+    public List<String> getSize() {
+        List<String> sizes = queueSender.getSize();
         return sizes;
     }
 
     @Override
-    public List getType() {
-        ArrayList<String> types = new ArrayList<>();
-        types.add("Envelope");
-        types.add("Box");
+    public List<String> getType() {
+        List<String> types = queueSender.getType();
         return types;
     }
 
     @Override
-    public List getTime() {
-        ArrayList<String> times = new ArrayList<>();
-        times.add("Express");
-        times.add("Regular");
-        times.add("Slow");
+    public List<String> getTime() {
+        List<String> times = queueSender.getTime();
         return times;
     }
 
     @Override
-    public List getTransport() {
-        ArrayList<String> transports = new ArrayList<>();
-        transports.add("Land");
-        transports.add("Air");
+    public List<String> getTransport() {
+        List<String> transports = queueSender.getTransport();
         return transports;
     }
 }

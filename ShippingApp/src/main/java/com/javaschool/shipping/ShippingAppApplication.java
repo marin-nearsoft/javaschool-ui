@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(scanBasePackages = {"com.javaschool"})
 public class ShippingAppApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ShippingAppApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ShippingAppApplication.class, args);
+    }
 
 }
