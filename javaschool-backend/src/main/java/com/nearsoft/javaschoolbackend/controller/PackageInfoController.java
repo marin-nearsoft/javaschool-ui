@@ -12,8 +12,11 @@ import java.util.List;
 @RequestMapping(value = "/shippingAPI/packageInfo")
 public class PackageInfoController {
 
-    @Autowired
-    private PackageInfoService packageInfoService;
+    private final PackageInfoService packageInfoService;
+
+    public PackageInfoController(PackageInfoService packageInfoService){
+        this.packageInfoService = packageInfoService;
+    }
 
     @GetMapping("/types")
     public List<String> getPackageTypes(){
