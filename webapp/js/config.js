@@ -2,14 +2,14 @@ const config = {
     "host": "http://localhost",
     "port": "3000",
     "rest" : {
-        "size" : "/size",
-        "type" : "/type",
-        "time" : "/time",
-        "transport" : "/transport",
-        "city" : "/cities",
-        "cityPath": "/cities",
-        "checkPrice" : "/cities",
-        "sendShipping": "/cities",
-        "shippingInformation": "/cities"
+        "size" : "/Cities",
+        "type" : "/Cities",
+        "time" : "/Cities",
+        "transport" : "/Cities",
+        "city" : "/Cities",
+        "cityPath": "/CityPath",
+        "checkPrice" : "/CheckPrice",
+        "sendShipping": "/SendShipping",
+        "shippingInformation": "/ShippingInfo"
     }
 };
