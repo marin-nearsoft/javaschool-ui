@@ -2,8 +2,8 @@ package com.javaschool.queue;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,16 +22,16 @@ public class ConfigRabbit {
 
     @Bean
     public Queue shippingQueue() {
-        return new Queue(QUEUE_SHIPPING);
+        return new Queue(QUEUE_SHIPPING, false);
     }
 
     @Bean
-    public DirectExchange shippingExchange() {
-        return new DirectExchange(EXCHANGE_SHIPPING);
+    public TopicExchange topic() {
+        return new TopicExchange(EXCHANGE_SHIPPING);
     }
 
     @Bean
-    public Binding shippingBinding(DirectExchange directExchange, Queue queue) {
-        return BindingBuilder.bind(queue).to(directExchange).with(ROUTING_KEY_SHIPPING);
+    public Binding shippingBinding(TopicExchange topic, Queue queue) {
+        return BindingBuilder.bind(queue).to(topic).with(ROUTING_KEY_SHIPPING);
     }
 }

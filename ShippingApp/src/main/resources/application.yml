@@ -2,6 +2,13 @@ server:
   port: 8080
 
 config-rabbit:
-  queue: shippingQueue
-  exchange: shippingExchange
-  routing-key: infoShipping
+  queue: db-queue
+  exchange: db-exchange
+  routing-key: "#"
+
+spring:
+  rabbitmq:
+    host: javaschoolrmqrv2dutokzu7as-vm0.southcentralus.cloudapp.azure.com
+    port: 5672
+    username: user
+    password: JavaSchool.1234
