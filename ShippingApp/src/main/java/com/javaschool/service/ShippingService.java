@@ -1,6 +1,8 @@
 package com.javaschool.service;
 
 
+import com.javaschool.common.PackageSize;
+
 import java.util.List;
 
 public interface ShippingService {

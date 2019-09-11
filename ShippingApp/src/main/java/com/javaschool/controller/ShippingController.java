@@ -1,5 +1,6 @@
 package com.javaschool.controller;
 
+import com.javaschool.common.PackageSize;
 import com.javaschool.service.ShippingService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;

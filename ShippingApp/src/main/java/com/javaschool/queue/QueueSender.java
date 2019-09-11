@@ -1,7 +1,10 @@
 package com.javaschool.queue;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.javaschool.common.PackageSize;
 import com.javaschool.common.QueueMessageRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +12,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,13 +55,21 @@ public class QueueSender {
     }
 
     public List<String> getSize() {
-        List<String> sizes = new ArrayList<>();
-        sizes.add("Small");
-        sizes.add("Medium");
-        sizes.add("Large");
-
-        String message = messageRequest("packageSize");
-        return sizes;
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<PackageSize> sizes;
+        List<String> sizesName = new ArrayList<>();
+        try{
+            String message = messageRequest("packageSize");
+            sizes = objectMapper.readValue(message, new TypeReference<List<PackageSize>>(){});
+            for (PackageSize size : sizes) {
+                sizesName.add(size.getDescription());
+            }
+        } catch(JsonParseException e){
+            logger.error(e.getMessage());
+        } catch(IOException e){
+            logger.error(e.getMessage());
+        }
+        return sizesName;
     }
 
     public List<String> getType() {

@@ -1,6 +1,8 @@
 package com.javaschool.service;
 
+import com.javaschool.common.PackageSize;
 import com.javaschool.queue.QueueSender;
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

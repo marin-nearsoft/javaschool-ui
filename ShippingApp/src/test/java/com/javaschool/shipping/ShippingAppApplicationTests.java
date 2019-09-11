@@ -1,5 +1,6 @@
 package com.javaschool.shipping;
 
+import com.javaschool.common.PackageSize;
 import com.javaschool.service.ShippingService;
 import com.javaschool.service.ShippingServiceImpl;
 import com.javaschool.queue.QueueSender;
