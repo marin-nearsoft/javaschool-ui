@@ -5,10 +5,18 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.javaschool.webservices.model.PackageType;
 import com.javaschool.webservices.service.PackageService;
+import com.javaschool.webservices.service.ShippingService;
 
 @Service
 public class PackageServiceImpl implements PackageService {
+	
+	private final ShippingService shippingService;
+	
+	public PackageServiceImpl(ShippingService shippingProducerService) {
+		this.shippingService = shippingProducerService;
+	}
 
 	@Override
 	public List<String> getSizes() {
@@ -24,13 +32,13 @@ public class PackageServiceImpl implements PackageService {
 
 	@Override
 	public List<String> getTypes() {
-		List<String> typesList = new LinkedList<String>(); 
-
-		typesList.add("BOX");
-		typesList.add("LETTER");
-		typesList.add("OTHER");
+		List<PackageType> packageTypes = shippingService.getPackageTypes();
 		
-		return typesList;
+		List<String> packageTypesNames = new LinkedList<String>(); 
+
+		packageTypes.forEach(packageType->packageTypesNames.add(packageType.getDescription()));
+		
+		return packageTypesNames;
 	}
 
 }

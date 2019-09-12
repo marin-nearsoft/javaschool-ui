@@ -4,8 +4,10 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import com.javaschool.webservices.service.impl.PackageServiceImpl;
+import com.javaschool.webservices.service.impl.ShippingRabbitRPCServiceImpl;
 
 public class PackageServiceImplTest {
 	
@@ -13,7 +15,7 @@ public class PackageServiceImplTest {
 	
 	@Before
 	public void setUp() {
-		packageService = new PackageServiceImpl();
+		packageService = new PackageServiceImpl(new ShippingRabbitRPCServiceImpl(new RabbitTemplate(), null, null, null));
 	}
 
 	@Test
