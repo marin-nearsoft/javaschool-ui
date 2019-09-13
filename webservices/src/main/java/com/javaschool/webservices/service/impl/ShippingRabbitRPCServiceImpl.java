@@ -1,6 +1,5 @@
 package com.javaschool.webservices.service.impl;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -8,7 +7,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.webservices.model.PackageType;
@@ -39,16 +37,9 @@ public class ShippingRabbitRPCServiceImpl implements ShippingService {
 		try {
 			String message = objectMapper.writeValueAsString(ShippingRabbitMessages.PACKAGE_TYPE.getMessageQueue());
 			Object object = rabbitTemplate.convertSendAndReceive(SHIPPING_EXCHANGE, SHIPPING_ROUTING_KEY, message);
-			System.out.println(object);
-			try {
-				return objectMapper.readValue((String)object, new TypeReference<List<PackageType>>(){});
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				return Collections.emptyList();
-			}
-		} catch (JsonProcessingException e) {
+			return objectMapper.readValue((String)object, new TypeReference<List<PackageType>>(){});
+		} catch (Exception e) {
 			return Collections.emptyList();
 		}
 	}
-	
 }
