@@ -1,5 +1,9 @@
 package com.JavaSchool.Service;
 
+import java.util.List;
+
 public interface BackEndService {
-    String[] getCities();
+
+    List<String> getType();
+
 }
