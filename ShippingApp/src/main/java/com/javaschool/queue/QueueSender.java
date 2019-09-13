@@ -1,18 +1,18 @@
 package com.javaschool.queue;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.common.PackageSize;
+import com.javaschool.common.PackageType;
+import com.javaschool.common.QueueException;
 import com.javaschool.common.QueueMessageRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class QueueSender {
 
     private static final Logger logger = LoggerFactory.getLogger(QueueSender.class);
 
-    private RabbitTemplate rabbitTemplate;
+    private AmqpTemplate rabbitTemplate;
 
     @Value("${config-rabbit.routing-key}")
     public String ROUTING_KEY_SHIPPING;
@@ -29,7 +29,7 @@ public class QueueSender {
     @Value("${config-rabbit.exchange}")
     public String EXCHANGE_SHIPPING;
 
-    public QueueSender(final RabbitTemplate rabbitTemplate) {
+    public QueueSender(final AmqpTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
@@ -64,19 +64,28 @@ public class QueueSender {
             for (PackageSize size : sizes) {
                 sizesName.add(size.getDescription());
             }
-        } catch(JsonParseException e){
+        } catch(Exception e){
             logger.error(e.getMessage());
-        } catch(IOException e){
-            logger.error(e.getMessage());
+            throw new QueueException(e.getMessage());
         }
         return sizesName;
     }
 
     public List<String> getType() {
-        List<String> types = new ArrayList<>();
-        types.add("Envelope");
-        types.add("Box");
-        return types;
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<PackageType> types;
+        List<String> typesName = new ArrayList<>();
+        try{
+            String message = messageRequest("packageType");
+            types = objectMapper.readValue(message, new TypeReference<List<PackageType>>(){});
+            for (PackageType type : types) {
+                typesName.add(type.getDescription());
+            }
+        } catch(Exception e){
+            logger.error(e.getMessage());
+            throw new QueueException(e.getMessage());
+        }
+        return typesName;
     }
 
     public List<String> getTime() {
@@ -93,5 +102,4 @@ public class QueueSender {
         transports.add("Air");
         return transports;
     }
-
 }
