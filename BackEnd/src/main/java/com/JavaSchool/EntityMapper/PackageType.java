@@ -6,7 +6,6 @@ public class PackageType {
     private int price;
 
     public int getId() {
-
         return id;
     }
 

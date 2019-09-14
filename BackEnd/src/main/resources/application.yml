@@ -4,11 +4,11 @@ spring:
     port: 5672
     username: user
     password: JavaSchool.1234
+    template:
+      exchange: db-exchange
+      routing-key: "#"
 
-rabbit:
-  exchange: db-exchange
-  routing-key: "#"
-  queue: db-queue
+
 
 server:
   port: 3000

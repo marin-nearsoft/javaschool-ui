@@ -1,9 +1,11 @@
 package com.JavaSchool.Service;
 
+import com.JavaSchool.EntityMapper.PackageType;
+
 import java.util.List;
 
 public interface BackEndService {
 
-    List<String> getType();
+    List<PackageType> getType();
 
 }

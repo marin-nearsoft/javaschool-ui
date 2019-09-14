@@ -1,5 +1,6 @@
 package com.JavaSchool.Service;
 
+import com.JavaSchool.EntityMapper.PackageType;
 import org.springframework.stereotype.Service;
 import com.JavaSchool.Queue.QueueClient;
 import java.util.List;
@@ -14,7 +15,7 @@ public class BackEndServiceImp implements BackEndService {
     }
 
     @Override
-    public List<String> getType() {
+    public List<PackageType> getType() {
         return queueClient.getType();
     }
 
