@@ -1,9 +1,9 @@
-package com.JavaSchool.EntityMapper;
+package com.javaschool.entitymapper;
 
-public class PackageType {
+public class PackageSize {
     private int id;
     private String description;
-    private int price;
+    private int priceFactor;
 
     public int getId() {
         return id;
@@ -21,11 +21,12 @@ public class PackageType {
         this.description = description;
     }
 
-    public int getPrice() {
-        return price;
+    public int getPriceFactor() {
+        return priceFactor;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setPriceFactor(int priceFactor) {
+        this.priceFactor = priceFactor;
     }
+
 }
