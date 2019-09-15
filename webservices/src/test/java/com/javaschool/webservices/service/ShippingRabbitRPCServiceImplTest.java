@@ -27,7 +27,7 @@ public class ShippingRabbitRPCServiceImplTest {
 	private ShippingService shippingService;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		rabbitTemplateMock = Mockito.mock(RabbitTemplate.class);
 		shippingService = new ShippingRabbitRPCServiceImpl(rabbitTemplateMock, new ObjectMapper(), EXCHANGE_TEST,
 				ROUTING_KEY_TEST);

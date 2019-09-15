@@ -2,6 +2,7 @@ package com.javaschool.webservices.service.impl;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -34,11 +35,10 @@ public class PackageServiceImpl implements PackageService {
 	public List<String> getTypes() {
 		List<PackageType> packageTypes = shippingService.getPackageTypes();
 		
-		List<String> packageTypesNames = new LinkedList<String>(); 
-
-		packageTypes.forEach(packageType->packageTypesNames.add(packageType.getDescription()));
+		List<String> packageTypesNames = packageTypes.stream()
+		.map(packageType->packageType.getDescription())
+		.collect(Collectors.toList());
 		
 		return packageTypesNames;
 	}
-
 }
