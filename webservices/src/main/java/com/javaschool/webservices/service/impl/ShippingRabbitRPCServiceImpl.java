@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.javaschool.webservices.model.PackageSize;
 import com.javaschool.webservices.model.PackageType;
 import com.javaschool.webservices.model.ShippingRabbitMessages;
 import com.javaschool.webservices.service.ShippingService;
@@ -38,6 +39,17 @@ public class ShippingRabbitRPCServiceImpl implements ShippingService {
 			String message = objectMapper.writeValueAsString(ShippingRabbitMessages.PACKAGE_TYPE.getMessageQueue());
 			Object object = rabbitTemplate.convertSendAndReceive(SHIPPING_EXCHANGE, SHIPPING_ROUTING_KEY, message);
 			return objectMapper.readValue((String)object, new TypeReference<List<PackageType>>(){});
+		} catch (Exception e) {
+			return Collections.emptyList();
+		}
+	}
+
+	@Override
+	public List<PackageSize> getPackageSizes() {
+		try {
+			String message = objectMapper.writeValueAsString(ShippingRabbitMessages.PACKAGE_SIZE.getMessageQueue());
+			Object object = rabbitTemplate.convertSendAndReceive(SHIPPING_EXCHANGE, SHIPPING_ROUTING_KEY, message);
+			return objectMapper.readValue((String)object, new TypeReference<List<PackageSize>>(){});
 		} catch (Exception e) {
 			return Collections.emptyList();
 		}
