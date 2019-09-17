@@ -8,10 +8,10 @@
 		<version>2.1.8.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.JavaSchool</groupId>
-	<artifactId>BackEnd</artifactId>
+	<groupId>com.javaschool</groupId>
+	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>BackEnd</name>
+	<name>backend</name>
 	<description>Project in Spring Boot for the JavaSchool</description>
 
 	<properties>

@@ -3,8 +3,8 @@ package com.javaschool.service;
 import com.javaschool.entitymapper.PackageType;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BackEndServiceImp implements BackEndService {
@@ -17,13 +17,7 @@ public class BackEndServiceImp implements BackEndService {
 
     @Override
     public List<String> getType() {
-        List<PackageType> typesResponse = queueResponseService.getType();
-
-        List<String> listOfTypes = new ArrayList<>();
-        for (PackageType type : typesResponse) {
-            listOfTypes.add(type.getDescription());
-        }
-
-        return listOfTypes;
+    return queueResponseService.getType().stream()
+            .map(PackageType::getDescription).collect(Collectors.toList());
     }
 }
