@@ -6,9 +6,9 @@ public class PackageSize implements Serializable {
 
 	private static final long serialVersionUID = 865846279570747807L;
 	
-	public int id;
-	public String description;
-	public float priceFactor;
+	private int id;
+	private String description;
+	private double priceFactor;
 
 	public int getId() {
 		return id;
@@ -26,11 +26,11 @@ public class PackageSize implements Serializable {
 		this.description = description;
 	}
 
-	public float getPriceFactor() {
+	public double getPriceFactor() {
 		return priceFactor;
 	}
 
-	public void setPriceFactor(float priceFactor) {
+	public void setPriceFactor(double priceFactor) {
 		this.priceFactor = priceFactor;
 	}
 

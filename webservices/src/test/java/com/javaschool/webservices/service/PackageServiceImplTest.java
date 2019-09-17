@@ -1,7 +1,6 @@
 package com.javaschool.webservices.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.javaschool.webservices.model.PackageSize;
 import com.javaschool.webservices.model.PackageType;
 import com.javaschool.webservices.service.impl.PackageServiceImpl;
 
@@ -27,7 +27,34 @@ public class PackageServiceImplTest {
 
 	@Test
 	public void testSizes() {
-		assertNotNull(packageService.getSizes());
+		List<PackageSize> packageSizesList = new LinkedList<PackageSize>();
+		
+		PackageSize packageSize1 = new PackageSize();
+		packageSize1.setId(1);
+		packageSize1.setDescription("Small");
+		packageSize1.setPriceFactor(10);
+		
+		PackageSize packageSize2 = new PackageSize();
+		packageSize2.setId(2);
+		packageSize2.setDescription("Medium");
+		packageSize2.setPriceFactor(20.20);
+		
+		PackageSize packageSize3 = new PackageSize();
+		packageSize3.setId(3);
+		packageSize3.setDescription("Big");
+		packageSize3.setPriceFactor(30.30);
+		
+		packageSizesList.add(packageSize1);
+		packageSizesList.add(packageSize2);
+		packageSizesList.add(packageSize3);
+		
+		Mockito.when(shippingServiceMock.getPackageSizes()).thenReturn(packageSizesList);
+		
+		List<String> packageSizesNames = packageService.getSizes();
+		
+		assertEquals(3, packageSizesNames.size());
+		
+		
 	}
 	
 	@Test
