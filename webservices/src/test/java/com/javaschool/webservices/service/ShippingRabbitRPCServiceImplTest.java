@@ -13,6 +13,7 @@ import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.javaschool.webservices.model.PackageSize;
 import com.javaschool.webservices.model.PackageType;
 import com.javaschool.webservices.service.impl.ShippingRabbitRPCServiceImpl;
 
@@ -52,5 +53,17 @@ public class ShippingRabbitRPCServiceImplTest {
 		List<PackageType> packageTypesList = shippingService.getPackageTypes();
 		assertFalse(packageTypesList.isEmpty());
 		assertEquals(3, packageTypesList.size());
+	}
+	
+	@Test
+	public void testgetPackageSizes() {
+		String jsonRabbitTemplateReponse = "[{\"id\":1,\"description\":\"Small\",\"priceFactor\":10},{\"id\":2,\"description\":\"Medium\",\"priceFactor\":20},{\"id\":3,\"description\":\"Big\",\"priceFactor\":30}]";
+
+		Mockito.when(rabbitTemplateMock.convertSendAndReceive(Mockito.eq(EXCHANGE_TEST), Mockito.eq(ROUTING_KEY_TEST),
+				Mockito.any(Object.class))).thenReturn(jsonRabbitTemplateReponse);
+
+		List<PackageSize> packageSizesList = shippingService.getPackageSizes();
+		assertFalse(packageSizesList.isEmpty());
+		assertEquals(3, packageSizesList.size());
 	}
 }

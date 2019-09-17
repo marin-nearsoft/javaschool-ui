@@ -31,9 +31,7 @@ public class PackageServiceImpl implements PackageService {
 	public List<String> getTypes() {
 		List<PackageType> packageTypes = shippingService.getPackageTypes();
 
-		List<String> packageTypesNames = packageTypes.stream().map(packageType -> packageType.getDescription())
+		return packageTypes.stream().map(packageType -> packageType.getDescription())
 				.collect(Collectors.toList());
-
-		return packageTypesNames;
 	}
 }
