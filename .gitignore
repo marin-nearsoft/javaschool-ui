@@ -1,8 +1,8 @@
 HELP.md
 target/
-!**/mvnw
-!**/mvnw.cmd
-!**/.mvn/**
+*/mvnw
+*/mvnw.cmd
+*/.mvn/
 !**/src/main/**
 !**/src/test/**
 
