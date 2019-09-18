@@ -1,5 +1,6 @@
 HELP.md
 target/
+!**/mvnw
 !**/.mvn/**
 !**/src/main/**
 !**/src/test/**
@@ -31,3 +32,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
