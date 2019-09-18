@@ -2,9 +2,9 @@ server:
   port: 8080
 
 config-rabbit:
-  queue: db-queue
-  exchange: db-exchange
-  routing-key: "#"
+  queue_shipping: db-queue
+  exchange_shipping: db-exchange
+  routing_key_shipping: "#"
 
 spring:
   rabbitmq:

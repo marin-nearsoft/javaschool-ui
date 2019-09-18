@@ -1,12 +1,15 @@
 package com.javaschool.controller;
 
 import com.javaschool.service.ShippingService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET})
 public class ShippingController {
 
     private ShippingService shippingService;

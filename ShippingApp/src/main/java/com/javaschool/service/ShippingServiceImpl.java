@@ -16,25 +16,21 @@ public class ShippingServiceImpl implements ShippingService {
 
     @Override
     public List<String> getSize() {
-        List<String> sizes = queueSender.getSize();
-        return sizes;
+        return queueSender.getSize();
     }
 
     @Override
     public List<String> getType() {
-        List<String> types = queueSender.getType();
-        return types;
+        return queueSender.getType();
     }
 
     @Override
     public List<String> getTime() {
-        List<String> times = queueSender.getTime();
-        return times;
+        return queueSender.getTime();
     }
 
     @Override
     public List<String> getTransport() {
-        List<String> transports = queueSender.getTransport();
-        return transports;
+        return queueSender.getTransport();
     }
 }

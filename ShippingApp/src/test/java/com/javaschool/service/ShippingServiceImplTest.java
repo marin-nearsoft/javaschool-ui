@@ -1,9 +1,8 @@
-package com.javaschool.shipping;
+package com.javaschool.service;
 
+import com.javaschool.common.GlobalProperties;
 import com.javaschool.common.QueueException;
 import com.javaschool.queue.QueueSender;
-import com.javaschool.service.ShippingService;
-import com.javaschool.service.ShippingServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -11,20 +10,23 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ShippingAppApplicationTests {
+public class ShippingServiceImplTest {
 
     private QueueSender queueSender;
+    private GlobalProperties globalProperties;
     private AmqpTemplate amqpTemplateMock;
     private ShippingService shippingService;
 
     @Before
     public void setup() {
         amqpTemplateMock = mock(RabbitTemplate.class);
-        queueSender = new QueueSender(amqpTemplateMock);
+        queueSender = new QueueSender(amqpTemplateMock, globalProperties);
         shippingService = new ShippingServiceImpl(queueSender);
     }
 
@@ -59,5 +61,4 @@ public class ShippingAppApplicationTests {
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(null);
         List<String> types = shippingService.getSize();
     }
-
 }
