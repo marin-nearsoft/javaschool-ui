@@ -7,10 +7,10 @@ import com.javaschool.common.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,14 +23,12 @@ public class QueueSender {
 
     private GlobalProperties globalProperties;
 
+    private ObjectMapper objectMapper;
+
     public QueueSender(final AmqpTemplate rabbitTemplate, GlobalProperties globalProperties) {
         this.rabbitTemplate = rabbitTemplate;
         this.globalProperties = globalProperties;
-    }
-
-    @Bean
-    public ObjectMapper objectMapper(){
-        return new ObjectMapper();
+        this.objectMapper = new ObjectMapper();
     }
 
     private String sendMessage(String queueMessage) {
@@ -40,7 +38,6 @@ public class QueueSender {
     }
 
     private String messageRequest(String type){
-        ObjectMapper objectMapper = objectMapper();
         QueueMessageRequest messageRequest = new QueueMessageRequest();
         String message;
         String queueResponse = "";
@@ -55,12 +52,11 @@ public class QueueSender {
     }
 
     public List<String> getSize() {
-        ObjectMapper objectMapper = objectMapper();
         List<PackageSize> sizes;
         List<String> sizesName;
         try{
             String message = messageRequest("packageSize");
-            sizes = objectMapper.readValue(message, new TypeReference<List<PackageSize>>(){});
+            sizes = Arrays.asList(objectMapper.readValue(message, PackageSize[].class));
             sizesName = sizes.stream()
                     .map(size->size.getDescription())
                     .collect(Collectors.toList());
@@ -72,12 +68,11 @@ public class QueueSender {
     }
 
     public List<String> getType() {
-        ObjectMapper objectMapper = objectMapper();
         List<PackageType> types;
         List<String> typesName;
         try{
             String message = messageRequest("packageType");
-            types = objectMapper.readValue(message, new TypeReference<List<PackageType>>(){});
+            types = Arrays.asList(objectMapper.readValue(message, PackageType[].class));
             typesName = types.stream()
                     .map(type->type.getDescription())
                     .collect(Collectors.toList());

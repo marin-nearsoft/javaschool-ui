@@ -1,8 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.javaschool.shipping.ShippingAppApplicationTests
--------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.644 s <<< FAILURE! - in com.javaschool.shipping.ShippingAppApplicationTests
-getSizeTest(com.javaschool.shipping.ShippingAppApplicationTests)  Time elapsed: 0.31 s  <<< ERROR!
-java.lang.NullPointerException
-	at com.javaschool.shipping.ShippingAppApplicationTests.getSizeTest(ShippingAppApplicationTests.java:24)
-
