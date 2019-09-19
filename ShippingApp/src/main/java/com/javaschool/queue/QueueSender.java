@@ -84,11 +84,19 @@ public class QueueSender {
     }
 
     public List<String> getTime() {
-        List<String> times = new ArrayList<>();
-        times.add("Express");
-        times.add("Regular");
-        times.add("Slow");
-        return times;
+        List<TransportVelocity> times;
+        List<String> timesName;
+        try{
+            String message = messageRequest("transportVelocity");
+            times = Arrays.asList(objectMapper.readValue(message, TransportVelocity[].class));
+            timesName = times.stream()
+                    .map(type->type.getDescription())
+                    .collect(Collectors.toList());
+        } catch(Exception e){
+            logger.error(e.getMessage());
+            throw new QueueException(e.getMessage());
+        }
+        return timesName;
     }
 
     public List<String> getTransport() {
