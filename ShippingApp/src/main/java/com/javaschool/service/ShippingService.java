@@ -12,4 +12,6 @@ public interface ShippingService {
     List<String> getTime();
 
     List<String> getTransport();
+
+    List<String> getCity();
 }

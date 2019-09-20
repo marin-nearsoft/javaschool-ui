@@ -1,7 +1,6 @@
 package com.javaschool.queue;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.common.*;
 import org.slf4j.Logger;
@@ -9,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -100,9 +98,34 @@ public class QueueSender {
     }
 
     public List<String> getTransport() {
-        List<String> transports = new ArrayList<>();
-        transports.add("Land");
-        transports.add("Air");
-        return transports;
+        List<TransportType> types;
+        List<String> typesName;
+        try{
+            String message = messageRequest("transportType");
+            types = Arrays.asList(objectMapper.readValue(message, TransportType[].class));
+            typesName = types.stream()
+                    .map(type->type.getDescription())
+                    .collect(Collectors.toList());
+        } catch(Exception e){
+            logger.error(e.getMessage());
+            throw new QueueException(e.getMessage());
+        }
+        return typesName;
+    }
+
+    public List<String> getCity() {
+        List<City> cities;
+        List<String> citiesName;
+        try{
+            String message = messageRequest("city");
+            cities = Arrays.asList(objectMapper.readValue(message, City[].class));
+            citiesName = cities.stream()
+                    .map(type->type.getName())
+                    .collect(Collectors.toList());
+        } catch(Exception e){
+            logger.error(e.getMessage());
+            throw new QueueException(e.getMessage());
+        }
+        return citiesName;
     }
 }

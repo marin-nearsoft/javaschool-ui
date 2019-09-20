@@ -33,4 +33,9 @@ public class ShippingServiceImpl implements ShippingService {
     public List<String> getTransport() {
         return queueSender.getTransport();
     }
+
+    @Override
+    public List<String> getCity(){
+        return queueSender.getCity();
+    }
 }

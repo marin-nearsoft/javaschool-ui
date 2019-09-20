@@ -1,15 +1,12 @@
 package com.javaschool.controller;
 
 import com.javaschool.service.ShippingService;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET})
 public class ShippingController {
 
     private ShippingService shippingService;
@@ -34,7 +31,15 @@ public class ShippingController {
     }
 
     @RequestMapping("/transport")
-    public List<String> getTransport() {
-        return shippingService.getTransport();
+    public List<String> getTransport() {return shippingService.getTransport();}
+
+    @RequestMapping("/city")
+    public List<String> getCity() {
+        return shippingService.getCity();
+    }
+
+    @RequestMapping("/cityPath")
+    public List<String> getCityPath() {
+        return shippingService.getCity();
     }
 }
