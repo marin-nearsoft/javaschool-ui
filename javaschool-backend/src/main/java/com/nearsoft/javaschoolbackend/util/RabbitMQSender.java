@@ -1,32 +1,25 @@
 package com.nearsoft.javaschoolbackend.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nearsoft.javaschoolbackend.config.ConfigProperties;
+import com.nearsoft.javaschoolbackend.exception.custom.CentralServerException;
 import com.nearsoft.javaschoolbackend.model.request.TypeRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class RabbitMQSender {
 
     private final RabbitTemplate rabbitTemplate;
 
-    public RabbitMQSender(RabbitTemplate rabbitTemplate){
-        this.rabbitTemplate = rabbitTemplate;
-    }
-
-    @Value("${rabbitmq.exchange}")
-    private String exchange;
-
-    @Value("${rabbitmq.routing-key}")
-    private String routingkey;
+    private final ConfigProperties configProperties;
 
     public String send(String type) {
         try {
-            return (String)rabbitTemplate.convertSendAndReceive(exchange, routingkey, new TypeRequest(type).toJSONString());
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
+            return (String)rabbitTemplate.convertSendAndReceive(configProperties.getExchange(), configProperties.getRoutingKey(), new TypeRequest(type).toJSONString());
+        } catch (Exception e) {
+            throw new CentralServerException("An error occurred during communication with the central server. Requested type: "+type);
         }
     }
 

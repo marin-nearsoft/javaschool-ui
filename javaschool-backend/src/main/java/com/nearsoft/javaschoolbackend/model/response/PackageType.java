@@ -1,5 +1,8 @@
 package com.nearsoft.javaschoolbackend.model.response;
 
+import lombok.Data;
+
+@Data
 public class PackageType {
 
     private int id;
@@ -8,27 +11,4 @@ public class PackageType {
 
     private int price;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
 }
