@@ -1,8 +1,7 @@
 package com.javaschool.backend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.javaschool.controllers.BackEndControllers;
-import com.javaschool.entitymapper.MessageType;
+import com.javaschool.queue.*;
 import com.javaschool.entitymapper.PackageType;
 import com.javaschool.service.*;
 import org.junit.Assert;
@@ -24,7 +23,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 public class BackEndApplicationTests {
     private static RabbitTemplate rabbitTemplateMock;
-    private static BackEndControllers backEndControllers;
+    private static BackEndService backEndService;
 
     private static MessageType messageType = new MessageType();
     private static ObjectMapper mapper= new ObjectMapper();
@@ -34,8 +33,7 @@ public class BackEndApplicationTests {
         rabbitTemplateMock = mock(RabbitTemplate.class);
         QueueSenderService queueSenderService = new QueueSenderServiceImp(rabbitTemplateMock, mapper);
         QueueResponseService queueResponseService = new QueueResponseServiceImp(queueSenderService, mapper);
-        BackEndService backEndService = new BackEndServiceImp(queueResponseService);
-        backEndControllers = new BackEndControllers(backEndService);
+        backEndService = new BackEndServiceImp(queueResponseService);
     }
 
     @Test
@@ -54,7 +52,7 @@ public class BackEndApplicationTests {
         String mockRequest = new ObjectMapper().writeValueAsString(messageType);
         when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockTypes);
 
-        List<String> actual = backEndControllers.getType();
+        List<String> actual = backEndService.getType();
 
         Assert.assertEquals(expected, actual);
 

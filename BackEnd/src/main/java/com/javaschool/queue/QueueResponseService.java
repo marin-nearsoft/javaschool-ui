@@ -1,4 +1,4 @@
-package com.javaschool.service;
+package com.javaschool.queue;
 
 import com.javaschool.entitymapper.PackageType;
 

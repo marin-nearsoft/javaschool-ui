@@ -1,6 +1,5 @@
-package com.javaschool.service;
+package com.javaschool.queue;
 
-import com.javaschool.entitymapper.MessageType;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -19,7 +18,7 @@ public class QueueSenderServiceImp implements QueueSenderService {
     }
 
 
-    public String SendRequest(String requestType) throws JsonProcessingException {
+    public String sendRequest(String requestType) throws JsonProcessingException {
         MessageType messageType = new MessageType();
         messageType.setType(requestType);
 

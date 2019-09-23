@@ -15,7 +15,7 @@ public class BackEndControllers {
         this.backEndService=backEndService;
     }
 
-    @RequestMapping("/Type")
+    @RequestMapping("/type")
     public List<String> getType() {
         List<String> types = backEndService.getType();
         return types;
