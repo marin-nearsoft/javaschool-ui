@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.javaschool</groupId>
-    <artifactId>ShippingApp</artifactId>
+    <artifactId>shippingapp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ShippingApp</name>
     <description>Application to give the information about shipping's</description>
@@ -32,6 +32,11 @@
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.6</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
