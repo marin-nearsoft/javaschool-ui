@@ -11,8 +11,8 @@ public class BackEndControllers {
 
     private BackEndService backEndService;
 
-    public BackEndControllers(final BackEndService backEndService){
-        this.backEndService=backEndService;
+    public BackEndControllers(final BackEndService backEndService) {
+        this.backEndService = backEndService;
     }
 
     @RequestMapping("/type")

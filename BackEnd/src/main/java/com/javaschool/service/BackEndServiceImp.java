@@ -13,12 +13,12 @@ public class BackEndServiceImp implements BackEndService {
     private QueueResponseService queueResponseService;
 
     public BackEndServiceImp(final QueueResponseService queueResponseService) {
-        this.queueResponseService=queueResponseService;
+        this.queueResponseService = queueResponseService;
     }
 
     @Override
     public List<String> getType() {
-    return queueResponseService.getType().stream()
-            .map(PackageType::getDescription).collect(Collectors.toList());
+        return queueResponseService.getType().stream()
+                .map(PackageType::getDescription).collect(Collectors.toList());
     }
 }
