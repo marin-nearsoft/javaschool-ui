@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.javaschool.webservices.service.PackageService;
 
 @RestController
-@RequestMapping("packageInformation")
+@RequestMapping("package-information")
 public class PackageController {	
 	
 	private PackageService packageService;
@@ -18,12 +18,12 @@ public class PackageController {
 		this.packageService = packageService;
 	}
 		
-	@GetMapping("/getSizes")
+	@GetMapping("/sizes")
 	public List<String> getSizes() {
 		return packageService.getSizes();
 	}
 	
-	@GetMapping("/getTypes")
+	@GetMapping("/types")
 	public List<String> getTypes(){
 		return packageService.getTypes();
 	}
