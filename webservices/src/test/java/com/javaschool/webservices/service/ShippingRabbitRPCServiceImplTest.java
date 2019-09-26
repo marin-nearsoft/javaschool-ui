@@ -16,13 +16,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.webservices.configuration.RabbitMQProperties;
 import com.javaschool.webservices.model.PackageSize;
 import com.javaschool.webservices.model.PackageType;
-import com.javaschool.webservices.service.impl.ShippingRabbitRPCServiceImpl;
+import com.javaschool.webservices.service.impl.PackageRabbitMqServiceImpl;
 
 public class ShippingRabbitRPCServiceImplTest {
 
 	private RabbitTemplate rabbitTemplateMock;
 
-	private ShippingService shippingService;
+	private PackageRabbitMqService shippingService;
 
 	private RabbitMQProperties rabbitMQProperties;
 
@@ -32,7 +32,7 @@ public class ShippingRabbitRPCServiceImplTest {
 		rabbitMQProperties = new RabbitMQProperties();
 		rabbitMQProperties.setExchange("exchange_test");
 		rabbitMQProperties.setRoutingKey("routing_key_test");
-		shippingService = new ShippingRabbitRPCServiceImpl(rabbitTemplateMock, new ObjectMapper(), rabbitMQProperties);
+		shippingService = new PackageRabbitMqServiceImpl(rabbitTemplateMock, new ObjectMapper(), rabbitMQProperties);
 	}
 
 	@Test

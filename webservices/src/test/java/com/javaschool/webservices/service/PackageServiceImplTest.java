@@ -17,11 +17,11 @@ public class PackageServiceImplTest {
 	
 	private PackageService packageService;
 	
-	private ShippingService shippingServiceMock;
+	private PackageRabbitMqService shippingServiceMock;
 	
 	@Before
 	public void setUp() {
-		shippingServiceMock = Mockito.mock(ShippingService.class);
+		shippingServiceMock = Mockito.mock(PackageRabbitMqService.class);
 		packageService = new PackageServiceImpl(shippingServiceMock);
 	}
 

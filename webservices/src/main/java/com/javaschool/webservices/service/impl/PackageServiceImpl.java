@@ -8,14 +8,14 @@ import org.springframework.stereotype.Service;
 import com.javaschool.webservices.model.PackageSize;
 import com.javaschool.webservices.model.PackageType;
 import com.javaschool.webservices.service.PackageService;
-import com.javaschool.webservices.service.ShippingService;
+import com.javaschool.webservices.service.PackageRabbitMqService;
 
 @Service
 public class PackageServiceImpl implements PackageService {
 
-	private final ShippingService shippingService;
+	private final PackageRabbitMqService shippingService;
 
-	public PackageServiceImpl(ShippingService shippingProducerService) {
+	public PackageServiceImpl(PackageRabbitMqService shippingProducerService) {
 		this.shippingService = shippingProducerService;
 	}
 
