@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.webservices.configuration.RabbitMQProperties;
 import com.javaschool.webservices.model.PackageSize;
 import com.javaschool.webservices.model.PackageType;
-import com.javaschool.webservices.model.ShippingRabbitMessages;
+import com.javaschool.webservices.model.PackageRabbitMqMessages;
 import com.javaschool.webservices.service.PackageRabbitMqService;
 
 @Service
@@ -33,7 +33,7 @@ public class PackageRabbitMqServiceImpl implements PackageRabbitMqService {
 	@Override
 	public List<PackageType> getPackageTypes() {
 		try {
-			String message = objectMapper.writeValueAsString(ShippingRabbitMessages.PACKAGE_TYPE.getMessageQueue());
+			String message = objectMapper.writeValueAsString(PackageRabbitMqMessages.PACKAGE_TYPE.getPackageRabbitRPCMessage());
 			Object object = rabbitTemplate.convertSendAndReceive(rabbitMQProperties.getExchange(), rabbitMQProperties.getRoutingKey(), message);
 			return objectMapper.readValue((String)object, new TypeReference<List<PackageType>>(){});
 		} catch (Exception e) {
@@ -44,7 +44,7 @@ public class PackageRabbitMqServiceImpl implements PackageRabbitMqService {
 	@Override
 	public List<PackageSize> getPackageSizes() {
 		try {
-			String message = objectMapper.writeValueAsString(ShippingRabbitMessages.PACKAGE_SIZE.getMessageQueue());
+			String message = objectMapper.writeValueAsString(PackageRabbitMqMessages.PACKAGE_SIZE.getPackageRabbitRPCMessage());
 			Object object = rabbitTemplate.convertSendAndReceive(rabbitMQProperties.getExchange(), rabbitMQProperties.getRoutingKey(), message);
 			return objectMapper.readValue((String)object, new TypeReference<List<PackageSize>>(){});
 		} catch (Exception e) {
