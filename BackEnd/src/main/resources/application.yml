@@ -1,0 +1,12 @@
+spring:
+  rabbitmq:
+    host: javaschoolrmqrv2dutokzu7as-vm0.southcentralus.cloudapp.azure.com
+    port: 5672
+    username: user
+    password: JavaSchool.1234
+    template:
+      exchange: db-exchange
+      routing-key: "#"
+
+server:
+  port: 3000
