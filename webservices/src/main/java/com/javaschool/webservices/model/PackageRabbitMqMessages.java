@@ -1,5 +1,9 @@
 package com.javaschool.webservices.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 public enum PackageRabbitMqMessages {
 
 	PACKAGE_TYPE("packageType"), PACKAGE_SIZE("packageSize");
@@ -15,19 +19,9 @@ public enum PackageRabbitMqMessages {
 	}
 }
 
+@AllArgsConstructor
 class PackageRabbitRPCMessage {
 
-	private String type;
+	@Getter @Setter private String type;
 	
-	public PackageRabbitRPCMessage(String type) {
-		this.type = type;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
 }
