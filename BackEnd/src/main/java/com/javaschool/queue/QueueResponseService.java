@@ -8,5 +8,6 @@ import java.util.List;
 public interface QueueResponseService {
 
     List<PackageType> getType();
+
     List<PackageSize> getSize();
 }

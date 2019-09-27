@@ -19,8 +19,10 @@ public class QueueResponseServiceImp implements QueueResponseService {
 
     private QueueSenderService queueSenderService;
     private ObjectMapper mapper;
-    TypeReference refpackage = new TypeReference<List<PackageType>>() {};
-    TypeReference refsize = new TypeReference<List<PackageSize>>() {};
+    TypeReference refpackage = new TypeReference<List<PackageType>>() {
+    };
+    TypeReference refsize = new TypeReference<List<PackageSize>>() {
+    };
 
     public QueueResponseServiceImp(final QueueSenderService queueSenderService, final ObjectMapper mapper) {
         this.queueSenderService = queueSenderService;

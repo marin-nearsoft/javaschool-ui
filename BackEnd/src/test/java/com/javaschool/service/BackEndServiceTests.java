@@ -77,6 +77,6 @@ public class BackEndServiceTests {
         List<String> actual = backEndService.getSize();
 
         Assert.assertEquals(expected, actual);
-        System.out.println("Expected:"+ expected + ":"+ actual);
+        System.out.println("Expected:" + expected + ":" + actual);
     }
 }
