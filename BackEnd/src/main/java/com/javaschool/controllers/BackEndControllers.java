@@ -21,4 +21,10 @@ public class BackEndControllers {
         return types;
     }
 
+    @RequestMapping("/size")
+    public List<String> getSize() {
+        List<String> sizes = backEndService.getSize();
+        return sizes;
+    }
+
 }
