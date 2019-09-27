@@ -17,12 +17,12 @@ public class PackageInfoController {
 
     @GetMapping("/types")
     public List<String> getPackageTypes(){
-        return packageInfoService.getPackageTypes();
+        return packageInfoService.getPackageDescriptionTypes();
     }
 
     @GetMapping("/sizes")
     public List<String> getPackageSizes(){
-        return packageInfoService.getPackageSizes();
+        return packageInfoService.getPackageDescriptionSizes();
     }
 
 }

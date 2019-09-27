@@ -4,8 +4,8 @@ import java.util.List;
 
 public interface PackageInfoService {
 
-    List<String> getPackageTypes();
+    List<String> getPackageDescriptionTypes();
 
-    List<String> getPackageSizes();
+    List<String> getPackageDescriptionSizes();
 
 }
