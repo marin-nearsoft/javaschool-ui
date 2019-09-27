@@ -1,4 +1,4 @@
-package com.javaschool.backend;
+package com.javaschool.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.queue.*;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class BackEndApplicationTests {
+public class BackEndServiceTests {
     private static RabbitTemplate rabbitTemplateMock;
     private static BackEndService backEndService;
 
