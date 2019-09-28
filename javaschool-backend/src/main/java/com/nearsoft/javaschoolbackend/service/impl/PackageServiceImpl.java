@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nearsoft.javaschoolbackend.exception.custom.PackageDataException;
 import com.nearsoft.javaschoolbackend.model.response.PackageSize;
 import com.nearsoft.javaschoolbackend.model.response.PackageType;
+import com.nearsoft.javaschoolbackend.model.response.TransportType;
 import com.nearsoft.javaschoolbackend.service.PackageService;
 import com.nearsoft.javaschoolbackend.util.RabbitMQSender;
 import lombok.AllArgsConstructor;
@@ -50,4 +51,19 @@ public class PackageServiceImpl implements PackageService {
 
         return packageSizes;
     }
+
+    @Override
+    public List<TransportType> getTransportTypes() {
+        List<TransportType> transportTypes;
+
+        try {
+            transportTypes = objectMapper.readValue(rabbitMQSender.send("transportType"), new TypeReference<List<TransportType>>(){});
+        } catch (IOException | NullPointerException e) {
+            log.error(e.getMessage());
+            throw new PackageDataException("JSON mapping error occurred");
+        }
+
+        return transportTypes;
+    }
+
 }

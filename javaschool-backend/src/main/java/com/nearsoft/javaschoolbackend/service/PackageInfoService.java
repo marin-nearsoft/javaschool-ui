@@ -8,4 +8,6 @@ public interface PackageInfoService {
 
     List<String> getPackageDescriptionSizes();
 
+    List<String> getTransportDescriptionTypes();
+
 }

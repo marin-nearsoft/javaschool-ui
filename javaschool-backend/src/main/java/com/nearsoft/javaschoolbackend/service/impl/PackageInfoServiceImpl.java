@@ -15,15 +15,17 @@ public class PackageInfoServiceImpl implements PackageInfoService {
 
     @Override
     public List<String> getPackageDescriptionTypes() {
-        List<String> res;
-        res = packageService.getPackageTypes().stream().map(type -> type.getDescription()).collect(Collectors.toList());
-        return res;
+        return packageService.getPackageTypes().stream().map(type -> type.getDescription()).collect(Collectors.toList());
     }
 
     @Override
     public List<String> getPackageDescriptionSizes() {
-        List<String> res;
-        res = packageService.getPackageSizes().stream().map(size -> size.getDescription()).collect(Collectors.toList());
-        return res;
+        return packageService.getPackageSizes().stream().map(size -> size.getDescription()).collect(Collectors.toList());
     }
+
+    @Override
+    public List<String> getTransportDescriptionTypes() {
+        return packageService.getTransportTypes().stream().map(type -> type.getDescription()).collect(Collectors.toList());
+    }
+
 }

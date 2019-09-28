@@ -1,8 +1,8 @@
 package com.nearsoft.javaschoolbackend.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nearsoft.javaschoolbackend.model.response.PackageSize;
 import com.nearsoft.javaschoolbackend.model.response.PackageType;
+import com.nearsoft.javaschoolbackend.model.response.TransportType;
 import com.nearsoft.javaschoolbackend.service.impl.PackageInfoServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,20 +28,20 @@ public class PackageInfoServiceTests {
     }
 
     @Test
-    public void testGetPackageInfoTypes() throws JsonProcessingException {
-        List<String> packageInfoTypes = Arrays.asList("Box", "Envelope");
+    public void testGetPackageInfoTypes() {
+        List<String> expected = Arrays.asList("Box", "Envelope");
         List<PackageType> packageTypes = new ArrayList<PackageType>();
         PackageType packageTypeOne = new PackageType(2, "Box", 10);
         PackageType packageTypeTwo = new PackageType(3, "Envelope", 5);
         packageTypes.add(packageTypeOne);
         packageTypes.add(packageTypeTwo);
         when(packageService.getPackageTypes()).thenReturn(packageTypes);
-        assertEquals(packageInfoTypes, packageInfoService.getPackageDescriptionTypes());
+        assertEquals(expected, packageInfoService.getPackageDescriptionTypes());
     }
 
     @Test
-    public void testGetPackageInfoSizes() throws JsonProcessingException {
-        List<String> packageInfoSizes = Arrays.asList("Small", "Medium", "Large");
+    public void testGetPackageInfoSizes() {
+        List<String> expected = Arrays.asList("Small", "Medium", "Large");
         List<PackageSize> packageSizes = new ArrayList<PackageSize>();
         PackageSize packageSizeOne = new PackageSize(1, "Small", 5);
         PackageSize packageSizeTwo = new PackageSize(2, "Medium", 10);
@@ -50,7 +50,22 @@ public class PackageInfoServiceTests {
         packageSizes.add(packageSizeTwo);
         packageSizes.add(packageSizeThree);
         when(packageService.getPackageSizes()).thenReturn(packageSizes);
-        assertEquals(packageInfoSizes, packageInfoService.getPackageDescriptionSizes());
+        assertEquals(expected, packageInfoService.getPackageDescriptionSizes());
+    }
+
+    @Test
+    public void testGetTransportInfoTypes() {
+        List<String> expected = Arrays.asList("Land", "Air", "Sea");
+        List<TransportType> transportTypes = new ArrayList<TransportType>();
+        TransportType transportTypeOne = new TransportType(1, "Land", 2);
+        TransportType transportTypeTwo = new TransportType(2, "Air", 4);
+        TransportType transportTypeThree = new TransportType(3, "Sea", 6);
+        transportTypes.add(transportTypeOne);
+        transportTypes.add(transportTypeTwo);
+        transportTypes.add(transportTypeThree);
+
+        when(packageService.getTransportTypes()).thenReturn(transportTypes);
+        assertEquals(expected, packageInfoService.getTransportDescriptionTypes());
     }
 
 }

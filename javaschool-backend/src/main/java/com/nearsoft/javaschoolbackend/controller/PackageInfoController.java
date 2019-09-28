@@ -15,14 +15,19 @@ public class PackageInfoController {
 
     private final PackageInfoService packageInfoService;
 
-    @GetMapping("/types")
+    @GetMapping("/package-types")
     public List<String> getPackageTypes(){
         return packageInfoService.getPackageDescriptionTypes();
     }
 
-    @GetMapping("/sizes")
+    @GetMapping("/package-sizes")
     public List<String> getPackageSizes(){
         return packageInfoService.getPackageDescriptionSizes();
+    }
+
+    @GetMapping("/transport-types")
+    public List<String> getTransportTypes(){
+        return packageInfoService.getTransportDescriptionTypes();
     }
 
 }
