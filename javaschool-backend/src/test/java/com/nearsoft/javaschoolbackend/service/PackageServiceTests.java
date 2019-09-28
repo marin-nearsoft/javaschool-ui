@@ -6,6 +6,7 @@ import com.nearsoft.javaschoolbackend.config.ConfigProperties;
 import com.nearsoft.javaschoolbackend.exception.custom.CentralServerException;
 import com.nearsoft.javaschoolbackend.exception.custom.PackageDataException;
 import com.nearsoft.javaschoolbackend.model.request.TypeRequest;
+import com.nearsoft.javaschoolbackend.model.response.PackageSize;
 import com.nearsoft.javaschoolbackend.model.response.PackageType;
 import com.nearsoft.javaschoolbackend.service.impl.PackageServiceImpl;
 import com.nearsoft.javaschoolbackend.util.RabbitMQSender;
@@ -46,17 +47,30 @@ public class PackageServiceTests {
         assertEquals(packageTypes, packageService.getPackageTypes());
     }
 
+    @Test
+    public void testGetPackageSizes() throws JsonProcessingException {
+        List<PackageSize> packageSizes = new ArrayList<PackageSize>();
+        PackageSize packageSizeOne = new PackageSize(1, "Small", 5);
+        PackageSize packageSizeTwo = new PackageSize(2, "Medium", 10);
+        PackageSize packageSizeThree = new PackageSize(3, "Large", 15);
+        packageSizes.add(packageSizeOne);
+        packageSizes.add(packageSizeTwo);
+        packageSizes.add(packageSizeThree);
+
+        when(rabbitTemplate.convertSendAndReceive(null, null, new TypeRequest("packageSize").toJSONString())).thenReturn("[{\"id\":1,\"description\":\"Small\",\"priceFactor\":5},{\"id\":2,\"description\":\"Medium\",\"priceFactor\":10},{\"id\":3,\"description\":\"Large\",\"priceFactor\":15}]");
+        assertEquals(packageSizes, packageService.getPackageSizes());
+    }
+
     @Test(expected = PackageDataException.class)
-    public void testPackageTypesDataException() throws JsonProcessingException {
+    public void testPackageDataException() throws JsonProcessingException {
         when(rabbitTemplate.convertSendAndReceive(null, null, new TypeRequest("packageType").toJSONString())).thenReturn(null);
         packageService.getPackageTypes();
     }
 
     @Test(expected = CentralServerException.class)
-    public void testPackageTypesCentralServerException() throws JsonProcessingException {
+    public void testPackageCentralServerException() throws JsonProcessingException {
         when(rabbitTemplate.convertSendAndReceive(null, null, new TypeRequest("packageType").toJSONString())).thenThrow(CentralServerException.class);
         packageService.getPackageTypes();
     }
-
 
 }
