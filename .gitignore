@@ -5,3 +5,12 @@
 *.ipr
 
 .DS_Store
+
+### Maven ###
+log/
+target/
+
+### Java ###
+*.class
+*.log
+*.ctxt
