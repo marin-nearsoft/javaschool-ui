@@ -86,8 +86,8 @@ public class PackageInfoServiceTests {
     public void testGetCityNames() {
         List<String> expected = Arrays.asList("Chihuahua", "Leon");
         List<City> cities = new ArrayList<City>();
-        City cityOne = new City(1, "Chihuahua", 4, false, true);
-        City cityTwo = new City(9, "Leon", 10, false, false);
+        City cityOne = new City(9, "Leon", 10, false, false);
+        City cityTwo = new City(1, "Chihuahua", 4, false, true);
         cities.add(cityOne);
         cities.add(cityTwo);
 

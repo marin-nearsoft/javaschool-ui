@@ -35,7 +35,7 @@ public class PackageInfoServiceImpl implements PackageInfoService {
 
     @Override
     public List<String> getCityNames() {
-        return packageService.getCities().stream().map(city -> city.getName()).collect(Collectors.toList());
+        return packageService.getCities().stream().map(city -> city.getName()).sorted().collect(Collectors.toList());
     }
 
 }
