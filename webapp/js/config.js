@@ -6,7 +6,7 @@ const config = {
         "type" : "/shipping-api/package-info/package-types",
         "time" : "/shipping-api/package-info/transport-velocities",
         "transport" : "/shipping-api/package-info/transport-types",
-        "city" : "",
+        "city" : "/shipping-api/package-info/cities",
         "cityPath": "",
         "checkPrice" : "",
         "sendShipping": "",

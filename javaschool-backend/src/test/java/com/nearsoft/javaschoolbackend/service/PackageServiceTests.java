@@ -6,10 +6,7 @@ import com.nearsoft.javaschoolbackend.config.ConfigProperties;
 import com.nearsoft.javaschoolbackend.exception.custom.CentralServerException;
 import com.nearsoft.javaschoolbackend.exception.custom.PackageDataException;
 import com.nearsoft.javaschoolbackend.model.request.TypeRequest;
-import com.nearsoft.javaschoolbackend.model.response.PackageSize;
-import com.nearsoft.javaschoolbackend.model.response.PackageType;
-import com.nearsoft.javaschoolbackend.model.response.TransportType;
-import com.nearsoft.javaschoolbackend.model.response.TransportVelocity;
+import com.nearsoft.javaschoolbackend.model.response.*;
 import com.nearsoft.javaschoolbackend.service.impl.PackageServiceImpl;
 import com.nearsoft.javaschoolbackend.util.RabbitMQSender;
 import org.junit.Before;
@@ -89,6 +86,18 @@ public class PackageServiceTests {
 
         when(rabbitTemplate.convertSendAndReceive(null, null, new TypeRequest("transportVelocity").toJSONString())).thenReturn("[{\"id\":1,\"description\":\"Slow\",\"priceFactor\":5},{\"id\":2,\"description\":\"Regular\",\"priceFactor\":10},{\"id\":3,\"description\":\"Fast\",\"priceFactor\":15}]");
         assertEquals(transportVelocities, packageService.getTransportVelocities());
+    }
+
+    @Test
+    public void testGetCities() throws JsonProcessingException {
+        List<City> cities = new ArrayList<City>();
+        City cityOne = new City(1, "Chihuahua", 4, false, true);
+        City cityTwo = new City(9, "Leon", 10, false, false);
+        cities.add(cityOne);
+        cities.add(cityTwo);
+
+        when(rabbitTemplate.convertSendAndReceive(null, null, new TypeRequest("city").toJSONString())).thenReturn("[{\"id\":1,\"name\":\"Chihuahua\",\"tax\":4,\"seaport\":false,\"airport\":true},{\"id\":9,\"name\":\"Leon\",\"tax\":10,\"seaport\":false,\"airport\":false}]");
+        assertEquals(cities, packageService.getCities());
     }
 
     @Test(expected = PackageDataException.class)

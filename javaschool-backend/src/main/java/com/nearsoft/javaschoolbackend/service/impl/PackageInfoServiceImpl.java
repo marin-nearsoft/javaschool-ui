@@ -33,4 +33,9 @@ public class PackageInfoServiceImpl implements PackageInfoService {
         return packageService.getTransportVelocities().stream().map(velocity -> velocity.getDescription()).collect(Collectors.toList());
     }
 
+    @Override
+    public List<String> getCityNames() {
+        return packageService.getCities().stream().map(city -> city.getName()).collect(Collectors.toList());
+    }
+
 }

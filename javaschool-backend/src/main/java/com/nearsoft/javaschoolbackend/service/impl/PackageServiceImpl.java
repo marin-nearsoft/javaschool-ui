@@ -3,10 +3,7 @@ package com.nearsoft.javaschoolbackend.service.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nearsoft.javaschoolbackend.exception.custom.PackageDataException;
-import com.nearsoft.javaschoolbackend.model.response.PackageSize;
-import com.nearsoft.javaschoolbackend.model.response.PackageType;
-import com.nearsoft.javaschoolbackend.model.response.TransportType;
-import com.nearsoft.javaschoolbackend.model.response.TransportVelocity;
+import com.nearsoft.javaschoolbackend.model.response.*;
 import com.nearsoft.javaschoolbackend.service.PackageService;
 import com.nearsoft.javaschoolbackend.util.RabbitMQSender;
 import lombok.AllArgsConstructor;
@@ -79,6 +76,20 @@ public class PackageServiceImpl implements PackageService {
         }
 
         return transportVelocities;
+    }
+
+    @Override
+    public List<City> getCities() {
+        List<City> cities;
+
+        try {
+            cities = objectMapper.readValue(rabbitMQSender.send("city"), new TypeReference<List<City>>(){});
+        } catch (IOException | NullPointerException e) {
+            log.error(e.getMessage());
+            throw new PackageDataException("JSON mapping error occurred");
+        }
+
+        return cities;
     }
 
 }

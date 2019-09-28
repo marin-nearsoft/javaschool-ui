@@ -1,10 +1,7 @@
 package com.nearsoft.javaschoolbackend.service;
 
 import com.nearsoft.javaschoolbackend.model.request.TypeRequest;
-import com.nearsoft.javaschoolbackend.model.response.PackageSize;
-import com.nearsoft.javaschoolbackend.model.response.PackageType;
-import com.nearsoft.javaschoolbackend.model.response.TransportType;
-import com.nearsoft.javaschoolbackend.model.response.TransportVelocity;
+import com.nearsoft.javaschoolbackend.model.response.*;
 import com.nearsoft.javaschoolbackend.service.impl.PackageInfoServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -83,6 +80,19 @@ public class PackageInfoServiceTests {
 
         when(packageService.getTransportVelocities()).thenReturn(transportVelocities);
         assertEquals(expected, packageInfoService.getTransportDescriptionVelocities());
+    }
+
+    @Test
+    public void testGetCityNames() {
+        List<String> expected = Arrays.asList("Chihuahua", "Leon");
+        List<City> cities = new ArrayList<City>();
+        City cityOne = new City(1, "Chihuahua", 4, false, true);
+        City cityTwo = new City(9, "Leon", 10, false, false);
+        cities.add(cityOne);
+        cities.add(cityTwo);
+
+        when(packageService.getCities()).thenReturn(cities);
+        assertEquals(expected, packageInfoService.getCityNames());
     }
 
 }

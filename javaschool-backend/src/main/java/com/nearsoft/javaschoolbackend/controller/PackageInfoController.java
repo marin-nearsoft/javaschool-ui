@@ -35,4 +35,9 @@ public class PackageInfoController {
         return packageInfoService.getTransportDescriptionVelocities();
     }
 
+    @GetMapping("/cities")
+    public List<String> getCities(){
+        return packageInfoService.getCityNames();
+    }
+
 }
