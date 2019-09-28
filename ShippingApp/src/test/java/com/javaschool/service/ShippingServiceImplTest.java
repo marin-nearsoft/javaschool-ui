@@ -11,9 +11,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.hasItems;
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.isA;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -33,52 +32,52 @@ public class ShippingServiceImplTest {
     }
 
     @Test
-    public void getSizeTest() {
+    public void getPackageSizeTest() {
         String queueResponse = "[{\"id\":1,\"description\":\"Small\",\"priceFactor\":5},{\"id\":2,\"description\":\"Medium\",\"priceFactor\":10},{\"id\":3,\"description\":\"Large\",\"priceFactor\":15}]";
         String queueMessage = "{\"type\":\"packageSize\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
-        List<String> sizes = shippingService.getSize();
+        List<String> sizes = shippingService.getPackageSize();
         assertEquals(sizes.size(), 3);
     }
 
     @Test
-    public void getSizeElementsTest() {
+    public void getPackageSizeElementsTest() {
         String queueResponse = "[{\"id\":1,\"description\":\"Small\",\"priceFactor\":5},{\"id\":2,\"description\":\"Medium\",\"priceFactor\":10},{\"id\":3,\"description\":\"Large\",\"priceFactor\":15}]";
         String queueMessage = "{\"type\":\"packageSize\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
-        List<String> sizes = shippingService.getSize();
+        List<String> sizes = shippingService.getPackageSize();
         assertThat(sizes, hasItems("Small", "Medium", "Large"));
     }
 
     @Test(expected = QueueException.class)
-    public void getSizeExceptionTest(){
+    public void getPackageSizeExceptionTest(){
         String queueMessage = "{\"type\":\"packageSize\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(null);
-        List<String> sizes = shippingService.getSize();
+        shippingService.getPackageSize();
     }
 
     @Test
-    public void getTypeTest() {
+    public void getPackageTypeTest() {
         String queueResponse = "[{\"id\":2,\"description\":\"Box\",\"price\":10},{\"id\":3,\"description\":\"Envelope\",\"price\":5}]";
         String queueMessage = "{\"type\":\"packageType\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
-        List<String> types = shippingService.getType();
+        List<String> types = shippingService.getPackageType();
         assertEquals(types.size(), 2);
     }
 
     @Test
-    public void getTypeElementsTest() {
+    public void getPackageTypeElementsTest() {
         String queueResponse = "[{\"id\":2,\"description\":\"Box\",\"price\":10},{\"id\":3,\"description\":\"Envelope\",\"price\":5}]";
         String queueMessage = "{\"type\":\"packageType\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
-        List<String> types = shippingService.getType();
+        List<String> types = shippingService.getPackageType();
         assertThat(types, hasItems("Box", "Envelope"));
     }
 
     @Test(expected = QueueException.class)
-    public void getTypeExceptionTest(){
+    public void getPackageTypeExceptionTest(){
         String queueMessage = "{\"type\":\"packageType\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(null);
-        List<String> types = shippingService.getSize();
+        shippingService.getPackageType();
     }
 }

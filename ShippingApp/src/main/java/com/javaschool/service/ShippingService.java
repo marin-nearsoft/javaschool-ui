@@ -5,11 +5,11 @@ import java.util.List;
 
 public interface ShippingService {
 
-    List<String> getSize();
+    List<String> getPackageSize();
 
-    List<String> getType();
+    List<String> getPackageType();
 
-    List<String> getTime();
+    List<String> getTransportVelocity();
 
     List<String> getTransport();
 }
