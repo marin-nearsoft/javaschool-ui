@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shipping.backend.config.AppConfiguration;
 import com.shipping.backend.config.CustomException;
 import com.shipping.backend.config.QueueClient;
+import com.shipping.backend.entities.PackageSize;
 import com.shipping.backend.entities.PackageType;
 import com.shipping.backend.entities.QueueRequestMessage;
 import com.shipping.backend.services.QueueResponseHandler;
@@ -79,6 +80,45 @@ public class BackendApplicationTests {
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
         List packageTypesList = queueResponseHandler.getTypes();
+
+    }
+
+
+    @Test
+    public void getPackageSizesTestSuccess()  {
+
+        //Set request message to get package types
+        queueRequestMessage.setType("packageSize");
+
+        //This line should be remove once i can implement TestPropertySource
+        appConfiguration.setPackageSizes("packageSize");
+
+        //Mocked Response Values
+        PackageSize packageSize = new PackageSize();
+        packageSize.setId(1);
+        packageSize.setDescription("Small");
+        packageSize.setPriceFactor(5);
+
+        when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(
+                packageSize.toString());
+        List packageSizesList = queueResponseHandler.getSizes();
+
+        assertEquals(packageSizesList.size(),1);
+        assertEquals(packageSizesList.get(0).getClass(), PackageSize.class);
+        assertThat(packageSizesList.get(0), hasProperty("description", is("Small")));
+
+    }
+
+    @Test(expected = CustomException.class)
+    public void getPackageSizesTestFailure()  {
+        //Set request message to get package types
+        queueRequestMessage.setType("packageSize");
+
+        //This line should be remove once i can implement TestPropertySource
+        appConfiguration.setPackageTypes("packageSize");
+
+        when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
+        List packageSizesList = queueResponseHandler.getSizes();
 
     }
 
