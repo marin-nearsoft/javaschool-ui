@@ -7,6 +7,7 @@ import com.shipping.backend.config.QueueClient;
 import com.shipping.backend.entities.PackageSize;
 import com.shipping.backend.entities.PackageType;
 import com.shipping.backend.entities.QueueRequestMessage;
+import com.shipping.backend.entities.Transport;
 import com.shipping.backend.services.QueueResponseHandler;
 import com.shipping.backend.services.QueueResponseHandlerImp;
 import org.junit.Before;
@@ -83,7 +84,6 @@ public class BackendApplicationTests {
 
     }
 
-
     @Test
     public void getPackageSizesTestSuccess()  {
 
@@ -115,10 +115,48 @@ public class BackendApplicationTests {
         queueRequestMessage.setType("packageSize");
 
         //This line should be remove once i can implement TestPropertySource
-        appConfiguration.setPackageTypes("packageSize");
+        appConfiguration.setPackageSizes("packageSize");
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
         List packageSizesList = queueResponseHandler.getSizes();
+
+    }
+
+    @Test
+    public void getTransportTypesTestSuccess()  {
+
+        //Set request message to get package types
+        queueRequestMessage.setType("transportType");
+
+        //This line should be remove once i can implement TestPropertySource
+        appConfiguration.setTransportTypes("transportType");
+
+        //Mocked Response Values
+        Transport transportType = new Transport();
+        transportType.setId(2);
+        transportType.setDescription("Land");
+        transportType.setPricePerMile(2);
+
+        when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(
+                transportType.toString());
+        List transportTypesList = queueResponseHandler.getTransports();
+
+        assertEquals(transportTypesList.size(),1);
+        assertEquals(transportTypesList.get(0).getClass(), Transport.class);
+        assertThat(transportTypesList.get(0), hasProperty("description", is("Land")));
+
+    }
+
+    @Test(expected = CustomException.class)
+    public void getTransportTypesTestFailure()  {
+        //Set request message to get package types
+        queueRequestMessage.setType("transportType");
+
+        //This line should be remove once i can implement TestPropertySource
+        appConfiguration.setTransportTypes("transportType");
+
+        when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
+        List transportTypesList = queueResponseHandler.getTransports();
 
     }
 

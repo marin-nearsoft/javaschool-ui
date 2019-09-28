@@ -28,4 +28,9 @@ public class ShipmentRetrievalController {
     public List<String> packageSizes(){
         return queueResponseHandler.getSizes().stream().map(packageSize -> packageSize.getDescription()).collect(Collectors.toList());
     }
+
+    @GetMapping("/transports")
+    public List<String> transports(){
+        return queueResponseHandler.getSizes().stream().map(transports -> transports.getDescription()).collect(Collectors.toList());
+    }
 }
