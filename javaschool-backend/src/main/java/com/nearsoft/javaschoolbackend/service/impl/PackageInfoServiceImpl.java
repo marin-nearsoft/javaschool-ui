@@ -28,4 +28,9 @@ public class PackageInfoServiceImpl implements PackageInfoService {
         return packageService.getTransportTypes().stream().map(type -> type.getDescription()).collect(Collectors.toList());
     }
 
+    @Override
+    public List<String> getTransportDescriptionVelocities() {
+        return packageService.getTransportVelocities().stream().map(velocity -> velocity.getDescription()).collect(Collectors.toList());
+    }
+
 }

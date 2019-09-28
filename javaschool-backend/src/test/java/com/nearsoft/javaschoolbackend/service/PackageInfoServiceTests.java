@@ -1,8 +1,10 @@
 package com.nearsoft.javaschoolbackend.service;
 
+import com.nearsoft.javaschoolbackend.model.request.TypeRequest;
 import com.nearsoft.javaschoolbackend.model.response.PackageSize;
 import com.nearsoft.javaschoolbackend.model.response.PackageType;
 import com.nearsoft.javaschoolbackend.model.response.TransportType;
+import com.nearsoft.javaschoolbackend.model.response.TransportVelocity;
 import com.nearsoft.javaschoolbackend.service.impl.PackageInfoServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,6 +68,21 @@ public class PackageInfoServiceTests {
 
         when(packageService.getTransportTypes()).thenReturn(transportTypes);
         assertEquals(expected, packageInfoService.getTransportDescriptionTypes());
+    }
+
+    @Test
+    public void testGetTransportInfoVelocities() {
+        List<String> expected = Arrays.asList("Slow", "Regular", "Fast");
+        List<TransportVelocity> transportVelocities = new ArrayList<TransportVelocity>();
+        TransportVelocity transportVelocityOne = new TransportVelocity(1, "Slow", 5);
+        TransportVelocity transportVelocityTwo = new TransportVelocity(2, "Regular", 10);
+        TransportVelocity transportVelocityThree = new TransportVelocity(3, "Fast", 15);
+        transportVelocities.add(transportVelocityOne);
+        transportVelocities.add(transportVelocityTwo);
+        transportVelocities.add(transportVelocityThree);
+
+        when(packageService.getTransportVelocities()).thenReturn(transportVelocities);
+        assertEquals(expected, packageInfoService.getTransportDescriptionVelocities());
     }
 
 }

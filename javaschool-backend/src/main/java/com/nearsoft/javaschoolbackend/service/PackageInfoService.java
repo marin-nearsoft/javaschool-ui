@@ -10,4 +10,6 @@ public interface PackageInfoService {
 
     List<String> getTransportDescriptionTypes();
 
+    List<String> getTransportDescriptionVelocities();
+
 }

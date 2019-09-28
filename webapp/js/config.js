@@ -4,7 +4,7 @@ const config = {
     "rest" : {
         "size" : "/shipping-api/package-info/package-sizes",
         "type" : "/shipping-api/package-info/package-types",
-        "time" : "",
+        "time" : "/shipping-api/package-info/transport-velocities",
         "transport" : "/shipping-api/package-info/transport-types",
         "city" : "",
         "cityPath": "",

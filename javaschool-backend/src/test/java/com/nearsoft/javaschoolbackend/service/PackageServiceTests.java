@@ -9,6 +9,7 @@ import com.nearsoft.javaschoolbackend.model.request.TypeRequest;
 import com.nearsoft.javaschoolbackend.model.response.PackageSize;
 import com.nearsoft.javaschoolbackend.model.response.PackageType;
 import com.nearsoft.javaschoolbackend.model.response.TransportType;
+import com.nearsoft.javaschoolbackend.model.response.TransportVelocity;
 import com.nearsoft.javaschoolbackend.service.impl.PackageServiceImpl;
 import com.nearsoft.javaschoolbackend.util.RabbitMQSender;
 import org.junit.Before;
@@ -74,6 +75,20 @@ public class PackageServiceTests {
 
         when(rabbitTemplate.convertSendAndReceive(null, null, new TypeRequest("transportType").toJSONString())).thenReturn("[{\"id\":1,\"description\":\"Land\",\"pricePerMile\":2},{\"id\":2,\"description\":\"Air\",\"pricePerMile\":4},{\"id\":3,\"description\":\"Sea\",\"pricePerMile\":6}]");
         assertEquals(transportTypes, packageService.getTransportTypes());
+    }
+
+    @Test
+    public void testGetTransportVelocities() throws JsonProcessingException {
+        List<TransportVelocity> transportVelocities = new ArrayList<TransportVelocity>();
+        TransportVelocity transportVelocityOne = new TransportVelocity(1, "Slow", 5);
+        TransportVelocity transportVelocityTwo = new TransportVelocity(2, "Regular", 10);
+        TransportVelocity transportVelocityThree = new TransportVelocity(3, "Fast", 15);
+        transportVelocities.add(transportVelocityOne);
+        transportVelocities.add(transportVelocityTwo);
+        transportVelocities.add(transportVelocityThree);
+
+        when(rabbitTemplate.convertSendAndReceive(null, null, new TypeRequest("transportVelocity").toJSONString())).thenReturn("[{\"id\":1,\"description\":\"Slow\",\"priceFactor\":5},{\"id\":2,\"description\":\"Regular\",\"priceFactor\":10},{\"id\":3,\"description\":\"Fast\",\"priceFactor\":15}]");
+        assertEquals(transportVelocities, packageService.getTransportVelocities());
     }
 
     @Test(expected = PackageDataException.class)

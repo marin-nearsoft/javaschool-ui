@@ -6,6 +6,7 @@ import com.nearsoft.javaschoolbackend.exception.custom.PackageDataException;
 import com.nearsoft.javaschoolbackend.model.response.PackageSize;
 import com.nearsoft.javaschoolbackend.model.response.PackageType;
 import com.nearsoft.javaschoolbackend.model.response.TransportType;
+import com.nearsoft.javaschoolbackend.model.response.TransportVelocity;
 import com.nearsoft.javaschoolbackend.service.PackageService;
 import com.nearsoft.javaschoolbackend.util.RabbitMQSender;
 import lombok.AllArgsConstructor;
@@ -64,6 +65,20 @@ public class PackageServiceImpl implements PackageService {
         }
 
         return transportTypes;
+    }
+
+    @Override
+    public List<TransportVelocity> getTransportVelocities() {
+        List<TransportVelocity> transportVelocities;
+
+        try {
+            transportVelocities = objectMapper.readValue(rabbitMQSender.send("transportVelocity"), new TypeReference<List<TransportVelocity>>(){});
+        } catch (IOException | NullPointerException e) {
+            log.error(e.getMessage());
+            throw new PackageDataException("JSON mapping error occurred");
+        }
+
+        return transportVelocities;
     }
 
 }

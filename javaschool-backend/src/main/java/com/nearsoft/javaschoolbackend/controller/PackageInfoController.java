@@ -30,4 +30,9 @@ public class PackageInfoController {
         return packageInfoService.getTransportDescriptionTypes();
     }
 
+    @GetMapping("/transport-velocities")
+    public List<String> getTransportVelocities(){
+        return packageInfoService.getTransportDescriptionVelocities();
+    }
+
 }
