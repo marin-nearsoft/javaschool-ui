@@ -17,21 +17,21 @@ public class ShippingController {
 
     @RequestMapping("/size")
     public List<String> getSize() {
-        return shippingService.getSize();
+        return shippingService.getPackageSize();
     }
 
     @RequestMapping("/type")
     public List<String> getType() {
-        return shippingService.getType();
+        return shippingService.getPackageType();
     }
 
     @RequestMapping("/time")
     public List<String> getTime() {
-        return shippingService.getTime();
+        return shippingService.getTransportVelocity();
     }
 
     @RequestMapping("/transport")
-    public List<String> getTransport() {return shippingService.getTransport();}
+    public List<String> getTransport() {return shippingService.getTransportType();}
 
     @RequestMapping("/city")
     public List<String> getCity() {
