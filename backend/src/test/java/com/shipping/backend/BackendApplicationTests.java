@@ -195,4 +195,44 @@ public class BackendApplicationTests {
 
     }
 
+    @Test
+    public void getCitiesTestSuccess()  {
+
+        //Set request message to get package types
+        queueRequestMessage.setType("city");
+
+        //This line should be remove once i can implement TestPropertySource
+        appConfiguration.setCities("city");
+
+        //Mocked Response Values
+        City city = new City();
+        city.setId(1);
+        city.setName("Leon");
+        city.setTax(10);
+        city.setSeaport(false);
+        city.setAirport(false);
+
+        when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(
+                city.toString());
+        List cityList = queueResponseHandler.getCities();
+
+        assertEquals(cityList.size(),1);
+        assertEquals(cityList.get(0).getClass(), City.class);
+        assertThat(cityList.get(0), hasProperty("name", is("Leon")));
+
+    }
+
+    @Test(expected = CustomException.class)
+    public void getCitiesTestFailure()  {
+        //Set request message to get package types
+        queueRequestMessage.setType("city");
+
+        //This line should be remove once i can implement TestPropertySource
+        appConfiguration.setCities("city");
+
+        when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
+        List cityList = queueResponseHandler.getCities();
+
+    }
+
 }

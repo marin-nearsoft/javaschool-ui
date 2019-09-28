@@ -38,4 +38,10 @@ public class ShipmentRetrievalController {
     public List<String> transportVelocities(){
         return queueResponseHandler.getSizes().stream().map(transportVelocities -> transportVelocities.getDescription()).collect(Collectors.toList());
     }
+
+    @GetMapping("/cities")
+    public List<String> cities(){
+        return queueResponseHandler.getCities().stream().map(cities -> cities.getName()).collect(Collectors.toList());
+    }
+
 }
