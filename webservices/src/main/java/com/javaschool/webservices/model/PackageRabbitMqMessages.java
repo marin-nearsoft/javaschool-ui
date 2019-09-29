@@ -14,7 +14,7 @@ public enum PackageRabbitMqMessages {
 		this.packageRabbitMqMessage = packageRabbitMqMessage;
 	}
 
-	public PackageRabbitRPCMessage getPackageRabbitRPCMessage() {
+	public PackageRabbitRPCMessage createPackageRabbitRPCMessage() {
 		return new PackageRabbitRPCMessage(packageRabbitMqMessage);
 	}
 }

@@ -33,7 +33,7 @@ public class PackageRabbitMqServiceImpl implements PackageRabbitMqService {
 	@Override
 	public List<PackageType> getPackageTypes() {
 		try {
-			String message = objectMapper.writeValueAsString(PackageRabbitMqMessages.PACKAGE_TYPE.getPackageRabbitRPCMessage());
+			String message = objectMapper.writeValueAsString(PackageRabbitMqMessages.PACKAGE_TYPE.createPackageRabbitRPCMessage());
 			Object object = rabbitTemplate.convertSendAndReceive(rabbitMQProperties.getExchange(), rabbitMQProperties.getRoutingKey(), message);
 			return objectMapper.readValue((String)object, new TypeReference<List<PackageType>>(){});
 		} catch (Exception e) {
@@ -44,7 +44,7 @@ public class PackageRabbitMqServiceImpl implements PackageRabbitMqService {
 	@Override
 	public List<PackageSize> getPackageSizes() {
 		try {
-			String message = objectMapper.writeValueAsString(PackageRabbitMqMessages.PACKAGE_SIZE.getPackageRabbitRPCMessage());
+			String message = objectMapper.writeValueAsString(PackageRabbitMqMessages.PACKAGE_SIZE.createPackageRabbitRPCMessage());
 			Object object = rabbitTemplate.convertSendAndReceive(rabbitMQProperties.getExchange(), rabbitMQProperties.getRoutingKey(), message);
 			return objectMapper.readValue((String)object, new TypeReference<List<PackageSize>>(){});
 		} catch (Exception e) {
