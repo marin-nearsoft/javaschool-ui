@@ -32,5 +32,10 @@ public class PackageController {
 	public List<String> getTransports() {
 		return packageService.getTransports();
 	}
+	
+	@GetMapping("/transports")
+	public List<String> getTimes() {
+		return packageService.getTimes();
+	}
 
 }
