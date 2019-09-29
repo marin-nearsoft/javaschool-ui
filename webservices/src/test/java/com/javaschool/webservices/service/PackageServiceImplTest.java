@@ -1,6 +1,7 @@
 package com.javaschool.webservices.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.javaschool.webservices.model.PackageSize;
+import com.javaschool.webservices.model.PackageTransport;
 import com.javaschool.webservices.model.PackageType;
 import com.javaschool.webservices.service.impl.PackageServiceImpl;
 
@@ -88,6 +90,39 @@ public class PackageServiceImplTest {
 		assertEquals(packageType1.getDescription(), packageTypesNames.get(0));
 		assertEquals(packageType2.getDescription(), packageTypesNames.get(1));
 		assertEquals(packageType3.getDescription(), packageTypesNames.get(2));
+	}
+	
+	@Test
+	public void testTransports() {
+		List<PackageTransport> packageTransportsList = new LinkedList<PackageTransport>();
+		
+		PackageTransport packageTransport1 = new PackageTransport();
+		packageTransport1.setId(1);
+		packageTransport1.setDescription("Package transport 1 test");
+		packageTransport1.setPricePerMile(10.10);
+		
+		PackageTransport packageTransport2 = new PackageTransport();
+		packageTransport2.setId(2);
+		packageTransport2.setDescription("Package transport 2 test");
+		packageTransport2.setPricePerMile(20.20);
+		
+		PackageTransport packageTransport3 = new PackageTransport();
+		packageTransport3.setId(3);
+		packageTransport3.setDescription("Package transport 3 test");
+		packageTransport3.setPricePerMile(30.30);
+		
+		packageTransportsList.add(packageTransport1);
+		packageTransportsList.add(packageTransport2);
+		packageTransportsList.add(packageTransport3);
+		
+		Mockito.when(shippingServiceMock.getPackageTransport()).thenReturn(packageTransportsList);
+		
+		List<String> packageTransportsNames = packageService.getTransports();
+		
+		assertNotNull(packageTransportsNames);
+		assertEquals(packageTransport1.getDescription(), packageTransportsNames.get(0));
+		assertEquals(packageTransport2.getDescription(), packageTransportsNames.get(1));
+		assertEquals(packageTransport3.getDescription(), packageTransportsNames.get(2));
 	}
 
 }

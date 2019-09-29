@@ -7,5 +7,7 @@ public interface PackageService {
 	List<String> getSizes();
 	
 	List<String> getTypes();
+	
+	List<String> getTransports();
 
 }
