@@ -85,6 +85,9 @@ public class PackageServiceImplTest {
 		List<String> packageTypesNames = packageService.getTypes();
 		
 		assertEquals(3, packageTypesNames.size());
+		assertEquals(packageType1.getDescription(), packageTypesNames.get(0));
+		assertEquals(packageType2.getDescription(), packageTypesNames.get(1));
+		assertEquals(packageType3.getDescription(), packageTypesNames.get(2));
 	}
 
 }
