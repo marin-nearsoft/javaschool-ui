@@ -33,7 +33,7 @@ public class PackageController {
 		return packageService.getTransports();
 	}
 	
-	@GetMapping("/transports")
+	@GetMapping("/times")
 	public List<String> getTimes() {
 		return packageService.getTimes();
 	}
