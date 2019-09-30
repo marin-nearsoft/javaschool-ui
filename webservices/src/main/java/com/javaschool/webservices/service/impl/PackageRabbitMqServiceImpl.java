@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.webservices.configuration.RabbitMQProperties;
+import com.javaschool.webservices.model.City;
 import com.javaschool.webservices.model.PackageRabbitMqMessages;
 import com.javaschool.webservices.model.PackageSize;
 import com.javaschool.webservices.model.PackageTime;
@@ -71,6 +72,17 @@ public class PackageRabbitMqServiceImpl implements PackageRabbitMqService {
 			String message = objectMapper.writeValueAsString(PackageRabbitMqMessages.PACKAGE_TIME.createPackageRabbitRPCMessage());
 			Object object = rabbitTemplate.convertSendAndReceive(rabbitMQProperties.getExchange(), rabbitMQProperties.getRoutingKey(), message);
 			return objectMapper.readValue((String)object, new TypeReference<List<PackageTime>>(){});
+		} catch (Exception e) {
+			return Collections.emptyList();
+		}
+	}
+
+	@Override
+	public List<City> getCities() {
+		try {
+			String message = objectMapper.writeValueAsString(PackageRabbitMqMessages.CITY.createPackageRabbitRPCMessage());
+			Object object = rabbitTemplate.convertSendAndReceive(rabbitMQProperties.getExchange(), rabbitMQProperties.getRoutingKey(), message);
+			return objectMapper.readValue((String)object, new TypeReference<List<City>>(){});
 		} catch (Exception e) {
 			return Collections.emptyList();
 		}

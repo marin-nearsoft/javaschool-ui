@@ -2,6 +2,7 @@ package com.javaschool.webservices.service;
 
 import java.util.List;
 
+import com.javaschool.webservices.model.City;
 import com.javaschool.webservices.model.PackageSize;
 import com.javaschool.webservices.model.PackageTime;
 import com.javaschool.webservices.model.PackageTransport;
@@ -16,5 +17,7 @@ public interface PackageRabbitMqService {
 	List<PackageTransport> getPackageTransport();
 	
 	List<PackageTime> getPackageTimes();
+	
+	List<City> getCities();
 
 }

@@ -14,6 +14,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.webservices.configuration.RabbitMQProperties;
+import com.javaschool.webservices.model.City;
 import com.javaschool.webservices.model.PackageSize;
 import com.javaschool.webservices.model.PackageTime;
 import com.javaschool.webservices.model.PackageTransport;
@@ -86,6 +87,7 @@ public class ShippingRabbitRPCServiceImplTest {
 		assertEquals(3, packageTransportsList.size());
 	}
 	
+	@Test
 	public void testgetPackageTimes() {
 		String jsonRabbitTemplateReponse = "[{\"id\":1,\"description\":\"Slow\",\"priceFactor\":10.10},{\"id\":2,\"description\":\"Fast\",\"priceFactor\":20.20},{\"id\":3,\"description\":\"Very fast\",\"priceFactor\":30.30}]";
 
@@ -96,5 +98,20 @@ public class ShippingRabbitRPCServiceImplTest {
 		List<PackageTime> packageTimesList = shippingService.getPackageTimes();
 		assertFalse(packageTimesList.isEmpty());
 		assertEquals(3, packageTimesList.size());
+	}
+	
+	@Test
+	public void testgetCities() {
+		String jsonRabbitTemplateReponse = "[{\"id\":1,\"name\":\"Cancun\",\"tax\":200,\"seaPort\":true,\"airPort\":true},"
+				+ "{\"id\":2,\"name\":\"Chihuahua\",\"tax\":100,\"seaPort\":false,\"airPort\":true},"
+				+ "{\"id\":3,\"name\":\"Leaon\",\"tax\":100,\"seaPort\":false,\"airPort\":false}]";
+
+		Mockito.when(rabbitTemplateMock.convertSendAndReceive(Mockito.eq(rabbitMQProperties.getExchange()),
+				Mockito.eq(rabbitMQProperties.getRoutingKey()), Mockito.any(Object.class)))
+				.thenReturn(jsonRabbitTemplateReponse);
+
+		List<City> citiesList = shippingService.getCities();
+		assertFalse(citiesList.isEmpty());
+		assertEquals(3, citiesList.size());
 	}
 }

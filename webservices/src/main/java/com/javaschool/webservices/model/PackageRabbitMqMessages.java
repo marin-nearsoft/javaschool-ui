@@ -7,7 +7,7 @@ import lombok.Setter;
 public enum PackageRabbitMqMessages {
 
 	PACKAGE_TYPE("packageType"), PACKAGE_SIZE("packageSize"), PACKAGE_TRANSPORT("transportType"),
-	PACKAGE_TIME("transportVelocity");
+	PACKAGE_TIME("transportVelocity"), CITY("city");
 
 	private String packageRabbitMqMessage;
 
