@@ -1,10 +1,12 @@
 package com.javaschool.webservices.service.impl;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.javaschool.webservices.model.City;
 import com.javaschool.webservices.model.PackageSize;
 import com.javaschool.webservices.model.PackageTime;
 import com.javaschool.webservices.model.PackageTransport;
@@ -50,6 +52,16 @@ public class PackageServiceImpl implements PackageService {
 		List<PackageTime> packageTransports = shippingService.getPackageTimes();
 		
 		return packageTransports.stream().map(packageTime -> packageTime.getDescription()).
+				collect(Collectors.toList());
+	}
+
+	@Override
+	public List<String> getCities() {
+		List<City> cities = shippingService.getCities();
+		
+		return  cities.stream().
+				sorted(Comparator.comparing(City::getName)).
+				map(city -> city.getName()).
 				collect(Collectors.toList());
 	}
 }

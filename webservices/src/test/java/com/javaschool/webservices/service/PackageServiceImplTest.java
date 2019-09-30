@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.javaschool.webservices.model.City;
 import com.javaschool.webservices.model.PackageSize;
 import com.javaschool.webservices.model.PackageTime;
 import com.javaschool.webservices.model.PackageTransport;
@@ -157,6 +158,37 @@ public class PackageServiceImplTest {
 		assertEquals(packageTime1.getDescription(), packageTimeNames.get(0));
 		assertEquals(packageTime2.getDescription(), packageTimeNames.get(1));
 		assertEquals(packageTime3.getDescription(), packageTimeNames.get(2));
+	}
+	
+	@Test
+	public void testCitiesOrder() {
+		List<City> citiesList = new LinkedList<City>();
+		
+		City city1 = new City();
+		city1.setId(1);
+		city1.setName("Leon");
+		
+		City city2 = new City();
+		city2.setId(2);
+		city2.setName("Chihuahua");
+		
+		City city3 = new City();
+		city3.setId(3);
+		city3.setName("Cancun");
+		
+		citiesList.add(city1);
+		citiesList.add(city2);
+		citiesList.add(city3);
+		
+		Mockito.when(shippingServiceMock.getCities()).thenReturn(citiesList);
+		
+		List<String> citiesNamesList = packageService.getCities();
+		
+		assertEquals(3, citiesList.size());
+		assertEquals(city3.getName(), citiesNamesList.get(0));
+		assertEquals(city2.getName(), citiesNamesList.get(1));
+		assertEquals(city1.getName(), citiesNamesList.get(2));
+		
 	}
 
 }

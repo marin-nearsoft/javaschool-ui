@@ -37,5 +37,10 @@ public class PackageController {
 	public List<String> getTimes() {
 		return packageService.getTimes();
 	}
+	
+	@GetMapping("/cities")
+	public List<String> getCities() {
+		return packageService.getCities();
+	}
 
 }
