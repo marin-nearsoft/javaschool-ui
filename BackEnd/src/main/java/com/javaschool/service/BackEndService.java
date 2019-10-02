@@ -12,4 +12,6 @@ public interface BackEndService {
 
     List<String> getVelocity();
 
+    List<String> getCity();
+
 }
