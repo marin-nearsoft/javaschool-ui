@@ -27,4 +27,10 @@ public class BackEndControllers {
         return sizes;
     }
 
+    @RequestMapping("/transport")
+    public List<String> getTransport() {
+        List<String> transports = backEndService.getTransport();
+        return transports;
+    }
+
 }

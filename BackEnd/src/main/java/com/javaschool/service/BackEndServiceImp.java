@@ -2,6 +2,7 @@ package com.javaschool.service;
 
 import com.javaschool.entitymapper.PackageSize;
 import com.javaschool.entitymapper.PackageType;
+import com.javaschool.entitymapper.TransportType;
 import com.javaschool.queue.QueueResponseService;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,12 @@ public class BackEndServiceImp implements BackEndService {
     public List<String> getSize() {
         return queueResponseService.getSize().stream()
                 .map(PackageSize::getDescription).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getTransport() {
+        return queueResponseService.getTransport().stream()
+                .map(TransportType::getDescription).collect(Collectors.toList());
     }
 
 
