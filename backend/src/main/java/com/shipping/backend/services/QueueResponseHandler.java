@@ -10,4 +10,5 @@ public interface QueueResponseHandler {
     public List<Transport> getTransports();
     public List<TransportVelocity> getTransportVelocity();
     public List<City> getCities();
+    public void getRoutes();
 }

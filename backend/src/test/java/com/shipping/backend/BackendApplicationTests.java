@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -28,6 +29,7 @@ public class BackendApplicationTests {
     private  QueueResponseHandler queueResponseHandler;
     private  AppConfiguration appConfiguration;
     private  QueueRequestMessage queueRequestMessage;
+    private  QueueRouteRequestMessage queueRouteRequestMessage;
     private  ObjectMapper mapper;
 
     @Before
@@ -36,6 +38,7 @@ public class BackendApplicationTests {
         //Initialize functional classes for testing
         mapper = new ObjectMapper();
         queueRequestMessage = new QueueRequestMessage();
+        queueRouteRequestMessage = new QueueRouteRequestMessage();
         appConfiguration = new AppConfiguration();
         rabbitTemplate = mock(RabbitTemplate.class);
         shippingRequestSender = new QueueClient(rabbitTemplate);
@@ -232,6 +235,42 @@ public class BackendApplicationTests {
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
         List cityList = queueResponseHandler.getCities();
+
+    }
+
+    @Test
+    public void getRoutesTestSuccess()  {
+
+        //Set request message to get package types
+        queueRouteRequestMessage.setType("routesList");
+        queueRouteRequestMessage.setOrigin("Chihuahua");
+        queueRouteRequestMessage.setDestination("Cancun");
+
+        //This line should be remove once i can implement TestPropertySource
+        appConfiguration.setRouteList("routesList");
+
+        //Mocked Response Values
+        Route route1 = new Route();
+        route1.setFrom("Chihuahua");
+        route1.setTo("Durango");
+        route1.setDistance("10");
+
+        Route route2 = new Route();
+        route2.setFrom("Durango");
+        route2.setTo("Cancun");
+        route2.setDistance("20");
+
+        List<Route> routeList = new ArrayList<>();
+
+        routeList.add(route1);
+        routeList.add(route2);
+
+        System.out.println(route1.RoutesToString(routeList));
+        System.out.println(queueRouteRequestMessage.toString());
+
+        when(rabbitTemplate.convertSendAndReceive(queueRouteRequestMessage.toString())).thenReturn(
+                route1.RoutesToString(routeList));
+        queueResponseHandler.getRoutes();
 
     }
 

@@ -20,6 +20,7 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
     private ObjectMapper mapper;
     private AppConfiguration appConfiguration;
     private QueueRequestMessage queueRequestMessage = new QueueRequestMessage();
+    private QueueRouteRequestMessage queueRouteRequestMessage = new QueueRouteRequestMessage();
 
     public QueueResponseHandlerImp(final QueueClient shippingRequestSender,
                                    final AppConfiguration appConfiguration,
@@ -103,6 +104,23 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
                     mapper.getTypeFactory().constructCollectionType(List.class, City.class));
             log.info("City list successfully generated");
             return cities;
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new CustomException("Service not available, please contact your administrator");
+        }
+    }
+
+    @Override
+    public void getRoutes() {
+
+        queueRouteRequestMessage.setType(appConfiguration.getRouteList());
+        queueRouteRequestMessage.setOrigin("Chihuahua");
+        queueRouteRequestMessage.setDestination("Cancun");
+        log.info("Generating routes list");
+        try {
+            List<Route> routes = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRouteRequestMessage)),
+                    mapper.getTypeFactory().constructCollectionType(List.class, Route.class));
+            log.info("City list successfully generated");
         }catch (Exception e){
             log.error(e.getMessage());
             throw new CustomException("Service not available, please contact your administrator");

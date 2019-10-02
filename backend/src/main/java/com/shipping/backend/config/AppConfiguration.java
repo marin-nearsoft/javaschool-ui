@@ -14,6 +14,7 @@ public class AppConfiguration {
     private String  transportTypes;
     private String  transportVelocity;
     private String  cities;
+    private String  routeList;
 
 }
 
