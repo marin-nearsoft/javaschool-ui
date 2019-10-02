@@ -33,4 +33,10 @@ public class BackEndControllers {
         return transports;
     }
 
+    @RequestMapping("/velocity")
+    public List<String> getVelocity() {
+        List<String> velocities = backEndService.getVelocity();
+        return velocities;
+    }
+
 }
