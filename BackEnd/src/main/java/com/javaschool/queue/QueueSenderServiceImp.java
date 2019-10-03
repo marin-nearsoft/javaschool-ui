@@ -25,4 +25,15 @@ public class QueueSenderServiceImp implements QueueSenderService {
 
         return (String) rabbitTemplate.convertSendAndReceive(message);
     }
+
+    public String sendRequest(String requestType, String origin, String destination) throws JsonProcessingException {
+        MessageWithOrigin messageorigin = new MessageWithOrigin();
+        messageorigin.setType(requestType);
+        messageorigin.setOrigin(origin);
+        messageorigin.setDestination(destination);
+
+        String message = mapper.writeValueAsString(messageorigin);
+
+        return (String) rabbitTemplate.convertSendAndReceive(message);
+    }
 }

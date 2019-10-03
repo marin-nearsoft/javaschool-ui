@@ -14,4 +14,6 @@ public interface BackEndService {
 
     List<String> getCity();
 
+    List<String> getRoute(String origin, String destination);
+
 }

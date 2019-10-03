@@ -15,4 +15,6 @@ public interface QueueResponseService {
     List<TransportVelocity> getVelocity();
 
     List<Cities> getCity();
+
+    List<RouteList> getRoute(String origin, String destination);
 }
