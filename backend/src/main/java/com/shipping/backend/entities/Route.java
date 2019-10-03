@@ -10,7 +10,7 @@ public class Route implements Serializable {
 
     private String from;
     private String to;
-    private String distance;
+    private double distance;
 
     public String RoutesToString(List<Route> routeList){
         String routesString = "[";

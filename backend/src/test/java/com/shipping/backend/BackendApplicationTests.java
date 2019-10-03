@@ -29,7 +29,6 @@ public class BackendApplicationTests {
     private  QueueResponseHandler queueResponseHandler;
     private  AppConfiguration appConfiguration;
     private  QueueRequestMessage queueRequestMessage;
-    private  QueueRouteRequestMessage queueRouteRequestMessage;
     private  ObjectMapper mapper;
 
     @Before
@@ -38,7 +37,6 @@ public class BackendApplicationTests {
         //Initialize functional classes for testing
         mapper = new ObjectMapper();
         queueRequestMessage = new QueueRequestMessage();
-        queueRouteRequestMessage = new QueueRouteRequestMessage();
         appConfiguration = new AppConfiguration();
         rabbitTemplate = mock(RabbitTemplate.class);
         shippingRequestSender = new QueueClient(rabbitTemplate);
@@ -60,6 +58,8 @@ public class BackendApplicationTests {
         packageType.setId(1);
         packageType.setDescription("Box");
         packageType.setPrice(100);
+
+        System.out.println(queueRequestMessage.toString());
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(
                 packageType.toString());
@@ -242,9 +242,10 @@ public class BackendApplicationTests {
     public void getRoutesTestSuccess()  {
 
         //Set request message to get package types
-        queueRouteRequestMessage.setType("routesList");
-        queueRouteRequestMessage.setOrigin("Chihuahua");
-        queueRouteRequestMessage.setDestination("Cancun");
+        queueRequestMessage.setType("routesList");
+        queueRequestMessage.setOrigin("Chihuahua");
+        queueRequestMessage.setDestination("Cancun");
+
 
         //This line should be remove once i can implement TestPropertySource
         appConfiguration.setRouteList("routesList");
@@ -266,9 +267,9 @@ public class BackendApplicationTests {
         routeList.add(route2);
 
         System.out.println(route1.RoutesToString(routeList));
-        System.out.println(queueRouteRequestMessage.toString());
+        System.out.println(queueRequestMessage.toString());
 
-        when(rabbitTemplate.convertSendAndReceive(queueRouteRequestMessage.toString())).thenReturn(
+        when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(
                 route1.RoutesToString(routeList));
         queueResponseHandler.getRoutes();
 

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -20,7 +21,7 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
     private ObjectMapper mapper;
     private AppConfiguration appConfiguration;
     private QueueRequestMessage queueRequestMessage = new QueueRequestMessage();
-    private QueueRouteRequestMessage queueRouteRequestMessage = new QueueRouteRequestMessage();
+    private RoutesResponseProcessor routesResponseProcessor = new RoutesResponseProcessor();
 
     public QueueResponseHandlerImp(final QueueClient shippingRequestSender,
                                    final AppConfiguration appConfiguration,
@@ -113,13 +114,16 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
     @Override
     public void getRoutes() {
 
-        queueRouteRequestMessage.setType(appConfiguration.getRouteList());
-        queueRouteRequestMessage.setOrigin("Chihuahua");
-        queueRouteRequestMessage.setDestination("Cancun");
+        queueRequestMessage.setType(appConfiguration.getRouteList());
+        queueRequestMessage.setOrigin("Chihuahua");
+        queueRequestMessage.setDestination("Cancun");
         log.info("Generating routes list");
         try {
-            List<Route> routes = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRouteRequestMessage)),
+            List<Route> routes = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
                     mapper.getTypeFactory().constructCollectionType(List.class, Route.class));
+            HashMap<String, CityVertex> cityVertexMap = routesResponseProcessor.getRoutesMap(routes);
+            routesResponseProcessor.computeShortestPaths(cityVertexMap.get(queueRequestMessage.getOrigin()));
+
             log.info("City list successfully generated");
         }catch (Exception e){
             log.error(e.getMessage());
