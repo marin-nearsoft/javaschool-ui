@@ -112,7 +112,7 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
     }
 
     @Override
-    public void getRoutes() {
+    public List getRoutes() {
 
         queueRequestMessage.setType(appConfiguration.getRouteList());
         queueRequestMessage.setOrigin("Chihuahua");
@@ -123,8 +123,9 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
                     mapper.getTypeFactory().constructCollectionType(List.class, Route.class));
             HashMap<String, CityVertex> cityVertexMap = routesResponseProcessor.getRoutesMap(routes);
             routesResponseProcessor.computeShortestPaths(cityVertexMap.get(queueRequestMessage.getOrigin()));
+            log.info("Generating routes list" + routesResponseProcessor.getShortestPathTo(cityVertexMap.get(queueRequestMessage.getDestination())));
+            return routesResponseProcessor.getShortestPathTo(cityVertexMap.get(queueRequestMessage.getDestination()));
 
-            log.info("City list successfully generated");
         }catch (Exception e){
             log.error(e.getMessage());
             throw new CustomException("Service not available, please contact your administrator");

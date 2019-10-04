@@ -254,24 +254,34 @@ public class BackendApplicationTests {
         Route route1 = new Route();
         route1.setFrom("Chihuahua");
         route1.setTo("Durango");
-        route1.setDistance("10");
+        route1.setDistance(10);
 
         Route route2 = new Route();
         route2.setFrom("Durango");
         route2.setTo("Cancun");
-        route2.setDistance("20");
+        route2.setDistance(20);
+
+        Route route3 = new Route();
+        route3.setFrom("Chihuahua");
+        route3.setTo("Cancun");
+        route3.setDistance(50);
 
         List<Route> routeList = new ArrayList<>();
 
         routeList.add(route1);
         routeList.add(route2);
+        routeList.add(route3);
 
         System.out.println(route1.RoutesToString(routeList));
         System.out.println(queueRequestMessage.toString());
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(
                 route1.RoutesToString(routeList));
-        queueResponseHandler.getRoutes();
+        List<CityVertex> cityVertices = queueResponseHandler.getRoutes();
+
+        for (CityVertex vertex : cityVertices){
+            System.out.println(vertex.getName());
+        }
 
     }
 
