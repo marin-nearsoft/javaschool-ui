@@ -1,9 +1,9 @@
 const config = {
-    "host": "",
-    "port": "",
+    "host": "http://localhost",
+    "port": "8080",
     "rest" : {
         "size" : "",
-        "type" : "",
+        "type" : "/shipment-management/package-types",
         "time" : "",
         "transport" : "",
         "city" : "",
