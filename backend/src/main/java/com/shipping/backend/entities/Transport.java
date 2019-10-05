@@ -14,8 +14,8 @@ public class Transport implements Serializable {
     @Override
     public String toString() {
         return "[{\"id\":" + id
-                + ",\"description\":\"" +  description
-                +"\",\"pricePerMile\":" + pricePerMile + "}]";
+                + ",\"description\":\"" + description
+                + "\",\"pricePerMile\":" + pricePerMile + "}]";
     }
 
 }
