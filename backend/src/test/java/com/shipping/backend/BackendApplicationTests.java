@@ -27,21 +27,19 @@ import static org.mockito.Mockito.when;
 public class BackendApplicationTests {
 
     private  RabbitTemplate rabbitTemplate;
-    private  QueueClient shippingRequestSender;
     private  QueueResponseHandler queueResponseHandler;
     private  AppConfiguration appConfiguration;
     private  QueueRequestMessage queueRequestMessage;
-    private  ObjectMapper mapper;
 
     @Before
     public void setUp(){
 
         //Initialize functional classes for testing
-        mapper = new ObjectMapper();
         queueRequestMessage = new QueueRequestMessage();
         appConfiguration = new AppConfiguration();
         rabbitTemplate = mock(RabbitTemplate.class);
-        shippingRequestSender = new QueueClient(rabbitTemplate);
+        ObjectMapper mapper = new ObjectMapper();
+        QueueClient shippingRequestSender = new QueueClient(rabbitTemplate);
         queueResponseHandler = new QueueResponseHandlerImp(shippingRequestSender, appConfiguration, mapper);
 
     }
@@ -80,7 +78,7 @@ public class BackendApplicationTests {
         appConfiguration.setPackageTypes("packageType");
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
-        List packageTypesList = queueResponseHandler.getTypes();
+        queueResponseHandler.getTypes();
 
     }
 
@@ -118,7 +116,7 @@ public class BackendApplicationTests {
         appConfiguration.setPackageSizes("packageSize");
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
-        List packageSizesList = queueResponseHandler.getSizes();
+        queueResponseHandler.getSizes();
 
     }
 
