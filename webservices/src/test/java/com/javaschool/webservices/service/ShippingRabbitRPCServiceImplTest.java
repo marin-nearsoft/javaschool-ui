@@ -15,6 +15,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.webservices.configuration.RabbitMQProperties;
 import com.javaschool.webservices.model.PackageSize;
+import com.javaschool.webservices.model.PackageTransport;
 import com.javaschool.webservices.model.PackageType;
 import com.javaschool.webservices.service.impl.PackageRabbitMqServiceImpl;
 
@@ -69,5 +70,18 @@ public class ShippingRabbitRPCServiceImplTest {
 		List<PackageSize> packageSizesList = shippingService.getPackageSizes();
 		assertFalse(packageSizesList.isEmpty());
 		assertEquals(3, packageSizesList.size());
+	}
+	
+	@Test
+	public void testgetPackageTransports() {
+		String jsonRabbitTemplateReponse = "[{\"id\":1,\"description\":\"Earth\",\"pricePerMile\":10.10},{\"id\":2,\"description\":\"Air\",\"pricePerMile\":20.20},{\"id\":3,\"description\":\"Sea\",\"pricePerMile\":30.30}]";
+
+		Mockito.when(rabbitTemplateMock.convertSendAndReceive(Mockito.eq(rabbitMQProperties.getExchange()),
+				Mockito.eq(rabbitMQProperties.getRoutingKey()), Mockito.any(Object.class)))
+				.thenReturn(jsonRabbitTemplateReponse);
+
+		List<PackageTransport> packageTransportsList = shippingService.getPackageTransport();
+		assertFalse(packageTransportsList.isEmpty());
+		assertEquals(3, packageTransportsList.size());
 	}
 }

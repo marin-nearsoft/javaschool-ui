@@ -6,12 +6,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class PackageSize implements Serializable {
+public class PackageTransport implements Serializable{
 
-	private static final long serialVersionUID = 865846279570747807L;
+	private static final long serialVersionUID = 8539127243710282153L;
 	
 	private int id;
 	private String description;
-	private double priceFactor;
-
+	private double pricePerMile;
 }
