@@ -26,13 +26,13 @@ import static org.mockito.Mockito.when;
 
 public class BackendApplicationTests {
 
-    private  RabbitTemplate rabbitTemplate;
-    private  QueueResponseHandler queueResponseHandler;
-    private  AppConfiguration appConfiguration;
-    private  QueueRequestMessage queueRequestMessage;
+    private RabbitTemplate rabbitTemplate;
+    private QueueResponseHandler queueResponseHandler;
+    private AppConfiguration appConfiguration;
+    private QueueRequestMessage queueRequestMessage;
 
     @Before
-    public void setUp(){
+    public void setUp() {
 
         //Initialize functional classes for testing
         queueRequestMessage = new QueueRequestMessage();
@@ -44,8 +44,8 @@ public class BackendApplicationTests {
 
     }
 
-	@Test
-	public void getPackageTypesTestSuccess()  {
+    @Test
+    public void getPackageTypesTestSuccess() {
 
         //Set request message to get package types
         queueRequestMessage.setType("packageType");
@@ -63,14 +63,14 @@ public class BackendApplicationTests {
                 packageType.toString());
         List packageTypesList = queueResponseHandler.getTypes();
 
-        assertEquals(packageTypesList.size(),1);
+        assertEquals(packageTypesList.size(), 1);
         assertEquals(packageTypesList.get(0).getClass(), PackageType.class);
         assertThat(packageTypesList.get(0), hasProperty("description", is("Box")));
 
-	}
+    }
 
     @Test(expected = CustomException.class)
-    public void getPackageTypesTestFailure()  {
+    public void getPackageTypesTestFailure() {
         //Set request message to get package types
         queueRequestMessage.setType("packageType");
 
@@ -83,7 +83,7 @@ public class BackendApplicationTests {
     }
 
     @Test
-    public void getPackageSizesTestSuccess()  {
+    public void getPackageSizesTestSuccess() {
 
         //Set request message to get package types
         queueRequestMessage.setType("packageSize");
@@ -101,14 +101,14 @@ public class BackendApplicationTests {
                 packageSize.toString());
         List packageSizesList = queueResponseHandler.getSizes();
 
-        assertEquals(packageSizesList.size(),1);
+        assertEquals(packageSizesList.size(), 1);
         assertEquals(packageSizesList.get(0).getClass(), PackageSize.class);
         assertThat(packageSizesList.get(0), hasProperty("description", is("Small")));
 
     }
 
     @Test(expected = CustomException.class)
-    public void getPackageSizesTestFailure()  {
+    public void getPackageSizesTestFailure() {
         //Set request message to get package types
         queueRequestMessage.setType("packageSize");
 
@@ -121,8 +121,7 @@ public class BackendApplicationTests {
     }
 
     @Test
-    public void getTransportTypesTestSuccess()  {
-
+    public void getTransportTypesTestSuccess() {
         //Set request message to get package types
         queueRequestMessage.setType("transportType");
 
@@ -139,14 +138,14 @@ public class BackendApplicationTests {
                 transportType.toString());
         List transportTypesList = queueResponseHandler.getTransports();
 
-        assertEquals(transportTypesList.size(),1);
+        assertEquals(transportTypesList.size(), 1);
         assertEquals(transportTypesList.get(0).getClass(), Transport.class);
         assertThat(transportTypesList.get(0), hasProperty("description", is("Land")));
 
     }
 
     @Test(expected = CustomException.class)
-    public void getTransportTypesTestFailure()  {
+    public void getTransportTypesTestFailure() {
         //Set request message to get package types
         queueRequestMessage.setType("transportType");
 
@@ -154,7 +153,7 @@ public class BackendApplicationTests {
         appConfiguration.setTransportTypes("transportType");
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
-        List transportTypesList = queueResponseHandler.getTransports();
+        queueResponseHandler.getTransports();
 
     }
 

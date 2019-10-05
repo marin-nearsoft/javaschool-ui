@@ -33,6 +33,6 @@ public class ShipmentRetrievalController {
 
     @GetMapping("/transports")
     public List<String> transports(){
-        return queueResponseHandler.getSizes().stream().map(transports -> transports.getDescription()).collect(Collectors.toList());
+        return queueResponseHandler.getSizes().stream().map(PackageSize::getDescription).collect(Collectors.toList());
     }
 }

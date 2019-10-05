@@ -7,7 +7,9 @@ import com.shipping.backend.entities.Transport;
 import java.util.List;
 
 public interface QueueResponseHandler {
-    public List<PackageType> getTypes();
-    public List<PackageSize> getSizes();
-    public List<Transport> getTransports();
+    List<PackageType> getTypes();
+
+    List<PackageSize> getSizes();
+
+    List<Transport> getTransports();
 }
