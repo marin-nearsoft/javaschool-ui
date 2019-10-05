@@ -21,10 +21,14 @@ public class QueueResponseServiceImp implements QueueResponseService {
 
     private QueueSenderService queueSenderService;
     private ObjectMapper mapper;
-    private TypeReference refpackage = new TypeReference<List<PackageType>>() {};
-    private TypeReference refsize = new TypeReference<List<PackageSize>>() {};
-    private TypeReference reftransport = new TypeReference<List<TransportType>>() {};
-    private TypeReference refvelocities = new TypeReference<List<TransportVelocity>>() {};
+    private TypeReference refpackage = new TypeReference<List<PackageType>>() {
+    };
+    private TypeReference refsize = new TypeReference<List<PackageSize>>() {
+    };
+    private TypeReference reftransport = new TypeReference<List<TransportType>>() {
+    };
+    private TypeReference refvelocities = new TypeReference<List<TransportVelocity>>() {
+    };
 
 
     public QueueResponseServiceImp(final QueueSenderService queueSenderService, final ObjectMapper mapper) {
