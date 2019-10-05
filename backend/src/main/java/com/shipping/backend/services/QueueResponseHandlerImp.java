@@ -30,7 +30,7 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
     }
 
     @Override
-    public List getTypes() {
+    public List<PackageType> getTypes() {
 
         queueRequestMessage.setType(appConfiguration.getPackageTypes());
         log.info("Generating package type list");
@@ -46,7 +46,7 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
     }
 
     @Override
-    public List getSizes() {
+    public List<PackageSize> getSizes() {
 
         queueRequestMessage.setType(appConfiguration.getPackageSizes());
         log.info("Generating package size list");
@@ -62,7 +62,7 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
     }
 
     @Override
-    public List getTransports() {
+    public List<Transport> getTransports() {
 
         queueRequestMessage.setType(appConfiguration.getTransportTypes());
         log.info("Generating transport types list");
@@ -78,7 +78,7 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
     }
 
     @Override
-    public List getTransportVelocity() {
+    public List<TransportVelocity> getTransportVelocity() {
 
         queueRequestMessage.setType(appConfiguration.getTransportVelocity());
         log.info("Generating transport velocity list");

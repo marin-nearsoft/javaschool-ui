@@ -1,8 +1,8 @@
 package com.shipping.backend.entities;
 
 
-
 import lombok.Data;
+
 import java.io.Serializable;
 
 @Data
@@ -15,8 +15,8 @@ public class TransportVelocity implements Serializable {
     @Override
     public String toString() {
         return "[{\"id\":" + id
-                + ",\"description\":\"" +  description
-                +"\",\"priceFactor\":" + priceFactor + "}]";
+                + ",\"description\":\"" + description
+                + "\",\"priceFactor\":" + priceFactor + "}]";
     }
 
 }
