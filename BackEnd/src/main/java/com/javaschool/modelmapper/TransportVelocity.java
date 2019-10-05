@@ -1,9 +1,9 @@
-package com.javaschool.entitymapper;
+package com.javaschool.modelmapper;
 
 import lombok.Data;
 
 @Data
-public class PackageSize {
+public class TransportVelocity {
     private int id;
     private String description;
     private int priceFactor;

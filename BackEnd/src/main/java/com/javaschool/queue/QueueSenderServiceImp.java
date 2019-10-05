@@ -17,22 +17,13 @@ public class QueueSenderServiceImp implements QueueSenderService {
     }
 
 
-    public String sendRequest(String requestType) throws JsonProcessingException {
+    public String sendRequest(String requestType, String origin, String destination) throws JsonProcessingException {
         MessageType messageType = new MessageType();
         messageType.setType(requestType);
+        messageType.setOrigin(origin);
+        messageType.setDestination(destination);
 
         String message = mapper.writeValueAsString(messageType);
-
-        return (String) rabbitTemplate.convertSendAndReceive(message);
-    }
-
-    public String sendRequest(String requestType, String origin, String destination) throws JsonProcessingException {
-        MessageWithOrigin messageorigin = new MessageWithOrigin();
-        messageorigin.setType(requestType);
-        messageorigin.setOrigin(origin);
-        messageorigin.setDestination(destination);
-
-        String message = mapper.writeValueAsString(messageorigin);
 
         return (String) rabbitTemplate.convertSendAndReceive(message);
     }

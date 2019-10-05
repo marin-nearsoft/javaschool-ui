@@ -1,10 +1,9 @@
-package com.javaschool.queue;
+package com.javaschool.modelmapper;
 
 import lombok.Data;
 
 @Data
-public class MessageWithOrigin {
-    private String type;
+public class Route {
     private String origin;
     private String destination;
 }

@@ -1,15 +1,14 @@
 package com.javaschool.controllers;
 
-import com.javaschool.entitymapper.Route;
+import com.javaschool.modelmapper.Price;
+import com.javaschool.modelmapper.Route;
 import com.javaschool.service.BackEndService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/shipping")
 public class BackEndControllers {
 
     private BackEndService backEndService;
@@ -20,41 +19,39 @@ public class BackEndControllers {
 
     @GetMapping("/type")
     public List<String> getType() {
-        List<String> types = backEndService.getType();
-        return types;
+        return backEndService.getType();
     }
 
     @GetMapping("/size")
     public List<String> getSize() {
-        List<String> sizes = backEndService.getSize();
-        return sizes;
+        return backEndService.getSize();
     }
 
     @GetMapping("/transport")
     public List<String> getTransport() {
-        List<String> transports = backEndService.getTransport();
-        return transports;
+        return backEndService.getTransport();
     }
 
     @GetMapping("/velocity")
     public List<String> getVelocity() {
-        List<String> velocities = backEndService.getVelocity();
-        return velocities;
+        return backEndService.getVelocity();
     }
 
     @GetMapping("/city")
     public List<String> getCity() {
-        List<String> cities = backEndService.getCity();
-        return cities;
+        return backEndService.getCity();
     }
 
     @PostMapping("/route")
     public List<String> getRoute(@RequestBody Route values) {
-        String origin = values.getOrigin();
-        String destination = values.getDestination();
 
-        List<String> routepath = backEndService.getRoute(origin, destination);
-        return routepath;
+        return backEndService.getRoute(values.getOrigin(), values.getDestination());
+    }
+
+    @PostMapping("/price")
+    public double getPrice(@RequestBody Price values) {
+
+        return backEndService.getPrice(values.getSize(), values.getType(), values.getTime(), values.getTransport());
     }
 
 }

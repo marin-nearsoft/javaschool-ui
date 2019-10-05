@@ -1,4 +1,4 @@
-package com.javaschool.entitymapper;
+package com.javaschool.modelmapper;
 
 import lombok.Data;
 

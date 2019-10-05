@@ -16,4 +16,5 @@ public interface BackEndService {
 
     List<String> getRoute(String origin, String destination);
 
+    double getPrice(String size, String type, String time, String transport);
 }

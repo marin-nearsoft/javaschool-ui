@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication(scanBasePackages = {"com.javaschool"})
+
 public class BackEndApplication {
 
     public static void main(String[] args) {

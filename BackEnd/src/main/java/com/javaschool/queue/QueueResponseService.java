@@ -1,6 +1,7 @@
 package com.javaschool.queue;
 
-import com.javaschool.entitymapper.*;
+import com.javaschool.dijkstra.RouteList;
+import com.javaschool.modelmapper.*;
 
 import java.util.List;
 

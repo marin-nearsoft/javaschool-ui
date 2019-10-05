@@ -1,4 +1,4 @@
-package com.javaschool.entitymapper;
+package com.javaschool.dijkstra;
 
 import lombok.Data;
 
