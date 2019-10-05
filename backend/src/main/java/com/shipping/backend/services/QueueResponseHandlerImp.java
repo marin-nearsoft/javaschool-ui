@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class QueueResponseHandlerImp implements QueueResponseHandler {
 
-    private final static Logger log = LoggerFactory.getLogger(QueueResponseHandlerImp.class);
+    private final static Logger LOG = LoggerFactory.getLogger(QueueResponseHandlerImp.class);
 
     private QueueClient shippingRequestSender;
     private ObjectMapper mapper;
@@ -23,24 +23,24 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
 
     public QueueResponseHandlerImp(final QueueClient shippingRequestSender,
                                    final AppConfiguration appConfiguration,
-                                   final ObjectMapper mapper){
-        this.shippingRequestSender=shippingRequestSender;
-        this.appConfiguration=appConfiguration;
-        this.mapper=mapper;
+                                   final ObjectMapper mapper) {
+        this.shippingRequestSender = shippingRequestSender;
+        this.appConfiguration = appConfiguration;
+        this.mapper = mapper;
     }
 
     @Override
     public List<PackageType> getTypes() {
 
         queueRequestMessage.setType(appConfiguration.getPackageTypes());
-        log.info("Generating package type list");
+        LOG.info("Generating package type list");
         try {
             List<PackageType> packageTypes = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
                     mapper.getTypeFactory().constructCollectionType(List.class, PackageType.class));
-            log.info("Package type list successfully generated");
+            LOG.info("Package type list successfully generated");
             return packageTypes;
-        }catch (Exception e){
-            log.error(e.getMessage());
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
             throw new CustomException("Service not available, please contact your administrator");
         }
     }
@@ -49,14 +49,14 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
     public List<PackageSize> getSizes() {
 
         queueRequestMessage.setType(appConfiguration.getPackageSizes());
-        log.info("Generating package size list");
+        LOG.info("Generating package size list");
         try {
             List<PackageSize> packageSizes = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
                     mapper.getTypeFactory().constructCollectionType(List.class, PackageSize.class));
-            log.info("Package type list successfully generated");
+            LOG.info("Package size list successfully generated");
             return packageSizes;
-        }catch (Exception e){
-            log.error(e.getMessage());
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
             throw new CustomException("Service not available, please contact your administrator");
         }
     }
@@ -65,14 +65,14 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
     public List<Transport> getTransports() {
 
         queueRequestMessage.setType(appConfiguration.getTransportTypes());
-        log.info("Generating transport types list");
+        LOG.info("Generating transport types list");
         try {
             List<Transport> transports = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
                     mapper.getTypeFactory().constructCollectionType(List.class, Transport.class));
-            log.info("Package type list successfully generated");
+            LOG.info("Transports list successfully generated");
             return transports;
-        }catch (Exception e){
-            log.error(e.getMessage());
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
             throw new CustomException("Service not available, please contact your administrator");
         }
     }
@@ -81,14 +81,30 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
     public List<TransportVelocity> getTransportVelocity() {
 
         queueRequestMessage.setType(appConfiguration.getTransportVelocity());
-        log.info("Generating transport types list");
+        LOG.info("Generating transport velocity list");
         try {
             List<TransportVelocity> transportVelocities = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
                     mapper.getTypeFactory().constructCollectionType(List.class, TransportVelocity.class));
-            log.info("Package type list successfully generated");
+            LOG.info("Transport velocities list successfully generated");
             return transportVelocities;
-        }catch (Exception e){
-            log.error(e.getMessage());
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
+            throw new CustomException("Service not available, please contact your administrator");
+        }
+    }
+
+    @Override
+    public List getCities() {
+
+        queueRequestMessage.setType(appConfiguration.getCities());
+        LOG.info("Generating cities list");
+        try {
+            List<City> cities = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
+                    mapper.getTypeFactory().constructCollectionType(List.class, City.class));
+            LOG.info("City list successfully generated");
+            return cities;
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
             throw new CustomException("Service not available, please contact your administrator");
         }
     }
