@@ -23,15 +23,15 @@ import static org.mockito.Mockito.when;
 
 public class BackendApplicationTests {
 
-    private  RabbitTemplate rabbitTemplate;
-    private  QueueClient shippingRequestSender;
-    private  QueueResponseHandler queueResponseHandler;
-    private  AppConfiguration appConfiguration;
-    private  QueueRequestMessage queueRequestMessage;
-    private  ObjectMapper mapper;
+    private RabbitTemplate rabbitTemplate;
+    private QueueClient shippingRequestSender;
+    private QueueResponseHandler queueResponseHandler;
+    private AppConfiguration appConfiguration;
+    private QueueRequestMessage queueRequestMessage;
+    private ObjectMapper mapper;
 
     @Before
-    public void setUp(){
+    public void setUp() {
 
         //Initialize functional classes for testing
         mapper = new ObjectMapper();
@@ -43,13 +43,11 @@ public class BackendApplicationTests {
 
     }
 
-	@Test
-	public void getPackageTypesTestSuccess()  {
+    @Test
+    public void getPackageTypesTestSuccess() {
 
         //Set request message to get package types
         queueRequestMessage.setType("packageType");
-
-        //This line should be remove once i can implement TestPropertySource
         appConfiguration.setPackageTypes("packageType");
 
         //Mocked Response Values
@@ -62,18 +60,16 @@ public class BackendApplicationTests {
                 packageType.toString());
         List packageTypesList = queueResponseHandler.getTypes();
 
-        assertEquals(packageTypesList.size(),1);
+        assertEquals(packageTypesList.size(), 1);
         assertEquals(packageTypesList.get(0).getClass(), PackageType.class);
         assertThat(packageTypesList.get(0), hasProperty("description", is("Box")));
 
-	}
+    }
 
     @Test(expected = CustomException.class)
-    public void getPackageTypesTestFailure()  {
+    public void getPackageTypesTestFailure() {
         //Set request message to get package types
         queueRequestMessage.setType("packageType");
-
-        //This line should be remove once i can implement TestPropertySource
         appConfiguration.setPackageTypes("packageType");
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
@@ -82,12 +78,10 @@ public class BackendApplicationTests {
     }
 
     @Test
-    public void getPackageSizesTestSuccess()  {
+    public void getPackageSizesTestSuccess() {
 
         //Set request message to get package types
         queueRequestMessage.setType("packageSize");
-
-        //This line should be remove once i can implement TestPropertySource
         appConfiguration.setPackageSizes("packageSize");
 
         //Mocked Response Values
@@ -100,18 +94,16 @@ public class BackendApplicationTests {
                 packageSize.toString());
         List packageSizesList = queueResponseHandler.getSizes();
 
-        assertEquals(packageSizesList.size(),1);
+        assertEquals(packageSizesList.size(), 1);
         assertEquals(packageSizesList.get(0).getClass(), PackageSize.class);
         assertThat(packageSizesList.get(0), hasProperty("description", is("Small")));
 
     }
 
     @Test(expected = CustomException.class)
-    public void getPackageSizesTestFailure()  {
+    public void getPackageSizesTestFailure() {
         //Set request message to get package types
         queueRequestMessage.setType("packageSize");
-
-        //This line should be remove once i can implement TestPropertySource
         appConfiguration.setPackageSizes("packageSize");
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
@@ -120,12 +112,10 @@ public class BackendApplicationTests {
     }
 
     @Test
-    public void getTransportTypesTestSuccess()  {
+    public void getTransportTypesTestSuccess() {
 
         //Set request message to get package types
         queueRequestMessage.setType("transportType");
-
-        //This line should be remove once i can implement TestPropertySource
         appConfiguration.setTransportTypes("transportType");
 
         //Mocked Response Values
@@ -138,18 +128,16 @@ public class BackendApplicationTests {
                 transportType.toString());
         List transportTypesList = queueResponseHandler.getTransports();
 
-        assertEquals(transportTypesList.size(),1);
+        assertEquals(transportTypesList.size(), 1);
         assertEquals(transportTypesList.get(0).getClass(), Transport.class);
         assertThat(transportTypesList.get(0), hasProperty("description", is("Land")));
 
     }
 
     @Test(expected = CustomException.class)
-    public void getTransportTypesTestFailure()  {
+    public void getTransportTypesTestFailure() {
         //Set request message to get package types
         queueRequestMessage.setType("transportType");
-
-        //This line should be remove once i can implement TestPropertySource
         appConfiguration.setTransportTypes("transportType");
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
@@ -158,12 +146,10 @@ public class BackendApplicationTests {
     }
 
     @Test
-    public void getTransportVelocityTestSuccess()  {
+    public void getTransportVelocityTestSuccess() {
 
         //Set request message to get package types
         queueRequestMessage.setType("transportVelocity");
-
-        //This line should be remove once i can implement TestPropertySource
         appConfiguration.setTransportVelocity("transportVelocity");
 
         //Mocked Response Values
@@ -176,18 +162,16 @@ public class BackendApplicationTests {
                 transportVelocity.toString());
         List transportVelocityList = queueResponseHandler.getTransportVelocity();
 
-        assertEquals(transportVelocityList.size(),1);
+        assertEquals(transportVelocityList.size(), 1);
         assertEquals(transportVelocityList.get(0).getClass(), TransportVelocity.class);
         assertThat(transportVelocityList.get(0), hasProperty("description", is("Regular")));
 
     }
 
     @Test(expected = CustomException.class)
-    public void getTransportVelocityTestFailure()  {
+    public void getTransportVelocityTestFailure() {
         //Set request message to get package types
         queueRequestMessage.setType("transportVelocity");
-
-        //This line should be remove once i can implement TestPropertySource
         appConfiguration.setTransportVelocity("transportVelocity");
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
