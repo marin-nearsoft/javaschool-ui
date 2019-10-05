@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shipping.backend.config.AppConfiguration;
 import com.shipping.backend.config.CustomException;
 import com.shipping.backend.config.QueueClient;
+import com.shipping.backend.entities.PackageSize;
 import com.shipping.backend.entities.PackageType;
 import com.shipping.backend.entities.QueueRequestMessage;
 import org.slf4j.Logger;
@@ -40,6 +41,22 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
                     mapper.getTypeFactory().constructCollectionType(List.class, PackageType.class));
             log.info("Package type list successfully generated");
             return packageTypes;
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new CustomException("Service not available, please contact your administrator");
+        }
+    }
+
+    @Override
+    public List getSizes() {
+
+        queueRequestMessage.setType(appConfiguration.getPackageSizes());
+        log.info("Generating package size list");
+        try {
+            List<PackageSize> packageSizes = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
+                    mapper.getTypeFactory().constructCollectionType(List.class, PackageSize.class));
+            log.info("Package type list successfully generated");
+            return packageSizes;
         }catch (Exception e){
             log.error(e.getMessage());
             throw new CustomException("Service not available, please contact your administrator");
