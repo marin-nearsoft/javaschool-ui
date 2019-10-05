@@ -14,49 +14,30 @@ public class RoutesResponseProcessor {
         HashMap<String, CityVertex> cityVertexMap = new HashMap<String, CityVertex>();
 
         for(Route route: routeList){
-            if(cityVertexMap.containsKey(route.getFrom())==false){
+            if(!cityVertexMap.containsKey(route.getFrom())){
 
                 CityVertex fromVertex = new CityVertex(route.getFrom());
                 cityVertexMap.put(route.getFrom(), fromVertex);
 
-                System.out.println("New vertex added: " + cityVertexMap.get(route.getFrom()).getName());
-
-                if(cityVertexMap.containsKey(route.getTo())==false){
+                if(!cityVertexMap.containsKey(route.getTo())){
                     CityVertex toVertex = new CityVertex(route.getTo());
                     cityVertexMap.put(route.getTo(), toVertex);
-
-                    System.out.println("New vertex added: " + cityVertexMap.get(route.getTo()).getName());
-
                     VertexEdge edge = new VertexEdge(route.getDistance(), fromVertex, toVertex);
                     fromVertex.addNeighbour(edge);
-
-                    System.out.println("New vertex edged added");
-
                 }else{
                     VertexEdge edge = new VertexEdge( route.getDistance(), fromVertex, cityVertexMap.get(route.getTo()));
                     fromVertex.addNeighbour(edge);
                 }
-
             }else{
-
-                if(cityVertexMap.containsKey(route.getTo())==false){
+                if(!cityVertexMap.containsKey(route.getTo())){
                     CityVertex toVertex = new CityVertex(route.getTo());
                     cityVertexMap.put(route.getTo(), toVertex);
-
-                    System.out.println("New vertex added to existing from: " + cityVertexMap.get(route.getTo()).getName());
-
                     VertexEdge edge = new VertexEdge(route.getDistance(), cityVertexMap.get(route.getFrom()), toVertex);
                     cityVertexMap.get(route.getFrom()).addNeighbour(edge);
-
-                    System.out.println("New vertex edge added");
-
                 }else{
                     VertexEdge edge = new VertexEdge( route.getDistance(), cityVertexMap.get(route.getFrom()), cityVertexMap.get(route.getTo()));
                     cityVertexMap.get(route.getFrom()).addNeighbour(edge);
-
-                    System.out.println("New vertex edge added to existing from");
                 }
-
             }
         }
 

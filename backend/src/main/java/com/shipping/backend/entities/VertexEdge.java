@@ -1,5 +1,8 @@
 package com.shipping.backend.entities;
 
+import lombok.Data;
+
+@Data
 public class VertexEdge {
 
     private double weight;
@@ -11,28 +14,5 @@ public class VertexEdge {
         this.startVertex = startVertex;
         this.targetVertex = targetVertex;
     }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public CityVertex getStartVertex() {
-        return startVertex;
-    }
-
-    public void setStartVertex(CityVertex startVertex) {
-        this.startVertex = startVertex;
-    }
-
-    public CityVertex getTargetVertex() {
-        return targetVertex;
-    }
-
-    public void setTargetVertex(CityVertex targetVertex) {
-        this.targetVertex = targetVertex;
-    }
+    
 }

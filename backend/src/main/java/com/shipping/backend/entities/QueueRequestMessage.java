@@ -10,6 +10,7 @@ import java.io.Serializable;
 @Data
 public class QueueRequestMessage implements Serializable {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String type;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
