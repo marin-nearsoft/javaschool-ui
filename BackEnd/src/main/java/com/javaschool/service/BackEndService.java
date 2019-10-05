@@ -6,4 +6,6 @@ public interface BackEndService {
 
     List<String> getType();
 
+    List<String> getSize();
+
 }
