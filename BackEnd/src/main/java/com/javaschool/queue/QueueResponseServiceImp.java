@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.entitymapper.PackageSize;
 import com.javaschool.entitymapper.PackageType;
+import com.javaschool.entitymapper.TransportType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,13 +17,15 @@ import java.util.List;
 public class QueueResponseServiceImp implements QueueResponseService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QueueSenderServiceImp.class);
-
+    private TypeReference refpackage = new TypeReference<List<PackageType>>() {
+    };
+    private TypeReference refsize = new TypeReference<List<PackageSize>>() {
+    };
+    private TypeReference<List<TransportType>> reftransport = new TypeReference<List<TransportType>>() {
+    };
     private QueueSenderService queueSenderService;
     private ObjectMapper mapper;
-    TypeReference refpackage = new TypeReference<List<PackageType>>() {
-    };
-    TypeReference refsize = new TypeReference<List<PackageSize>>() {
-    };
+
 
     public QueueResponseServiceImp(final QueueSenderService queueSenderService, final ObjectMapper mapper) {
         this.queueSenderService = queueSenderService;
@@ -51,5 +54,17 @@ public class QueueResponseServiceImp implements QueueResponseService {
             LOGGER.error(e.getMessage(), e);
         }
         return sizes;
+    }
+
+    @Override
+    public List<TransportType> getTransport() {
+        List<TransportType> transports = Collections.emptyList();
+        try {
+            String response = queueSenderService.sendRequest("transportType");
+            transports = mapper.readValue(response, reftransport);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return transports;
     }
 }

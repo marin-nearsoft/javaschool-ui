@@ -3,6 +3,7 @@ package com.javaschool.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.entitymapper.PackageSize;
 import com.javaschool.entitymapper.PackageType;
+import com.javaschool.entitymapper.TransportType;
 import com.javaschool.queue.*;
 import com.sun.glass.ui.Application;
 import org.junit.Assert;
@@ -77,6 +78,28 @@ public class BackEndServiceTests {
         List<String> actual = backEndService.getSize();
 
         Assert.assertEquals(expected, actual);
-        System.out.println("Expected:" + expected + ":" + actual);
+
+    }
+
+    @Test
+    public void getTransportTest() throws IOException {
+        List<String> expected = Collections.singletonList("Land");
+        messageType.setType("transportType");
+
+        TransportType transportTypeResponse = new TransportType();
+        transportTypeResponse.setId(1);
+        transportTypeResponse.setDescription("Land");
+        transportTypeResponse.setPricePerMile(2);
+
+        TransportType[] transportResponseArray = new TransportType[]{transportTypeResponse};
+
+        String mockTypes = new ObjectMapper().writeValueAsString(transportResponseArray);
+        String mockRequest = new ObjectMapper().writeValueAsString(messageType);
+        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockTypes);
+
+        List<String> actual = backEndService.getTransport();
+
+        Assert.assertEquals(expected, actual);
+
     }
 }

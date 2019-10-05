@@ -1,11 +1,11 @@
 const config = {
-    "host": "",
-    "port": "",
+    "host": "localhost",
+    "port": "3000",
     "rest" : {
-        "size" : "",
-        "type" : "",
+        "size" : "/size",
+        "type" : "/type",
         "time" : "",
-        "transport" : "",
+        "transport" : "/transport",
         "city" : "",
         "cityPath": "",
         "checkPrice" : "",

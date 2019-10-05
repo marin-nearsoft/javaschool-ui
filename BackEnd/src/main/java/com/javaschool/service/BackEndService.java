@@ -8,4 +8,6 @@ public interface BackEndService {
 
     List<String> getSize();
 
+    List<String> getTransport();
+
 }
