@@ -14,7 +14,7 @@ public class BackEndServiceImp implements BackEndService {
 
     private QueueResponseService queueResponseService;
 
-    public BackEndServiceImp(final QueueResponseService queueResponseService) {
+    BackEndServiceImp(final QueueResponseService queueResponseService) {
         this.queueResponseService = queueResponseService;
     }
 

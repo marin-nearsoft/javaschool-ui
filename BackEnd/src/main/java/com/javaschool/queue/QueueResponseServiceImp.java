@@ -17,12 +17,14 @@ import java.util.List;
 public class QueueResponseServiceImp implements QueueResponseService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QueueSenderServiceImp.class);
-
+    private TypeReference refpackage = new TypeReference<List<PackageType>>() {
+    };
+    private TypeReference refsize = new TypeReference<List<PackageSize>>() {
+    };
+    private TypeReference<List<TransportType>> reftransport = new TypeReference<List<TransportType>>() {
+    };
     private QueueSenderService queueSenderService;
     private ObjectMapper mapper;
-    TypeReference refpackage = new TypeReference<List<PackageType>>() {};
-    TypeReference refsize = new TypeReference<List<PackageSize>>() {};
-    TypeReference<List<TransportType>> reftransport = new TypeReference<List<TransportType>>() {};
 
 
     public QueueResponseServiceImp(final QueueSenderService queueSenderService, final ObjectMapper mapper) {

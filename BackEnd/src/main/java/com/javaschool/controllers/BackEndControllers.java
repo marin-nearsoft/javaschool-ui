@@ -17,20 +17,17 @@ public class BackEndControllers {
 
     @RequestMapping("/type")
     public List<String> getType() {
-        List<String> types = backEndService.getType();
-        return types;
+        return backEndService.getType();
     }
 
     @RequestMapping("/size")
     public List<String> getSize() {
-        List<String> sizes = backEndService.getSize();
-        return sizes;
+        return backEndService.getSize();
     }
 
     @RequestMapping("/transport")
     public List<String> getTransport() {
-        List<String> transports = backEndService.getTransport();
-        return transports;
+        return backEndService.getTransport();
     }
 
 }
