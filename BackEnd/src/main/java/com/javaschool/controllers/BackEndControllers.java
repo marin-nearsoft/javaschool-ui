@@ -35,4 +35,9 @@ public class BackEndControllers {
         return backEndService.getVelocity();
     }
 
+    @RequestMapping("/city")
+    public List<String> getCity() {
+        return backEndService.getCity();
+    }
+
 }

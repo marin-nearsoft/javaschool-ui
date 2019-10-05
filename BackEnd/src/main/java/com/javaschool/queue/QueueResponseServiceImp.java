@@ -1,10 +1,7 @@
 package com.javaschool.queue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.javaschool.entitymapper.PackageSize;
-import com.javaschool.entitymapper.PackageType;
-import com.javaschool.entitymapper.TransportType;
-import com.javaschool.entitymapper.TransportVelocity;
+import com.javaschool.entitymapper.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -73,5 +70,17 @@ public class QueueResponseServiceImp implements QueueResponseService {
             LOGGER.error(e.getMessage(), e);
         }
         return velocities;
+    }
+
+    @Override
+    public List<Cities> getCity() {
+        List<Cities> cities = Collections.emptyList();
+        try {
+            String response = queueSenderService.sendRequest("city");
+            cities = mapper.readValue(response, mapper.getTypeFactory().constructCollectionType(List.class, Cities.class));
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return cities;
     }
 }
