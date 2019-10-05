@@ -1,10 +1,10 @@
 package com.javaschool.queue;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.entitymapper.PackageSize;
 import com.javaschool.entitymapper.PackageType;
 import com.javaschool.entitymapper.TransportType;
+import com.javaschool.entitymapper.TransportVelocity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,7 @@ import java.util.List;
 public class QueueResponseServiceImp implements QueueResponseService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QueueSenderServiceImp.class);
-    private TypeReference refpackage = new TypeReference<List<PackageType>>() {
-    };
-    private TypeReference refsize = new TypeReference<List<PackageSize>>() {
-    };
-    private TypeReference<List<TransportType>> reftransport = new TypeReference<List<TransportType>>() {
-    };
+
     private QueueSenderService queueSenderService;
     private ObjectMapper mapper;
 
@@ -37,7 +32,7 @@ public class QueueResponseServiceImp implements QueueResponseService {
         List<PackageType> types = Collections.emptyList();
         try {
             String response = queueSenderService.sendRequest("packageType");
-            types = mapper.readValue(response, refpackage);
+            types = mapper.readValue(response, mapper.getTypeFactory().constructCollectionType(List.class, PackageType.class));
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -49,7 +44,7 @@ public class QueueResponseServiceImp implements QueueResponseService {
         List<PackageSize> sizes = Collections.emptyList();
         try {
             String response = queueSenderService.sendRequest("packageSize");
-            sizes = mapper.readValue(response, refsize);
+            sizes = mapper.readValue(response, mapper.getTypeFactory().constructCollectionType(List.class, PackageSize.class));
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -61,10 +56,22 @@ public class QueueResponseServiceImp implements QueueResponseService {
         List<TransportType> transports = Collections.emptyList();
         try {
             String response = queueSenderService.sendRequest("transportType");
-            transports = mapper.readValue(response, reftransport);
+            transports = mapper.readValue(response, mapper.getTypeFactory().constructCollectionType(List.class, TransportType.class));
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
         return transports;
+    }
+
+    @Override
+    public List<TransportVelocity> getVelocity() {
+        List<TransportVelocity> velocities = Collections.emptyList();
+        try {
+            String response = queueSenderService.sendRequest("transportVelocity");
+            velocities = mapper.readValue(response, mapper.getTypeFactory().constructCollectionType(List.class, TransportVelocity.class));
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return velocities;
     }
 }

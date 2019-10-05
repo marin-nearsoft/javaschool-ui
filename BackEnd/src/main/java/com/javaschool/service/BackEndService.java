@@ -10,4 +10,6 @@ public interface BackEndService {
 
     List<String> getTransport();
 
+    List<String> getVelocity();
+
 }

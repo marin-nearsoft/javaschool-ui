@@ -3,6 +3,7 @@ package com.javaschool.service;
 import com.javaschool.entitymapper.PackageSize;
 import com.javaschool.entitymapper.PackageType;
 import com.javaschool.entitymapper.TransportType;
+import com.javaschool.entitymapper.TransportVelocity;
 import com.javaschool.queue.QueueResponseService;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +37,9 @@ public class BackEndServiceImp implements BackEndService {
                 .map(TransportType::getDescription).collect(Collectors.toList());
     }
 
-
+    @Override
+    public List<String> getVelocity() {
+        return queueResponseService.getVelocity().stream()
+                .map(TransportVelocity::getDescription).collect(Collectors.toList());
+    }
 }

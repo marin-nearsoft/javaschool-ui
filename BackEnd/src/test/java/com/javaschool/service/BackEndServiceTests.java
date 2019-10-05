@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.entitymapper.PackageSize;
 import com.javaschool.entitymapper.PackageType;
 import com.javaschool.entitymapper.TransportType;
+import com.javaschool.entitymapper.TransportVelocity;
 import com.javaschool.queue.*;
 import com.sun.glass.ui.Application;
 import org.junit.Assert;
@@ -98,6 +99,28 @@ public class BackEndServiceTests {
         when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockTypes);
 
         List<String> actual = backEndService.getTransport();
+
+        Assert.assertEquals(expected, actual);
+
+    }
+
+    @Test
+    public void getVelocityTest() throws IOException {
+        List<String> expected = Collections.singletonList("Regular");
+        messageType.setType("transportVelocity");
+
+        TransportVelocity transportVelocityResponse = new TransportVelocity();
+        transportVelocityResponse.setId(1);
+        transportVelocityResponse.setDescription("Regular");
+        transportVelocityResponse.setPriceFactor(5);
+
+        TransportVelocity[] velocityResponseArray = new TransportVelocity[]{transportVelocityResponse};
+
+        String mockTypes = new ObjectMapper().writeValueAsString(velocityResponseArray);
+        String mockRequest = new ObjectMapper().writeValueAsString(messageType);
+        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockTypes);
+
+        List<String> actual = backEndService.getVelocity();
 
         Assert.assertEquals(expected, actual);
 

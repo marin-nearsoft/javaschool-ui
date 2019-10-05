@@ -30,4 +30,9 @@ public class BackEndControllers {
         return backEndService.getTransport();
     }
 
+    @RequestMapping("/velocity")
+    public List<String> getVelocity() {
+        return backEndService.getVelocity();
+    }
+
 }
