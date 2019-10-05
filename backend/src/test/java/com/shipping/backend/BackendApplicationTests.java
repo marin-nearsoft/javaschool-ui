@@ -73,7 +73,7 @@ public class BackendApplicationTests {
         appConfiguration.setPackageTypes("packageType");
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
-        List packageTypesList = queueResponseHandler.getTypes();
+        queueResponseHandler.getTypes();
 
     }
 
@@ -107,7 +107,7 @@ public class BackendApplicationTests {
         appConfiguration.setPackageSizes("packageSize");
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
-        List packageSizesList = queueResponseHandler.getSizes();
+        queueResponseHandler.getSizes();
 
     }
 
@@ -141,7 +141,7 @@ public class BackendApplicationTests {
         appConfiguration.setTransportTypes("transportType");
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
-        List transportTypesList = queueResponseHandler.getTransports();
+        queueResponseHandler.getTransports();
 
     }
 
@@ -175,17 +175,15 @@ public class BackendApplicationTests {
         appConfiguration.setTransportVelocity("transportVelocity");
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
-        List transportTypesList = queueResponseHandler.getTransportVelocity();
+        queueResponseHandler.getTransportVelocity();
 
     }
 
     @Test
-    public void getCitiesTestSuccess()  {
+    public void getCitiesTestSuccess() {
 
         //Set request message to get package types
         queueRequestMessage.setType("city");
-
-        //This line should be remove once i can implement TestPropertySource
         appConfiguration.setCities("city");
 
         //Mocked Response Values
@@ -200,22 +198,20 @@ public class BackendApplicationTests {
                 city.toString());
         List cityList = queueResponseHandler.getCities();
 
-        assertEquals(cityList.size(),1);
+        assertEquals(cityList.size(), 1);
         assertEquals(cityList.get(0).getClass(), City.class);
         assertThat(cityList.get(0), hasProperty("name", is("Leon")));
 
     }
 
     @Test(expected = CustomException.class)
-    public void getCitiesTestFailure()  {
+    public void getCitiesTestFailure() {
         //Set request message to get package types
         queueRequestMessage.setType("city");
-
-        //This line should be remove once i can implement TestPropertySource
         appConfiguration.setCities("city");
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
-        List cityList = queueResponseHandler.getCities();
+        queueResponseHandler.getCities();
 
     }
 
