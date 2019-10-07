@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.javaschool.webservices.model.PackageSize;
-import com.javaschool.webservices.model.PackageTime;
+import com.javaschool.webservices.model.TransportVelocity;
 import com.javaschool.webservices.model.PackageTransport;
 import com.javaschool.webservices.model.PackageType;
 import com.javaschool.webservices.service.PackageRabbitMqService;
@@ -46,8 +46,8 @@ public class PackageServiceImpl implements PackageService {
 	}
 	
 	@Override
-	public List<String> getTimes() {
-		List<PackageTime> packageTransports = shippingService.getPackageTimes();
+	public List<String> getTransportVelocities() {
+		List<TransportVelocity> packageTransports = shippingService.getTransportVelocities();
 		
 		return packageTransports.stream().map(packageTime -> packageTime.getDescription()).
 				collect(Collectors.toList());

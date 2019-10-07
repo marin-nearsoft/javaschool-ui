@@ -10,5 +10,6 @@ public interface PackageService {
 	
 	List<String> getTransports();
 
-	List<String> getTimes();
+	List<String> getTransportVelocities();
+
 }
