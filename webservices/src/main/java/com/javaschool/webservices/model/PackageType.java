@@ -5,6 +5,7 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter @Setter
 public class PackageType implements Serializable{
 
 	private static final long serialVersionUID = 8642607176960918131L;

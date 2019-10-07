@@ -12,7 +12,7 @@ import com.javaschool.webservices.configuration.RabbitMQProperties;
 import com.javaschool.webservices.model.City;
 import com.javaschool.webservices.model.PackageRabbitMqMessages;
 import com.javaschool.webservices.model.PackageSize;
-import com.javaschool.webservices.model.PackageTime;
+import com.javaschool.webservices.model.TransportVelocity;
 import com.javaschool.webservices.model.PackageTransport;
 import com.javaschool.webservices.model.PackageType;
 import com.javaschool.webservices.service.PackageRabbitMqService;
@@ -67,11 +67,11 @@ public class PackageRabbitMqServiceImpl implements PackageRabbitMqService {
 	}
 
 	@Override
-	public List<PackageTime> getPackageTimes() {
+	public List<TransportVelocity> getTransportVelocities() {
 		try {
-			String message = objectMapper.writeValueAsString(PackageRabbitMqMessages.PACKAGE_TIME.createPackageRabbitRPCMessage());
+			String message = objectMapper.writeValueAsString(PackageRabbitMqMessages.TRANSPORT_VELOCITY.createPackageRabbitRPCMessage());
 			Object object = rabbitTemplate.convertSendAndReceive(rabbitMQProperties.getExchange(), rabbitMQProperties.getRoutingKey(), message);
-			return objectMapper.readValue((String)object, new TypeReference<List<PackageTime>>(){});
+			return objectMapper.readValue((String)object, new TypeReference<List<TransportVelocity>>(){});
 		} catch (Exception e) {
 			return Collections.emptyList();
 		}

@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 
 import com.javaschool.webservices.model.City;
 import com.javaschool.webservices.model.PackageSize;
-import com.javaschool.webservices.model.PackageTime;
+import com.javaschool.webservices.model.TransportVelocity;
 import com.javaschool.webservices.model.PackageTransport;
 import com.javaschool.webservices.model.PackageType;
 import com.javaschool.webservices.service.impl.PackageServiceImpl;
@@ -128,20 +128,20 @@ public class PackageServiceImplTest {
 	}
 	
 	@Test
-	public void testTimes() {
-		List<PackageTime> packageTimesList = new LinkedList<PackageTime>();
+	public void testTransporVelocities() {
+		List<TransportVelocity> packageTimesList = new LinkedList<TransportVelocity>();
 		
-		PackageTime packageTime1 = new PackageTime();
+		TransportVelocity packageTime1 = new TransportVelocity();
 		packageTime1.setId(1);
 		packageTime1.setDescription("Package time 1 test");
 		packageTime1.setPriceFactor(10.10);
 		
-		PackageTime packageTime2 = new PackageTime();
+		TransportVelocity packageTime2 = new TransportVelocity();
 		packageTime2.setId(1);
 		packageTime2.setDescription("Package time 2 test");
 		packageTime2.setPriceFactor(20.20);
 		
-		PackageTime packageTime3 = new PackageTime();
+		TransportVelocity packageTime3 = new TransportVelocity();
 		packageTime3.setId(3);
 		packageTime3.setDescription("Package time 3 test");
 		packageTime3.setPriceFactor(30.30);
@@ -150,9 +150,9 @@ public class PackageServiceImplTest {
 		packageTimesList.add(packageTime2);
 		packageTimesList.add(packageTime3);
 		
-		Mockito.when(shippingServiceMock.getPackageTimes()).thenReturn(packageTimesList);
+		Mockito.when(shippingServiceMock.getTransportVelocities()).thenReturn(packageTimesList);
 		
-		List<String> packageTimeNames = packageService.getTimes();
+		List<String> packageTimeNames = packageService.getTransportVelocities();
 		
 		assertEquals(3, packageTimeNames.size());
 		assertEquals(packageTime1.getDescription(), packageTimeNames.get(0));

@@ -33,9 +33,9 @@ public class PackageController {
 		return packageService.getTransports();
 	}
 	
-	@GetMapping("/transports")
+	@GetMapping("/transportVelocities")
 	public List<String> getTimes() {
-		return packageService.getTimes();
+		return packageService.getTransportVelocities();
 	}
 	
 	@GetMapping("/cities")
