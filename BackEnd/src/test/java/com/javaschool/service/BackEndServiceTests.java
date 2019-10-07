@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,20 +29,22 @@ public class BackEndServiceTests {
 
     private static MessageType messageType = new MessageType();
     private static ObjectMapper mapper = new ObjectMapper();
-    private static MessageWithOrigin messageWithOrigin = new MessageWithOrigin();
+    private static ResponseList responseList = new ResponseList();
 
     @BeforeClass
     public static void setUp() {
         rabbitTemplateMock = mock(RabbitTemplate.class);
         QueueSenderService queueSenderService = new QueueSenderServiceImp(rabbitTemplateMock, mapper);
         QueueResponseService queueResponseService = new QueueResponseServiceImp(queueSenderService, mapper);
-        backEndService = new BackEndServiceImp(queueResponseService);
+        backEndService = new BackEndServiceImp(queueResponseService,responseList);
     }
 
     @Test
     public void getTypeTest() throws IOException {
         List<String> expected = Collections.singletonList("Box");
         messageType.setType("packageType");
+        messageType.setOrigin(null);
+        messageType.setDestination(null);
 
         PackageType packageTypeResponse = new PackageType();
         packageTypeResponse.setId(1);
@@ -63,6 +66,8 @@ public class BackEndServiceTests {
     public void getSizeTest() throws IOException {
         List<String> expected = Collections.singletonList("Small");
         messageType.setType("packageSize");
+        messageType.setOrigin(null);
+        messageType.setDestination(null);
 
         PackageSize packageSizeResponse = new PackageSize();
         packageSizeResponse.setId(1);
@@ -71,9 +76,9 @@ public class BackEndServiceTests {
 
         PackageSize[] sizeResponseArray = new PackageSize[]{packageSizeResponse};
 
-        String mockTypes = new ObjectMapper().writeValueAsString(sizeResponseArray);
+        String mockSize = new ObjectMapper().writeValueAsString(sizeResponseArray);
         String mockRequest = new ObjectMapper().writeValueAsString(messageType);
-        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockTypes);
+        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockSize);
 
         List<String> actual = backEndService.getSize();
 
@@ -85,6 +90,8 @@ public class BackEndServiceTests {
     public void getTransportTest() throws IOException {
         List<String> expected = Collections.singletonList("Land");
         messageType.setType("transportType");
+        messageType.setOrigin(null);
+        messageType.setDestination(null);
 
         TransportType transportTypeResponse = new TransportType();
         transportTypeResponse.setId(1);
@@ -93,9 +100,9 @@ public class BackEndServiceTests {
 
         TransportType[] transportResponseArray = new TransportType[]{transportTypeResponse};
 
-        String mockTypes = new ObjectMapper().writeValueAsString(transportResponseArray);
+        String mockTransport = new ObjectMapper().writeValueAsString(transportResponseArray);
         String mockRequest = new ObjectMapper().writeValueAsString(messageType);
-        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockTypes);
+        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockTransport);
 
         List<String> actual = backEndService.getTransport();
 
@@ -107,6 +114,8 @@ public class BackEndServiceTests {
     public void getVelocityTest() throws IOException {
         List<String> expected = Collections.singletonList("Regular");
         messageType.setType("transportVelocity");
+        messageType.setOrigin(null);
+        messageType.setDestination(null);
 
         TransportVelocity transportVelocityResponse = new TransportVelocity();
         transportVelocityResponse.setId(1);
@@ -115,9 +124,9 @@ public class BackEndServiceTests {
 
         TransportVelocity[] velocityResponseArray = new TransportVelocity[]{transportVelocityResponse};
 
-        String mockTypes = new ObjectMapper().writeValueAsString(velocityResponseArray);
+        String mockVelority = new ObjectMapper().writeValueAsString(velocityResponseArray);
         String mockRequest = new ObjectMapper().writeValueAsString(messageType);
-        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockTypes);
+        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockVelority);
 
         List<String> actual = backEndService.getVelocity();
 
@@ -127,33 +136,64 @@ public class BackEndServiceTests {
 
     @Test
     public void getCityTest() throws IOException {
-        List<String> expected = Collections.singletonList("Leon");
+        ArrayList expected = new ArrayList();
+        expected.add("Aguascalientes");
+        expected.add("Chihuahua");
+        expected.add("Leon");
+
         messageType.setType("city");
+        messageType.setOrigin(null);
+        messageType.setDestination(null);
 
-        Cities citiesResponse = new Cities();
-        citiesResponse.setId(1);
-        citiesResponse.setName("Leon");
-        citiesResponse.setAirport(true);
-        citiesResponse.setSeaport(false);
+        Cities Aguascalientes = new Cities();
+        Aguascalientes.setId(1);
+        Aguascalientes.setName("Aguascalientes");
+        Aguascalientes.setTax(10);
+        Aguascalientes.setAirport(true);
+        Aguascalientes.setSeaport(false);
 
-        Cities[] citiesResponseArray = new Cities[]{citiesResponse};
+        Cities Chihuahua = new Cities();
+        Chihuahua.setId(2);
+        Chihuahua.setName("Chihuahua");
+        Chihuahua.setTax(5);
+        Chihuahua.setAirport(true);
+        Chihuahua.setSeaport(false);
 
-        String mockTypes = new ObjectMapper().writeValueAsString(citiesResponseArray);
+        Cities Leon = new Cities();
+        Leon.setId(3);
+        Leon.setName("Leon");
+        Leon.setTax(2);
+        Leon.setAirport(true);
+        Leon.setSeaport(false);
+
+        List<Cities> citiesResponseArray = new java.util.ArrayList<>(Collections.emptyList());
+        citiesResponseArray.add(Aguascalientes);
+        citiesResponseArray.add(Chihuahua);
+        citiesResponseArray.add(Leon);
+
+        String mockCities = new ObjectMapper().writeValueAsString(citiesResponseArray);
+
         String mockRequest = new ObjectMapper().writeValueAsString(messageType);
-        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockTypes);
+        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockCities);
 
         List<String> actual = backEndService.getCity();
 
         Assert.assertEquals(expected, actual);
 
+
     }
 
     @Test
     public void getRouteTest() throws IOException {
-        List<String> expected = Collections.singletonList("\"Chihuahua\",\"Tampico\",\"Puebla\",\"Acapulco\"");
-        messageWithOrigin.setType("routesList");
-        messageWithOrigin.setOrigin("Chihuahua");
-        messageWithOrigin.setDestination("Acapulco");
+        ArrayList expected = new ArrayList();
+        expected.add("Chihuahua");
+        expected.add("Tampico");
+        expected.add("Puebla");
+        expected.add("Acapulco");
+
+        messageType.setType("routesList");
+        messageType.setOrigin("Chihuahua");
+        messageType.setDestination("Acapulco");
 
         RouteList chihuahua = new RouteList();
         chihuahua.setFrom("Chihuahua");
@@ -171,23 +211,19 @@ public class BackEndServiceTests {
         Puebla.setDistance(9);
 
         List<RouteList> routeLists = new java.util.ArrayList<>(Collections.emptyList());
-
         routeLists.add(chihuahua);
         routeLists.add(Tampico);
         routeLists.add(Puebla);
 
 
-/*
-
-        RouteList[] routeResponseArray = new RouteList[]{(RouteList) routeLists};
-
-        String mockTypes = new ObjectMapper().writeValueAsString(routeResponseArray);
-        String mockRequest = new ObjectMapper().writeValueAsString(messageWithOrigin);
-        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockTypes);
+        String mockRoutes = new ObjectMapper().writeValueAsString(routeLists);
+        String mockRequest = new ObjectMapper().writeValueAsString(messageType);
+        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockRoutes);
 
         List<String> actual = backEndService.getRoute("Chihuahua","Acapulco");
 
         Assert.assertEquals(expected, actual);
-*/
+
     }
+
 }
