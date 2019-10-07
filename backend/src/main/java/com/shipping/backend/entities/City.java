@@ -16,10 +16,10 @@ public class City implements Serializable {
     @Override
     public String toString() {
         return "[{\"id\":" + id
-                + ",\"name\":\"" +  name
-                +"\",\"tax\":" + tax
-                +",\"seaport\":" + seaport
-                +",\"airport\":" + airport + "}]";
+                + ",\"name\":\"" + name
+                + "\",\"tax\":" + tax
+                + ",\"seaport\":" + seaport
+                + ",\"airport\":" + airport + "}]";
     }
 
 }
