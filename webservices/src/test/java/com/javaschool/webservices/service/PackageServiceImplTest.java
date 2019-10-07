@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.javaschool.webservices.model.PackageSize;
+import com.javaschool.webservices.model.TransportVelocity;
 import com.javaschool.webservices.model.PackageTransport;
 import com.javaschool.webservices.model.PackageType;
 import com.javaschool.webservices.service.impl.PackageServiceImpl;
@@ -123,6 +124,39 @@ public class PackageServiceImplTest {
 		assertEquals(packageTransport1.getDescription(), packageTransportsNames.get(0));
 		assertEquals(packageTransport2.getDescription(), packageTransportsNames.get(1));
 		assertEquals(packageTransport3.getDescription(), packageTransportsNames.get(2));
+	}
+	
+	@Test
+	public void testTransporVelocities() {
+		List<TransportVelocity> packageTimesList = new LinkedList<TransportVelocity>();
+		
+		TransportVelocity packageTime1 = new TransportVelocity();
+		packageTime1.setId(1);
+		packageTime1.setDescription("Package time 1 test");
+		packageTime1.setPriceFactor(10.10);
+		
+		TransportVelocity packageTime2 = new TransportVelocity();
+		packageTime2.setId(1);
+		packageTime2.setDescription("Package time 2 test");
+		packageTime2.setPriceFactor(20.20);
+		
+		TransportVelocity packageTime3 = new TransportVelocity();
+		packageTime3.setId(3);
+		packageTime3.setDescription("Package time 3 test");
+		packageTime3.setPriceFactor(30.30);
+		
+		packageTimesList.add(packageTime1);
+		packageTimesList.add(packageTime2);
+		packageTimesList.add(packageTime3);
+		
+		Mockito.when(shippingServiceMock.getTransportVelocities()).thenReturn(packageTimesList);
+		
+		List<String> packageTimeNames = packageService.getTransportVelocities();
+		
+		assertEquals(3, packageTimeNames.size());
+		assertEquals(packageTime1.getDescription(), packageTimeNames.get(0));
+		assertEquals(packageTime2.getDescription(), packageTimeNames.get(1));
+		assertEquals(packageTime3.getDescription(), packageTimeNames.get(2));
 	}
 
 }

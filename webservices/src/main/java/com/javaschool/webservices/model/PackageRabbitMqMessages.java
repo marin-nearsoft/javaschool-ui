@@ -8,7 +8,8 @@ public enum PackageRabbitMqMessages {
 
 	PACKAGE_TYPE("packageType"), 
 	PACKAGE_SIZE("packageSize"), 
-	PACKAGE_TRANSPORT("transportType");
+	PACKAGE_TRANSPORT("transportType"),
+	TRANSPORT_VELOCITY("transportVelocity");
 	
 	private String packageRabbitMqMessage;
 
@@ -24,6 +25,8 @@ public enum PackageRabbitMqMessages {
 @AllArgsConstructor
 class PackageRabbitRPCMessage {
 
-	@Getter @Setter private String type;
-	
+	@Getter
+	@Setter
+	private String type;
+
 }
