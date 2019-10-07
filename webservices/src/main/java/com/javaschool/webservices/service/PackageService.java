@@ -12,4 +12,6 @@ public interface PackageService {
 
 	List<String> getTransportVelocities();
 
+	List<String> getCities();
+
 }

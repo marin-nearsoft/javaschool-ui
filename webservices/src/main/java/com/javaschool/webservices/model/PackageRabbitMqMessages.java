@@ -9,7 +9,8 @@ public enum PackageRabbitMqMessages {
 	PACKAGE_TYPE("packageType"), 
 	PACKAGE_SIZE("packageSize"), 
 	PACKAGE_TRANSPORT("transportType"),
-	TRANSPORT_VELOCITY("transportVelocity");
+	TRANSPORT_VELOCITY("transportVelocity"),
+	CITY("city");
 	
 	private String packageRabbitMqMessage;
 
