@@ -1,9 +1,9 @@
 package com.shipping.backend.services;
 
 
-import com.shipping.backend.entities.CityVertex;
-import com.shipping.backend.entities.Route;
-import com.shipping.backend.entities.VertexEdge;
+import com.shipping.backend.models.dijkstra.CityVertex;
+import com.shipping.backend.models.common.Route;
+import com.shipping.backend.models.dijkstra.VertexEdge;
 
 import java.util.*;
 
@@ -13,7 +13,7 @@ public class RoutesResponseProcessor {
 
         HashMap<String, CityVertex> cityVertexMap = new HashMap<String, CityVertex>();
 
-        for(Route route: routeList){
+        for(Route route : routeList){
             if(!cityVertexMap.containsKey(route.getFrom())){
 
                 CityVertex fromVertex = new CityVertex(route.getFrom());
@@ -75,11 +75,11 @@ public class RoutesResponseProcessor {
         }
     }
 
-    public List<CityVertex> getShortestPathTo(CityVertex targetVertex){
-        List<CityVertex> path = new ArrayList<>();
+    public List<String> getShortestPathTo(CityVertex targetVertex){
+        List<String> path = new ArrayList<>();
 
         for(CityVertex vertex=targetVertex;vertex!=null;vertex=vertex.getPredecessor()){
-            path.add(vertex);
+            path.add(vertex.getName());
         }
 
         Collections.reverse(path);

@@ -2,12 +2,12 @@ const config = {
     "host": "http://localhost",
     "port": "8080",
     "rest" : {
-        "size" : "",
+        "size" : "/shipment-management/package-sizes",
         "type" : "/shipment-management/package-types",
-        "time" : "",
-        "transport" : "",
-        "city" : "",
-        "cityPath": "",
+        "time" : "/shipment-management/transports/velocities",
+        "transport" : "/shipment-management/transports",
+        "city" : "/shipment-management/cities",
+        "cityPath": "/shipment-management/route",
         "checkPrice" : "",
         "sendShipping": "",
         "shippingInformation": ""

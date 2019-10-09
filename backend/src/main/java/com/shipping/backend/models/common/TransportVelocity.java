@@ -1,4 +1,4 @@
-package com.shipping.backend.entities;
+package com.shipping.backend.models.common;
 
 
 import lombok.Data;

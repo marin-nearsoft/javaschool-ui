@@ -1,21 +1,21 @@
-package com.shipping.backend.entities;
+package com.shipping.backend.models.common;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class PackageSize implements Serializable {
+public class PackageType implements Serializable {
 
     private int id;
     private String description;
-    private int priceFactor;
+    private int price;
 
     @Override
     public String toString() {
         return "[{\"id\":" + id
                 + ",\"description\":\"" +  description
-                +"\",\"priceFactor\":" + priceFactor + "}]";
+                +"\",\"price\":" + price + "}]";
     }
 
 }

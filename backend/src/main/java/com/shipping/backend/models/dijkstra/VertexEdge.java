@@ -1,4 +1,4 @@
-package com.shipping.backend.entities;
+package com.shipping.backend.models.dijkstra;
 
 import lombok.Data;
 
@@ -14,5 +14,5 @@ public class VertexEdge {
         this.startVertex = startVertex;
         this.targetVertex = targetVertex;
     }
-    
+
 }

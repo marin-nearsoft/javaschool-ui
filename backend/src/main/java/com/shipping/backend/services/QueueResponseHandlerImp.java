@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shipping.backend.config.AppConfiguration;
 import com.shipping.backend.config.CustomException;
 import com.shipping.backend.config.QueueClient;
-import com.shipping.backend.entities.*;
+import com.shipping.backend.models.common.*;
+import com.shipping.backend.models.dijkstra.CityVertex;
+import com.shipping.backend.models.rmq.QueueRequestMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,14 +22,17 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
     private QueueClient shippingRequestSender;
     private ObjectMapper mapper;
     private AppConfiguration appConfiguration;
+    private ResponseList responseList;
     private QueueRequestMessage queueRequestMessage = new QueueRequestMessage();
     private RoutesResponseProcessor routesResponseProcessor = new RoutesResponseProcessor();
 
     public QueueResponseHandlerImp(final QueueClient shippingRequestSender,
                                    final AppConfiguration appConfiguration,
+                                   final ResponseList responseList,
                                    final ObjectMapper mapper) {
         this.shippingRequestSender = shippingRequestSender;
         this.appConfiguration = appConfiguration;
+        this.responseList = responseList;
         this.mapper = mapper;
     }
 
@@ -37,10 +42,10 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
         queueRequestMessage.setType(appConfiguration.getPackageTypes());
         LOG.info("Generating package type list");
         try {
-            List<PackageType> packageTypes = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
-                    mapper.getTypeFactory().constructCollectionType(List.class, PackageType.class));
+            responseList.setPackageTypes(mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
+                    mapper.getTypeFactory().constructCollectionType(List.class, PackageType.class)));
             LOG.info("Package type list successfully generated");
-            return packageTypes;
+            return responseList.getPackageTypes();
         } catch (Exception e) {
             LOG.error(e.getMessage());
             throw new CustomException("Service not available, please contact your administrator");
@@ -53,10 +58,10 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
         queueRequestMessage.setType(appConfiguration.getPackageSizes());
         LOG.info("Generating package size list");
         try {
-            List<PackageSize> packageSizes = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
-                    mapper.getTypeFactory().constructCollectionType(List.class, PackageSize.class));
+            responseList.setPackageSizes(mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
+                    mapper.getTypeFactory().constructCollectionType(List.class, PackageSize.class)));
             LOG.info("Package size list successfully generated");
-            return packageSizes;
+            return responseList.getPackageSizes();
         } catch (Exception e) {
             LOG.error(e.getMessage());
             throw new CustomException("Service not available, please contact your administrator");
@@ -69,10 +74,10 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
         queueRequestMessage.setType(appConfiguration.getTransportTypes());
         LOG.info("Generating transport types list");
         try {
-            List<Transport> transports = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
-                    mapper.getTypeFactory().constructCollectionType(List.class, Transport.class));
+            responseList.setTransports(mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
+                    mapper.getTypeFactory().constructCollectionType(List.class, Transport.class)));
             LOG.info("Transports list successfully generated");
-            return transports;
+            return responseList.getTransports();
         } catch (Exception e) {
             LOG.error(e.getMessage());
             throw new CustomException("Service not available, please contact your administrator");
@@ -85,10 +90,10 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
         queueRequestMessage.setType(appConfiguration.getTransportVelocity());
         LOG.info("Generating transport velocity list");
         try {
-            List<TransportVelocity> transportVelocities = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
-                    mapper.getTypeFactory().constructCollectionType(List.class, TransportVelocity.class));
+            responseList.setTransportVelocities(mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
+                    mapper.getTypeFactory().constructCollectionType(List.class, TransportVelocity.class)));
             LOG.info("Transport velocities list successfully generated");
-            return transportVelocities;
+            return responseList.getTransportVelocities();
         } catch (Exception e) {
             LOG.error(e.getMessage());
             throw new CustomException("Service not available, please contact your administrator");
@@ -101,10 +106,10 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
         queueRequestMessage.setType(appConfiguration.getCities());
         LOG.info("Generating cities list");
         try {
-            List<City> cities = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
-                    mapper.getTypeFactory().constructCollectionType(List.class, City.class));
+            responseList.setCities(mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
+                    mapper.getTypeFactory().constructCollectionType(List.class, City.class)));
             LOG.info("City list successfully generated");
-            return cities;
+            return responseList.getCities();
         } catch (Exception e) {
             LOG.error(e.getMessage());
             throw new CustomException("Service not available, please contact your administrator");
@@ -112,22 +117,22 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
     }
 
     @Override
-    public List getRoutes() {
+    public List<String> getRoutes(String origin, String destination) {
 
         queueRequestMessage.setType(appConfiguration.getRouteList());
-        queueRequestMessage.setOrigin("Chihuahua");
-        queueRequestMessage.setDestination("Cancun");
-        log.info("Generating routes list");
+        queueRequestMessage.setOrigin(origin);
+        queueRequestMessage.setDestination(destination);
+        LOG.info("Generating routes list");
         try {
-            List<Route> routes = mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
-                    mapper.getTypeFactory().constructCollectionType(List.class, Route.class));
-            HashMap<String, CityVertex> cityVertexMap = routesResponseProcessor.getRoutesMap(routes);
+            responseList.setRoutes(mapper.readValue(shippingRequestSender.sendRequest(mapper.writeValueAsString(queueRequestMessage)),
+                    mapper.getTypeFactory().constructCollectionType(List.class, Route.class)));
+            HashMap<String, CityVertex> cityVertexMap = routesResponseProcessor.getRoutesMap(responseList.getRoutes());
             routesResponseProcessor.computeShortestPaths(cityVertexMap.get(queueRequestMessage.getOrigin()));
-            log.info("Generating routes list" + routesResponseProcessor.getShortestPathTo(cityVertexMap.get(queueRequestMessage.getDestination())));
+            LOG.info("Generating routes list" + routesResponseProcessor.getShortestPathTo(cityVertexMap.get(queueRequestMessage.getDestination())));
             return routesResponseProcessor.getShortestPathTo(cityVertexMap.get(queueRequestMessage.getDestination()));
 
         }catch (Exception e){
-            log.error(e.getMessage());
+            LOG.error(e.getMessage());
             throw new CustomException("Service not available, please contact your administrator");
         }
     }

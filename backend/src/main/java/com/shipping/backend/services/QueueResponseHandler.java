@@ -1,6 +1,7 @@
 package com.shipping.backend.services;
 
-import com.shipping.backend.entities.*;
+import com.shipping.backend.models.common.*;
+import com.shipping.backend.models.dijkstra.CityVertex;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface QueueResponseHandler {
 
     List<City> getCities();
 
-    List<CityVertex> getRoutes();
+    List<String> getRoutes(String origin, String destination);
 }

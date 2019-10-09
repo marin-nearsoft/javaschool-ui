@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shipping.backend.config.AppConfiguration;
 import com.shipping.backend.config.CustomException;
 import com.shipping.backend.config.QueueClient;
-import com.shipping.backend.entities.*;
+import com.shipping.backend.models.common.*;
+import com.shipping.backend.models.rmq.QueueRequestMessage;
 import com.shipping.backend.services.QueueResponseHandler;
 import com.shipping.backend.services.QueueResponseHandlerImp;
 import org.junit.Before;
@@ -25,22 +26,23 @@ import static org.mockito.Mockito.when;
 public class BackendApplicationTests {
 
     private RabbitTemplate rabbitTemplate;
-    private QueueClient shippingRequestSender;
     private QueueResponseHandler queueResponseHandler;
     private AppConfiguration appConfiguration;
     private QueueRequestMessage queueRequestMessage;
-    private ObjectMapper mapper;
+    private ResponseList responseList;
 
     @Before
     public void setUp() {
 
         //Initialize functional classes for testing
-        mapper = new ObjectMapper();
+
         queueRequestMessage = new QueueRequestMessage();
         appConfiguration = new AppConfiguration();
         rabbitTemplate = mock(RabbitTemplate.class);
-        shippingRequestSender = new QueueClient(rabbitTemplate);
-        queueResponseHandler = new QueueResponseHandlerImp(shippingRequestSender, appConfiguration, mapper);
+        responseList = new ResponseList();
+        QueueClient shippingRequestSender = new QueueClient(rabbitTemplate);
+        ObjectMapper mapper = new ObjectMapper();
+        queueResponseHandler = new QueueResponseHandlerImp(shippingRequestSender, appConfiguration, responseList, mapper);
 
     }
 
@@ -56,8 +58,6 @@ public class BackendApplicationTests {
         packageType.setId(1);
         packageType.setDescription("Box");
         packageType.setPrice(100);
-
-        System.out.println(queueRequestMessage.toString());
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(
                 packageType.toString());
@@ -219,13 +219,12 @@ public class BackendApplicationTests {
     }
 
     @Test
-    public void getRoutesTestSuccess()  {
+    public void getRoutesTestSuccess() {
 
         //Set request message to get package types
         queueRequestMessage.setType("routesList");
         queueRequestMessage.setOrigin("Chihuahua");
         queueRequestMessage.setDestination("Cancun");
-
 
         //This line should be remove once i can implement TestPropertySource
         appConfiguration.setRouteList("routesList");
@@ -246,22 +245,36 @@ public class BackendApplicationTests {
         route3.setTo("Cancun");
         route3.setDistance(50);
 
-        List<Route> routeList = new ArrayList<>();
+        List<Route> routes = new ArrayList<>();
 
-        routeList.add(route1);
-        routeList.add(route2);
-        routeList.add(route3);
-
-        System.out.println(route1.RoutesToString(routeList));
-        System.out.println(queueRequestMessage.toString());
+        routes.add(route1);
+        routes.add(route2);
+        routes.add(route3);
 
         when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(
-                route1.RoutesToString(routeList));
-        List<CityVertex> cityVertices = queueResponseHandler.getRoutes();
+                responseList.RoutesToString(routes));
 
-        for (CityVertex vertex : cityVertices){
-            System.out.println(vertex.getName());
-        }
+        List<String> shortestRoute = queueResponseHandler.getRoutes("Chihuahua", "Cancun");
+
+        assertEquals(shortestRoute.size(), 3);
+        assertEquals(shortestRoute.get(0), "Chihuahua");
+        assertEquals(shortestRoute.get(1), "Durango");
+        assertEquals(shortestRoute.get(2), "Cancun");
+
+    }
+
+    @Test(expected = CustomException.class)
+    public void getRoutesTestFailure() {
+        //Set request message to get package types
+        queueRequestMessage.setType("routesList");
+        queueRequestMessage.setOrigin("Chihuahua");
+        queueRequestMessage.setDestination("Cancun");
+
+        //This line should be remove once i can implement TestPropertySource
+        appConfiguration.setRouteList("routesList");
+
+        when(rabbitTemplate.convertSendAndReceive(queueRequestMessage.toString())).thenReturn(null);
+        queueResponseHandler.getRoutes("Chihuahua", "Cancun");;
 
     }
 

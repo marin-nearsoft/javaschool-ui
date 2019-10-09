@@ -1,12 +1,12 @@
 package com.shipping.backend.controllers;
 
 
-import com.shipping.backend.entities.PackageSize;
-import com.shipping.backend.entities.PackageType;
+import com.shipping.backend.models.common.City;
+import com.shipping.backend.models.common.PackageSize;
+import com.shipping.backend.models.common.PackageType;
+import com.shipping.backend.models.request.RouteRequest;
 import com.shipping.backend.services.QueueResponseHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,12 +38,18 @@ public class ShipmentRetrievalController {
 
     @GetMapping("/transports/velocities")
     public List<String> transportVelocities(){
-        return queueResponseHandler.getSizes().stream().map(transportVelocities -> transportVelocities.getDescription()).collect(Collectors.toList());
+        return queueResponseHandler.getSizes().stream().map(PackageSize::getDescription).collect(Collectors.toList());
     }
 
     @GetMapping("/cities")
     public List<String> cities(){
-        return queueResponseHandler.getCities().stream().map(cities -> cities.getName()).collect(Collectors.toList());
+        return queueResponseHandler.getCities().stream().map(City::getName).collect(Collectors.toList());
     }
+
+    @PostMapping("/route")
+    public List<String> getRoute(@RequestBody RouteRequest values) {
+        return queueResponseHandler.getRoutes(values.getOrigin(), values.getDestination());
+    }
+
 
 }
