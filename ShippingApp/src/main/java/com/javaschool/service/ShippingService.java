@@ -11,5 +11,7 @@ public interface ShippingService {
 
     List<String> getTransportVelocity();
 
-    List<String> getTransport();
+    List<String> getTransportType();
+
+    List<String> getCity();
 }

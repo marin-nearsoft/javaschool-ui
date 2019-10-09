@@ -2,11 +2,11 @@ package com.javaschool.common;
 
 import java.io.Serializable;
 
-public class PackageType implements Serializable {
+public class TransportType implements Serializable {
 
     private int id;
     private String description;
-    private int price;
+    private int pricePerMile;
 
     public int getId() {
         return id;
@@ -24,9 +24,9 @@ public class PackageType implements Serializable {
         this.description = description;
     }
 
-    public int getPrice() { return price; }
+    public int getPricePerMile() { return pricePerMile; }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setPricePerMile(int pricePerMile) {
+        this.pricePerMile = pricePerMile;
     }
 }
