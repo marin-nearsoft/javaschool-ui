@@ -21,4 +21,6 @@ public class ResponseList {
     List<Cities> listCity;
 
     List<RouteList> routeresponse;
+
+    List<Information> information;
 }

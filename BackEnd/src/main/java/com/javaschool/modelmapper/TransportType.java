@@ -6,5 +6,5 @@ import lombok.Data;
 public class TransportType {
     private int id;
     private String description;
-    private int pricePerMile;
+    private double pricePerMile;
 }

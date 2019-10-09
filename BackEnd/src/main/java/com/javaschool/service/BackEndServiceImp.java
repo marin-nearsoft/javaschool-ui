@@ -28,28 +28,28 @@ public class BackEndServiceImp implements BackEndService {
     @Override
     public List<String> getType() {
         responseList.setListType(queueResponseService.getType());
-        return responseList.getListType().stream().map(PackageType::getDescription).collect(Collectors.toList());
+        return responseList.getListType().stream().map(PackageType::getDescription).sorted().collect(Collectors.toList());
     }
 
     @Override
     public List<String> getSize() {
         responseList.setListSize(queueResponseService.getSize());
         return responseList.getListSize().stream()
-                .map(PackageSize::getDescription).collect(Collectors.toList());
+                .map(PackageSize::getDescription).sorted().collect(Collectors.toList());
     }
 
     @Override
     public List<String> getTransport() {
         responseList.setListTransport(queueResponseService.getTransport());
         return responseList.getListTransport().stream()
-                .map(TransportType::getDescription).collect(Collectors.toList());
+                .map(TransportType::getDescription).sorted().collect(Collectors.toList());
     }
 
     @Override
     public List<String> getVelocity() {
         responseList.setListVelocity(queueResponseService.getVelocity());
         return responseList.getListVelocity().stream()
-                .map(TransportVelocity::getDescription).collect(Collectors.toList());
+                .map(TransportVelocity::getDescription).sorted().collect(Collectors.toList());
     }
 
     @Override
@@ -67,9 +67,7 @@ public class BackEndServiceImp implements BackEndService {
         for (RouteList node : responseList.getRouteresponse()) {
 
             if (listOfNodes.containsKey(node.getFrom())) {
-
                 if (listOfNodes.containsKey(node.getTo())) {
-
                     Edge edge = new Edge(listOfNodes.get(node.getFrom()), listOfNodes.get(node.getTo()), node.getDistance());
                     listOfNodes.get(node.getFrom()).addNeighbour(edge);
 
@@ -120,7 +118,7 @@ public class BackEndServiceImp implements BackEndService {
         double typeprice = 0;
         for (PackageType currentype : responseList.getListType()) {
             if (type.equals(currentype.getDescription())) {
-                typeprice = (double) currentype.getPrice();
+                typeprice = currentype.getPrice();
                 break;
             }
         }
@@ -129,7 +127,7 @@ public class BackEndServiceImp implements BackEndService {
         double sizeprice = 0;
         for (PackageSize currensize : responseList.getListSize()) {
             if (size.equals(currensize.getDescription())) {
-                sizeprice = (double) currensize.getPriceFactor();
+                sizeprice = currensize.getPriceFactor();
                 break;
             }
         }
@@ -138,7 +136,7 @@ public class BackEndServiceImp implements BackEndService {
         double transportprice = 0;
         for (TransportType currenttransport : responseList.getListTransport()) {
             if (transport.equals(currenttransport.getDescription())) {
-                transportprice = (double) currenttransport.getPricePerMile();
+                transportprice = currenttransport.getPricePerMile();
                 break;
             }
         }
@@ -147,11 +145,23 @@ public class BackEndServiceImp implements BackEndService {
         double velocityprice = 0;
         for (TransportVelocity currentvelocity : responseList.getListVelocity()) {
             if (time.equals(currentvelocity.getDescription())) {
-                velocityprice = (double) currentvelocity.getPriceFactor();
+                velocityprice = currentvelocity.getPriceFactor();
                 break;
             }
         }
 
         return (typeprice * (sizeprice / 100)) + (transportprice * (velocityprice / 100));
+    }
+
+    @Override
+    public List<Information> getInformation() {
+        responseList.setInformation(queueResponseService.getInformation());
+        return queueResponseService.getInformation();
+    }
+
+    @Override
+    public Information postInformation(String size, String type, String time, String transport, double price, String path) {
+
+        return queueResponseService.postInformation(price, path);
     }
 }

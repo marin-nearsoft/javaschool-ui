@@ -6,5 +6,5 @@ import lombok.Data;
 public class PackageType {
     private int id;
     private String description;
-    private int price;
+    private double price;
 }

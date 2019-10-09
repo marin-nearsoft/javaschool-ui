@@ -1,5 +1,6 @@
 package com.javaschool.controllers;
 
+import com.javaschool.modelmapper.Information;
 import com.javaschool.modelmapper.Price;
 import com.javaschool.modelmapper.Route;
 import com.javaschool.service.BackEndService;
@@ -52,6 +53,19 @@ public class BackEndControllers {
     public double getPrice(@RequestBody Price values) {
 
         return backEndService.getPrice(values.getSize(), values.getType(), values.getTime(), values.getTransport());
+    }
+
+    @GetMapping("/information")
+    public List<Information> getInformation() {
+        return backEndService.getInformation();
+    }
+
+    @PostMapping("/send")
+    public Information postInformation(@RequestBody Price values) {
+
+        return backEndService.postInformation(values.getSize(), values.getType(),
+                values.getTime(), values.getTransport(), values.getPrice(), values.getPath());
+
     }
 
 }

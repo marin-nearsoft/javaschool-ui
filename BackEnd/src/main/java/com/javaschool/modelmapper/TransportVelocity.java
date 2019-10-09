@@ -6,5 +6,5 @@ import lombok.Data;
 public class TransportVelocity {
     private int id;
     private String description;
-    private int priceFactor;
+    private double priceFactor;
 }

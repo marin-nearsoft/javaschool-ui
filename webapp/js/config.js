@@ -9,7 +9,7 @@ const config = {
         "city" : "/shipping/city",
         "cityPath": "/shipping/route",
         "checkPrice" : "/shipping/price",
-        "sendShipping": "",
-        "shippingInformation": ""
+        "sendShipping": "/shipping/send",
+        "shippingInformation": "/shipping/information"
     }
 };

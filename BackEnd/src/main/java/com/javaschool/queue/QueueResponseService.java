@@ -18,4 +18,8 @@ public interface QueueResponseService {
     List<Cities> getCity();
 
     List<RouteList> getRoute(String origin, String destination);
+
+    List<Information> getInformation();
+
+    Information postInformation(double price, String path);
 }

@@ -35,13 +35,15 @@ public class BackEndServiceTests {
     public static void setUp() {
         rabbitTemplateMock = mock(RabbitTemplate.class);
         QueueSenderService queueSenderService = new QueueSenderServiceImp(rabbitTemplateMock, mapper);
-        QueueResponseService queueResponseService = new QueueResponseServiceImp(queueSenderService, mapper);
+        QueueResponseService queueResponseService = new QueueResponseServiceImp(mapper);
         backEndService = new BackEndServiceImp(queueResponseService,responseList);
     }
 
     @Test
     public void getTypeTest() throws IOException {
-        List<String> expected = Collections.singletonList("Box");
+        ArrayList expected = new ArrayList();
+        expected.add("Box");
+        expected.add("Envelope");
         messageType.setType("packageType");
         messageType.setOrigin(null);
         messageType.setDestination(null);
@@ -64,7 +66,9 @@ public class BackEndServiceTests {
 
     @Test
     public void getSizeTest() throws IOException {
-        List<String> expected = Collections.singletonList("Small");
+        ArrayList expected = new ArrayList();
+        expected.add("Big");
+        expected.add("Small");
         messageType.setType("packageSize");
         messageType.setOrigin(null);
         messageType.setDestination(null);
@@ -88,7 +92,9 @@ public class BackEndServiceTests {
 
     @Test
     public void getTransportTest() throws IOException {
-        List<String> expected = Collections.singletonList("Land");
+        ArrayList expected = new ArrayList();
+        expected.add("Air");
+        expected.add("Land");
         messageType.setType("transportType");
         messageType.setOrigin(null);
         messageType.setDestination(null);
@@ -112,7 +118,9 @@ public class BackEndServiceTests {
 
     @Test
     public void getVelocityTest() throws IOException {
-        List<String> expected = Collections.singletonList("Regular");
+        ArrayList expected = new ArrayList();
+        expected.add("Express");
+        expected.add("Regular");
         messageType.setType("transportVelocity");
         messageType.setOrigin(null);
         messageType.setDestination(null);
