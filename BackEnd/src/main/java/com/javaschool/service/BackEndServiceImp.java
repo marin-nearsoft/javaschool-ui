@@ -115,40 +115,17 @@ public class BackEndServiceImp implements BackEndService {
     @Override
     public double getPrice(String size, String type, String time, String transport) {
 
-        double typeprice = 0;
-        for (PackageType currentype : responseList.getListType()) {
-            if (type.equals(currentype.getDescription())) {
-                typeprice = currentype.getPrice();
-                break;
-            }
-        }
+        double typeprice = responseList.getListType().stream().filter(currentype -> type.equals(currentype.getDescription()))
+                .mapToDouble(PackageType::getPrice).sum();
 
+        double sizeprice = responseList.getListSize().stream().filter(currensize -> size.equals(currensize.getDescription()))
+                .mapToDouble(PackageSize::getPriceFactor).sum();
 
-        double sizeprice = 0;
-        for (PackageSize currensize : responseList.getListSize()) {
-            if (size.equals(currensize.getDescription())) {
-                sizeprice = currensize.getPriceFactor();
-                break;
-            }
-        }
+        double transportprice = responseList.getListTransport().stream().filter(currenttransport -> transport.equals(currenttransport.getDescription()))
+                .mapToDouble(TransportType::getPricePerMile).sum();
 
-
-        double transportprice = 0;
-        for (TransportType currenttransport : responseList.getListTransport()) {
-            if (transport.equals(currenttransport.getDescription())) {
-                transportprice = currenttransport.getPricePerMile();
-                break;
-            }
-        }
-
-
-        double velocityprice = 0;
-        for (TransportVelocity currentvelocity : responseList.getListVelocity()) {
-            if (time.equals(currentvelocity.getDescription())) {
-                velocityprice = currentvelocity.getPriceFactor();
-                break;
-            }
-        }
+        double velocityprice = responseList.getListVelocity().stream().filter(currentvelocity -> time.equals(currentvelocity.getDescription()))
+                .mapToDouble(TransportVelocity::getPriceFactor).sum();
 
         return (typeprice * (sizeprice / 100)) + (transportprice * (velocityprice / 100));
     }
