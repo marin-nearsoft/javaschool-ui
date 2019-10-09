@@ -10,4 +10,6 @@ import java.io.Serializable;
 public class QueueMessageRequest implements Serializable {
 
     private String type;
+    private String origin;
+    private String destination;
 }

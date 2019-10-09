@@ -1,5 +1,6 @@
 package com.javaschool.controller;
 
+import com.javaschool.common.Route;
 import com.javaschool.service.ShippingService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,5 +42,10 @@ public class ShippingController {
     @RequestMapping("/cityPath")
     public List<String> getCityPath() {
         return shippingService.getCity();
+    }
+
+    @RequestMapping("/checkPrice")
+    public List<Route> getRoute(){
+        return shippingService.getRoute();
     }
 }

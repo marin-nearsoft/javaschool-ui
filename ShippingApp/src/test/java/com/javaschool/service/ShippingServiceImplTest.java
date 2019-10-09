@@ -1,7 +1,9 @@
 package com.javaschool.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.common.GlobalProperties;
 import com.javaschool.common.QueueException;
+import com.javaschool.common.QueueMessageRequest;
 import com.javaschool.queue.QueueSender;
 import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.Before;
@@ -23,6 +25,8 @@ public class ShippingServiceImplTest {
     private GlobalProperties globalProperties;
     private AmqpTemplate amqpTemplateMock;
     private ShippingService shippingService;
+    private ObjectMapper objectMapper;
+    private QueueMessageRequest messageRequest;
 
     @Before
     public void setup() {
@@ -30,110 +34,126 @@ public class ShippingServiceImplTest {
         globalProperties = new GlobalProperties();
         queueSender = new QueueSender(amqpTemplateMock, globalProperties);
         shippingService = new ShippingServiceImpl(queueSender);
+        objectMapper = new ObjectMapper();
+        messageRequest = new QueueMessageRequest();
     }
 
     @Test
-    public void getPackageSizeTest() {
+    public void getPackageSizeTest() throws Exception{
+        messageRequest.setType("packageSize");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         String queueResponse = "[{\"id\":1,\"description\":\"Small\",\"priceFactor\":5},{\"id\":2,\"description\":\"Medium\",\"priceFactor\":10},{\"id\":3,\"description\":\"Large\",\"priceFactor\":15}]";
-        String queueMessage = "{\"type\":\"packageSize\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
         List<String> sizes = shippingService.getPackageSize();
         assertEquals(sizes.size(), 3);
     }
 
     @Test
-    public void getPackageSizeElementsTest() {
+    public void getPackageSizeElementsTest() throws Exception{
+        messageRequest.setType("packageSize");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         String queueResponse = "[{\"id\":1,\"description\":\"Small\",\"priceFactor\":5},{\"id\":2,\"description\":\"Medium\",\"priceFactor\":10},{\"id\":3,\"description\":\"Large\",\"priceFactor\":15}]";
-        String queueMessage = "{\"type\":\"packageSize\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
         List<String> sizes = shippingService.getPackageSize();
         assertThat(sizes, hasItems("Small", "Medium", "Large"));
     }
 
     @Test(expected = QueueException.class)
-    public void getPackageSizeExceptionTest(){
-        String queueMessage = "{\"type\":\"packageSize\"}";
+    public void getPackageSizeExceptionTest() throws Exception{
+        messageRequest.setType("packageSize");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(null);
         shippingService.getPackageSize();
     }
 
     @Test
-    public void getPackageTypeTest() {
+    public void getPackageTypeTest() throws Exception{
+        messageRequest.setType("packageType");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         String queueResponse = "[{\"id\":2,\"description\":\"Box\",\"price\":10},{\"id\":3,\"description\":\"Envelope\",\"price\":5}]";
-        String queueMessage = "{\"type\":\"packageType\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
         List<String> types = shippingService.getPackageType();
         assertEquals(types.size(), 2);
     }
 
     @Test
-    public void getPackageTypeElementsTest() {
+    public void getPackageTypeElementsTest() throws Exception{
+        messageRequest.setType("packageType");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         String queueResponse = "[{\"id\":2,\"description\":\"Box\",\"price\":10},{\"id\":3,\"description\":\"Envelope\",\"price\":5}]";
-        String queueMessage = "{\"type\":\"packageType\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
         List<String> types = shippingService.getPackageType();
         assertThat(types, hasItems("Box", "Envelope"));
     }
 
     @Test(expected = QueueException.class)
-    public void getPackageTypeExceptionTest(){
-        String queueMessage = "{\"type\":\"packageType\"}";
+    public void getPackageTypeExceptionTest() throws Exception{
+        messageRequest.setType("packageType");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(null);
         shippingService.getPackageType();
     }
 
     @Test
-    public void getTransportVelocityTest() {
+    public void getTransportVelocityTest() throws Exception{
+        messageRequest.setType("transportVelocity");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         String queueResponse = "[{\"id\":1,\"description\":\"Regular\",\"priceFactor\":5},{\"id\":2,\"description\":\"Express\",\"priceFactor\":10},{\"id\":3,\"description\":\"Slow\",\"priceFactor\":0}]";
-        String queueMessage = "{\"type\":\"transportVelocity\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
         List<String> times = shippingService.getTransportVelocity();
         assertEquals(times.size(), 3);
     }
 
     @Test
-    public void getTransportVelocityElementsTest() {
+    public void getTransportVelocityElementsTest() throws Exception{
+        messageRequest.setType("transportVelocity");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         String queueResponse = "[{\"id\":1,\"description\":\"Regular\",\"priceFactor\":5},{\"id\":2,\"description\":\"Express\",\"priceFactor\":10},{\"id\":3,\"description\":\"Slow\",\"priceFactor\":0}]";
-        String queueMessage = "{\"type\":\"transportVelocity\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
         List<String> times = shippingService.getTransportVelocity();
         assertThat(times, hasItems("Regular", "Express", "Slow"));
     }
 
     @Test(expected = QueueException.class)
-    public void getTransportVelocityExceptionTest(){
-        String queueMessage = "{\"type\":\"transportVelocity\"}";
+    public void getTransportVelocityExceptionTest() throws Exception{
+        messageRequest.setType("transportVelocity");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(null);
         List<String> times = shippingService.getTransportVelocity();
     }
 
     @Test
-    public void getTransportTypeTest() {
+    public void getTransportTypeTest() throws Exception{
+        messageRequest.setType("transportType");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         String queueResponse = "[{\"id\":2,\"description\":\"Land\",\"pricePerMile\":2},{\"id\":1,\"description\":\"Air\",\"pricePerMile\":5}]";
-        String queueMessage = "{\"type\":\"transportType\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
         List<String> transports = shippingService.getTransportType();
         assertEquals(transports.size(), 2);
     }
 
     @Test
-    public void getransportTypeElementsTest() {
+    public void getransportTypeElementsTest() throws Exception{
+        messageRequest.setType("transportType");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         String queueResponse = "[{\"id\":2,\"description\":\"Land\",\"pricePerMile\":2},{\"id\":1,\"description\":\"Air\",\"pricePerMile\":5}]";
-        String queueMessage = "{\"type\":\"transportType\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
         List<String> transports = shippingService.getTransportType();
         assertThat(transports, hasItems("Land", "Air"));
     }
 
     @Test(expected = QueueException.class)
-    public void getransportTypeExceptionTest(){
-        String queueMessage = "{\"type\":\"transportType\"}";
+    public void getransportTypeExceptionTest() throws Exception{
+        messageRequest.setType("transportType");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(null);
         shippingService.getTransportType();
     }
 
     @Test
-    public void getCityTest() {
+    public void getCityTest() throws Exception{
+        messageRequest.setType("city");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         String queueResponse = "[{\"id\":9,\"name\":\"Leon\",\"tax\":10,\"seaport\":false,\"airport\":false},{\"id\":12," +
                 "\"name\":\"Cuernavaca\",\"tax\":0,\"seaport\":false,\"airport\":false},{\"id\":23,\"name\":\"Tuxtla Gutierrez\"" +
                 ",\"tax\":5,\"seaport\":false,\"airport\":false},{\"id\":26,\"name\":\"Veracruz\",\"tax\":10,\"seaport\":true,\"" +
@@ -159,14 +179,15 @@ public class ShippingServiceImplTest {
                 "\"name\":\"Puerto Escondido\",\"tax\":0,\"seaport\":true,\"airport\":false},{\"id\":33,\"name\":\"Tlaxcala\"," +
                 "\"tax\":0,\"seaport\":false,\"airport\":true},{\"id\":32,\"name\":\"Monterrey\",\"tax\":16,\"seaport\":false," +
                 "\"airport\":true}]";
-        String queueMessage = "{\"type\":\"city\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
         List<String> cities = shippingService.getCity();
         assertEquals(cities.size(), 32);
     }
 
     @Test
-    public void getCityElementsTest() {
+    public void getCityElementsTest() throws Exception{
+        messageRequest.setType("city");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         String queueResponse = "[{\"id\":9,\"name\":\"Leon\",\"tax\":10,\"seaport\":false,\"airport\":false},{\"id\":12," +
                 "\"name\":\"Cuernavaca\",\"tax\":0,\"seaport\":false,\"airport\":false},{\"id\":23,\"name\":\"Tuxtla Gutierrez\"" +
                 ",\"tax\":5,\"seaport\":false,\"airport\":false},{\"id\":26,\"name\":\"Veracruz\",\"tax\":10,\"seaport\":true,\"" +
@@ -192,7 +213,6 @@ public class ShippingServiceImplTest {
                 "\"name\":\"Puerto Escondido\",\"tax\":0,\"seaport\":true,\"airport\":false},{\"id\":33,\"name\":\"Tlaxcala\"," +
                 "\"tax\":0,\"seaport\":false,\"airport\":true},{\"id\":32,\"name\":\"Monterrey\",\"tax\":16,\"seaport\":false," +
                 "\"airport\":true}]";
-        String queueMessage = "{\"type\":\"city\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
         List<String> cities = shippingService.getCity();
         assertThat(cities, hasItems("Leon", "Cuernavaca", "Tuxtla Gutierrez", "Veracruz", "Villahermosa", "Saltillo",
@@ -203,7 +223,9 @@ public class ShippingServiceImplTest {
     }
 
     @Test
-    public void getCityElementsOrderTest(){
+    public void getCityElementsOrderTest() throws Exception{
+        messageRequest.setType("city");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         String queueResponse = "[{\"id\":9,\"name\":\"Leon\",\"tax\":10,\"seaport\":false,\"airport\":false},{\"id\":12," +
                 "\"name\":\"Cuernavaca\",\"tax\":0,\"seaport\":false,\"airport\":false},{\"id\":23,\"name\":\"Tuxtla Gutierrez\"" +
                 ",\"tax\":5,\"seaport\":false,\"airport\":false},{\"id\":26,\"name\":\"Veracruz\",\"tax\":10,\"seaport\":true,\"" +
@@ -229,7 +251,6 @@ public class ShippingServiceImplTest {
                 "\"name\":\"Puerto Escondido\",\"tax\":0,\"seaport\":true,\"airport\":false},{\"id\":33,\"name\":\"Tlaxcala\"," +
                 "\"tax\":0,\"seaport\":false,\"airport\":true},{\"id\":32,\"name\":\"Monterrey\",\"tax\":16,\"seaport\":false," +
                 "\"airport\":true}]";
-        String queueMessage = "{\"type\":\"city\"}";
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(queueResponse);
         List<String> cities = shippingService.getCity();
         assertThat(cities, IsIterableContainingInOrder.contains("Acapulco", "Aguascalientes", "Cancun", "Cdmx", "Chihuahua",
@@ -240,8 +261,9 @@ public class ShippingServiceImplTest {
     }
 
     @Test(expected = QueueException.class)
-    public void getCityExceptionTest(){
-        String queueMessage = "{\"type\":\"city\"}";
+    public void getCityExceptionTest() throws Exception{
+        messageRequest.setType("city");
+        String queueMessage = objectMapper.writeValueAsString(messageRequest);
         when(amqpTemplateMock.convertSendAndReceive(null, null, queueMessage)).thenReturn(null);
         shippingService.getCity();
     }
