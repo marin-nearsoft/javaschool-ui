@@ -28,6 +28,7 @@ public class ShippingServiceImplTest {
     private static final String TRANSPORT_VELOCITY_REQUEST = "{\"type\":\"transportVelocity\"}";
     private static final String TRANSPORT_TYPE_REQUEST = "{\"type\":\"transportType\"}";
     private static final String CITY_REQUEST =  "{\"type\":\"city\"}";
+    private static final String ROUTE_REQUEST =  "{\"type\":\"routesList\",\"origin\":\"Chihuahua\",\"destination\":\"Cancun\"}";
     private static final String PACKAGE_SIZE_RESPONSE =  "[{\"id\":1,\"description\":\"Small\",\"priceFactor\":5},{\"id\":2,\"description\":\"Medium\",\"priceFactor\":10},{\"id\":3,\"description\":\"Large\",\"priceFactor\":15}]";
     private static final String PACKAGE_TYPE_RESPONSE =  "[{\"id\":2,\"description\":\"Box\",\"price\":10},{\"id\":3,\"description\":\"Envelope\",\"price\":5}]";
     private static final String TRANSPORT_VELOCITY_RESPONSE = "[{\"id\":1,\"description\":\"Regular\",\"priceFactor\":5},{\"id\":2,\"description\":\"Express\",\"priceFactor\":10},{\"id\":3,\"description\":\"Slow\",\"priceFactor\":0}]";
@@ -57,6 +58,258 @@ public class ShippingServiceImplTest {
             "\"name\":\"Puerto Escondido\",\"tax\":0,\"seaport\":true,\"airport\":false},{\"id\":33,\"name\":\"Tlaxcala\"," +
             "\"tax\":0,\"seaport\":false,\"airport\":true},{\"id\":32,\"name\":\"Monterrey\",\"tax\":16,\"seaport\":false," +
             "\"airport\":true}]";
+    private static final String ROUTE_RESPONSE = "[\n" +
+            "{\n" +
+            "\"from\": \"Ensenada\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 91\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Saltillo\",\n" +
+            "\"to\": \"Zacatecas\",\n" +
+            "\"distance\": 32\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Tlaxcala\",\n" +
+            "\"to\": \"Tuxtla Gutierrez\",\n" +
+            "\"distance\": 33\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"San Luis Potosi\",\n" +
+            "\"to\": \"Manzanillo\",\n" +
+            "\"distance\": 6\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Queretaro\",\n" +
+            "\"to\": \"Cuernavaca\",\n" +
+            "\"distance\": 12\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Mazatlan\",\n" +
+            "\"to\": \"Tuxtla Gutierrez\",\n" +
+            "\"distance\": 90\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Saltillo\",\n" +
+            "\"to\": \"Merida\",\n" +
+            "\"distance\": 22\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Chihuahua\",\n" +
+            "\"to\": \"La Paz\",\n" +
+            "\"distance\": 20\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Tepic\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 69\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Saltillo\",\n" +
+            "\"to\": \"Veracruz\",\n" +
+            "\"distance\": 4\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Veracruz\",\n" +
+            "\"to\": \"Queretaro\",\n" +
+            "\"distance\": 79\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Manzanillo\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 25\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Mazatlan\",\n" +
+            "\"to\": \"Queretaro\",\n" +
+            "\"distance\": 86\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Chihuahua\",\n" +
+            "\"to\": \"Puerto Vallarta\",\n" +
+            "\"distance\": 80\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Pachuca\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 3\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Chihuahua\",\n" +
+            "\"to\": \"Mazatlan\",\n" +
+            "\"distance\": 88\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Tampico\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 60\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Merida\",\n" +
+            "\"to\": \"Acapulco\",\n" +
+            "\"distance\": 80\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Zacatecas\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 16\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Tuxtla Gutierrez\",\n" +
+            "\"to\": \"Pachuca\",\n" +
+            "\"distance\": 4\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Puebla\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 9\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Pachuca\",\n" +
+            "\"to\": \"Lazaro Cardenas\",\n" +
+            "\"distance\": 86\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Chihuahua\",\n" +
+            "\"to\": \"Pachuca\",\n" +
+            "\"distance\": 89\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Puerto Vallarta\",\n" +
+            "\"to\": \"Queretaro\",\n" +
+            "\"distance\": 25\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Leon\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 79\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Puerto Vallarta\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 13\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Puerto Vallarta\",\n" +
+            "\"to\": \"Ensenada\",\n" +
+            "\"distance\": 4\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Veracruz\",\n" +
+            "\"to\": \"Zacatecas\",\n" +
+            "\"distance\": 92\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Tuxtla Gutierrez\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 31\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Queretaro\",\n" +
+            "\"to\": \"Leon\",\n" +
+            "\"distance\": 82\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Tlaxcala\",\n" +
+            "\"to\": \"Puerto Vallarta\",\n" +
+            "\"distance\": 53\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Acapulco\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 36\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Leon\",\n" +
+            "\"to\": \"Zacatecas\",\n" +
+            "\"distance\": 45\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"La Paz\",\n" +
+            "\"to\": \"Durango\",\n" +
+            "\"distance\": 38\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"La Paz\",\n" +
+            "\"to\": \"Tlaxcala\",\n" +
+            "\"distance\": 38\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Cuautitlan\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 28\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Pachuca\",\n" +
+            "\"to\": \"San Luis Potosi\",\n" +
+            "\"distance\": 12\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Cuernavaca\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 48\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Durango\",\n" +
+            "\"to\": \"San Luis Potosi\",\n" +
+            "\"distance\": 21\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"La Paz\",\n" +
+            "\"to\": \"Cdmx\",\n" +
+            "\"distance\": 52\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Ensenada\",\n" +
+            "\"to\": \"Tepic\",\n" +
+            "\"distance\": 87\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"San Luis Potosi\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 8\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Saltillo\",\n" +
+            "\"to\": \"Leon\",\n" +
+            "\"distance\": 62\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Queretaro\",\n" +
+            "\"to\": \"Cuautitlan\",\n" +
+            "\"distance\": 22\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Tuxtla Gutierrez\",\n" +
+            "\"to\": \"Tampico\",\n" +
+            "\"distance\": 78\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Lazaro Cardenas\",\n" +
+            "\"to\": \"Ensenada\",\n" +
+            "\"distance\": 77\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Chihuahua\",\n" +
+            "\"to\": \"Saltillo\",\n" +
+            "\"distance\": 58\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Cdmx\",\n" +
+            "\"to\": \"Puebla\",\n" +
+            "\"distance\": 58\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Queretaro\",\n" +
+            "\"to\": \"Cancun\",\n" +
+            "\"distance\": 21\n" +
+            "},\n" +
+            "{\n" +
+            "\"from\": \"Queretaro\",\n" +
+            "\"to\": \"Ensenada\",\n" +
+            "\"distance\": 82\n" +
+            "}\n" +
+            "]";
 
     @Before
     public void setup() {
@@ -123,7 +376,7 @@ public class ShippingServiceImplTest {
     @Test(expected = QueueException.class)
     public void getTransportVelocityExceptionTest(){
         when(amqpTemplateMock.convertSendAndReceive(null, null, TRANSPORT_VELOCITY_REQUEST)).thenReturn(null);
-        List<String> times = shippingService.getTransportVelocity();
+        shippingService.getTransportVelocity();
     }
 
     @Test
@@ -134,14 +387,14 @@ public class ShippingServiceImplTest {
     }
 
     @Test
-    public void getransportTypeElementsTest() {
+    public void geTransportTypeElementsTest() {
         when(amqpTemplateMock.convertSendAndReceive(null, null, TRANSPORT_TYPE_REQUEST)).thenReturn(TRANSPORT_TYPE_RESPONSE);
         List<String> transports = shippingService.getTransportType();
         assertThat(transports, hasItems("Land", "Air"));
     }
 
     @Test(expected = QueueException.class)
-    public void getransportTypeExceptionTest(){
+    public void geTransportTypeExceptionTest(){
         when(amqpTemplateMock.convertSendAndReceive(null, null, TRANSPORT_TYPE_REQUEST)).thenReturn(null);
         shippingService.getTransportType();
     }
@@ -179,5 +432,32 @@ public class ShippingServiceImplTest {
     public void getCityExceptionTest(){
         when(amqpTemplateMock.convertSendAndReceive(null, null, CITY_REQUEST)).thenReturn(null);
         shippingService.getCity();
+    }
+
+    @Test
+    public void getRouteTest() {
+        when(amqpTemplateMock.convertSendAndReceive(null, null, ROUTE_REQUEST)).thenReturn(ROUTE_RESPONSE);
+        List<String> routes = shippingService.getRoute();
+        assertEquals(routes.size(), 5);
+    }
+
+    @Test
+    public void getRouteElementsTest() {
+        when(amqpTemplateMock.convertSendAndReceive(null, null, ROUTE_REQUEST)).thenReturn(ROUTE_RESPONSE);
+        List<String> routes = shippingService.getRoute();
+        assertThat(routes, hasItems("Chihuahua","La Paz","Durango","San Luis Potosi","Cancun"));
+    }
+
+    @Test(timeout = 1000)
+    public void getRouteTimeTest(){
+        when(amqpTemplateMock.convertSendAndReceive(null, null, ROUTE_REQUEST)).thenReturn(ROUTE_RESPONSE);
+        List<String> routes = shippingService.getRoute();
+        assertThat(routes, hasItems("Chihuahua","La Paz","Durango","San Luis Potosi","Cancun"));
+    }
+
+    @Test(expected = QueueException.class)
+    public void getRouteVelocityExceptionTest() {
+        when(amqpTemplateMock.convertSendAndReceive(null, null, ROUTE_REQUEST)).thenReturn(null);
+        shippingService.getRoute();
     }
 }

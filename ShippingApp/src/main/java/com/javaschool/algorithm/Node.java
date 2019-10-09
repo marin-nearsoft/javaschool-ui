@@ -20,13 +20,13 @@ public class Node implements Comparable<Node> {
         getAdjacentNodes().put(destination, distance);
     }
 
-    public Node(String name) {
-        this.setName(name);
-    }
+    public Node(String name) { this.setName(name); }
 
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getName() { return name; }
 
     public Map<List<Node>, Integer> getShortestPath() {
         return shortestPath;

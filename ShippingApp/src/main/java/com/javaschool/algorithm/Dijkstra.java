@@ -31,16 +31,15 @@ public class Dijkstra {
         }
     }
 
-    public static void setShortestPathTo(Node target) {
+    public static List<Node> setShortestPathTo(Node target) {
         List<Node> path = new ArrayList();
         Map<List<Node>, Integer> shortestPath = new HashMap<>();
-        Integer distance = 0;
         for (Node node = target; node != null; node = node.getPreviousNode()) {
-            distance += node.getDistance();
             path.add(node);
         }
         Collections.reverse(path);
-        shortestPath.put(path,distance);
+        shortestPath.put(path,target.getDistance());
         target.setShortestPath(shortestPath);
+        return path;
     }
 }

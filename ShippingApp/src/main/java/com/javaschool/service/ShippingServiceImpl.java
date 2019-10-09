@@ -81,46 +81,47 @@ public class ShippingServiceImpl implements ShippingService {
     }
 
     @Override
-    public List<Route> getRoute() {
+    public List<String> getRoute() {
         List<Route> routes;
-        List<Node> nodes = new ArrayList<>();
         messageRequest.setType(ROUTE);
         messageRequest.setOrigin("Chihuahua");
         messageRequest.setDestination("Cancun");
-        try {
-            routes = queueSender.messageRequest(messageRequest, new Route[0]);
-            for (Route route : routes) {
-                Node origin = new Node(route.getFrom());
-                Node destiny = new Node(route.getTo());
+        routes = queueSender.messageRequest(messageRequest, new Route[0]);
+        List<Node> shortestPath = getShortestPath(routes);
+        List<String> route = shortestPath.stream()
+                                         .map(Node::getName)
+                                         .collect(Collectors.toList());
+        return route;
+    }
 
-                if (nodes.contains(origin)) {
-                    origin = nodes.get(nodes.indexOf(origin));
-                }
-                if (nodes.contains(destiny)) {
-                    destiny = nodes.get(nodes.indexOf(destiny));
-                }
+    private List<Node> getShortestPath(List<Route> routes){
+        List<Node> nodes = new ArrayList<>();
+        for (Route route : routes) {
+            Node origin = new Node(route.getFrom());
+            Node destiny = new Node(route.getTo());
 
-                origin.addDestination(destiny, route.getDistance());
-
-                if (!nodes.contains(origin)) {
-                    nodes.add(origin);
-                }
-                if (!nodes.contains(destiny)) {
-                    nodes.add(destiny);
-                }
+            if (nodes.contains(origin)) {
+                origin = nodes.get(nodes.indexOf(origin));
+            }
+            if (nodes.contains(destiny)) {
+                destiny = nodes.get(nodes.indexOf(destiny));
             }
 
-            Node origin = nodes.get(nodes.indexOf(new Node(messageRequest.getOrigin())));
-            Node destination = nodes.get(nodes.indexOf(new Node(messageRequest.getDestination())));
+            origin.addDestination(destiny, route.getDistance());
 
-            Dijkstra.computePaths(origin);
-            Dijkstra.setShortestPathTo(destination);
-
-            logger.info("Stop");
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new QueueException(e.getMessage());
+            if (!nodes.contains(origin)) {
+                nodes.add(origin);
+            }
+            if (!nodes.contains(destiny)) {
+                nodes.add(destiny);
+            }
         }
-        return routes;
+        Node origin = nodes.get(nodes.indexOf(new Node(messageRequest.getOrigin())));
+        Node destination = nodes.get(nodes.indexOf(new Node(messageRequest.getDestination())));
+
+        Dijkstra.computePaths(origin);
+        List<Node> path = Dijkstra.setShortestPathTo(destination);
+        logger.info("Path: " + path);
+        return path;
     }
 }

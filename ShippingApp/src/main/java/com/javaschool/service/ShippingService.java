@@ -1,8 +1,6 @@
 package com.javaschool.service;
 
 
-import com.javaschool.common.Route;
-
 import java.util.List;
 
 public interface ShippingService {
@@ -17,5 +15,5 @@ public interface ShippingService {
 
     List<String> getCity();
 
-    List<Route> getRoute();
+    List<String> getRoute();
 }
