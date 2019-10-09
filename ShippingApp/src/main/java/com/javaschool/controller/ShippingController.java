@@ -17,9 +17,7 @@ public class ShippingController {
     }
 
     @RequestMapping("/size")
-    public List<String> getSize() {
-        return shippingService.getPackageSize();
-    }
+    public List<String> getSize() { return shippingService.getPackageSize(); }
 
     @RequestMapping("/type")
     public List<String> getType() {
@@ -32,7 +30,7 @@ public class ShippingController {
     }
 
     @RequestMapping("/transport")
-    public List<String> getTransport() {return shippingService.getTransportType();}
+    public List<String> getTransport() { return shippingService.getTransportType(); }
 
     @RequestMapping("/city")
     public List<String> getCity() {

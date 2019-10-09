@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class ShippingServiceImpl implements ShippingService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ShippingServiceImpl[].class);
+    private static final Logger logger = LoggerFactory.getLogger(QueueSender.class);
     private QueueSender queueSender;
     private QueueMessageRequest messageRequest = new QueueMessageRequest();
     private static final String PACKAGE_SIZE = "packageSize";
@@ -31,87 +31,52 @@ public class ShippingServiceImpl implements ShippingService {
 
     @Override
     public List<String> getPackageSize() {
-        List<PackageSize> packageSizes;
-        List<String> sizes;
         messageRequest.setType(PACKAGE_SIZE);
-        try {
-            packageSizes = queueSender.messageRequest(messageRequest, new PackageSize[0]);
-            sizes = packageSizes.stream()
-                    .map(size -> size.getDescription())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new QueueException(e.getMessage());
-        }
+        List<PackageSize> packageSizes = queueSender.messageRequest(messageRequest, new PackageSize[0]);
+        List<String> sizes = packageSizes.stream()
+                                         .map(PackageSize::getDescription)
+                                         .collect(Collectors.toList());
         return sizes;
     }
 
     @Override
     public List<String> getPackageType() {
-        List<PackageType> packageTypes;
-        List<String> types;
         messageRequest.setType(PACKAGE_TYPE);
-        try {
-            packageTypes = queueSender.messageRequest(messageRequest, new PackageType[0]);
-            types = packageTypes.stream()
-                    .map(type -> type.getDescription())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new QueueException(e.getMessage());
-        }
+        List<PackageType> packageTypes = queueSender.messageRequest(messageRequest, new PackageType[0]);
+        List<String> types = packageTypes.stream()
+                                         .map(PackageType::getDescription)
+                                         .collect(Collectors.toList());
         return types;
     }
 
     @Override
     public List<String> getTransportVelocity() {
-        List<TransportVelocity> transportVelocities;
-        List<String> velocities;
         messageRequest.setType(TRANSPORT_VELOCITY);
-        try {
-            transportVelocities = queueSender.messageRequest(messageRequest, new TransportVelocity[0]);
-            velocities = transportVelocities.stream()
-                    .map(velocity -> velocity.getDescription())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new QueueException(e.getMessage());
-        }
+        List<TransportVelocity> transportVelocities = queueSender.messageRequest(messageRequest, new TransportVelocity[0]);
+        List<String> velocities = transportVelocities.stream()
+                                                     .map(TransportVelocity::getDescription)
+                                                     .collect(Collectors.toList());
         return velocities;
     }
 
     @Override
     public List<String> getTransportType() {
-        List<TransportType> transportTypes;
-        List<String> types;
         messageRequest.setType(TRANSPORT_TYPE);
-        try {
-            transportTypes = queueSender.messageRequest(messageRequest, new TransportType[0]);
-            types = transportTypes.stream()
-                    .map(type -> type.getDescription())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new QueueException(e.getMessage());
-        }
+        List<TransportType> transportTypes = queueSender.messageRequest(messageRequest, new TransportType[0]);
+        List<String> types = transportTypes.stream()
+                                           .map(TransportType::getDescription)
+                                           .collect(Collectors.toList());
         return types;
     }
 
     @Override
-    public List<String> getCity(){
-        List<City> cities;
-        List<String> cityList;
+    public List<String> getCity() {
         messageRequest.setType(CITY);
-        try {
-            cities = queueSender.messageRequest(messageRequest, new City[0]);
-            cityList = cities.stream()
-                    .map(type -> type.getName())
-                    .sorted()
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new QueueException(e.getMessage());
-        }
+        List<City> cities = queueSender.messageRequest(messageRequest, new City[0]);
+        List<String> cityList = cities.stream()
+                                      .map(City::getName)
+                                      .sorted()
+                                      .collect(Collectors.toList());
         return cityList;
     }
 
