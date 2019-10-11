@@ -6,6 +6,7 @@ import com.javaschool.dijkstra.Node;
 import com.javaschool.dijkstra.RouteList;
 import com.javaschool.modelmapper.*;
 import com.javaschool.queue.QueueResponseService;
+import com.javaschool.temp.PriceAndInfoService;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -16,12 +17,14 @@ import java.util.stream.Collectors;
 public class BackEndServiceImp implements BackEndService {
 
     private QueueResponseService queueResponseService;
+    private PriceAndInfoService priceAndInfoService;
     private ResponseList responseList;
 
 
-    BackEndServiceImp(final QueueResponseService queueResponseService, final ResponseList responseList) {
+    BackEndServiceImp(final QueueResponseService queueResponseService, final ResponseList responseList, final PriceAndInfoService priceAndInfoService) {
         this.queueResponseService = queueResponseService;
         this.responseList = responseList;
+        this.priceAndInfoService = priceAndInfoService;
     }
 
     @Override
@@ -103,11 +106,11 @@ public class BackEndServiceImp implements BackEndService {
         System.out.println("To " + listOfNodes.get(destination) + ":" + listOfNodes.get(destination).getDistance());
         System.out.println("Path To " + listOfNodes.get(destination) + ":" + shortestPath.getShortestPathTo(listOfNodes.get(destination)));
 
-        StringBuilder routes= new StringBuilder();
+        StringBuilder routes = new StringBuilder();
         for (Node node : shortestPath.getShortestPathTo(listOfNodes.get(destination))) {
             routes.append(node.getName()).append(", ");
         }
-        routes.deleteCharAt(routes.length()-2);
+        routes.deleteCharAt(routes.length() - 2);
         return routes.toString();
     }
 
@@ -131,13 +134,13 @@ public class BackEndServiceImp implements BackEndService {
 
     @Override
     public List<Information> getInformation() {
-        responseList.setInformation(queueResponseService.getInformation());
-        return queueResponseService.getInformation();
+        responseList.setInformation(priceAndInfoService.getInformation());
+        return priceAndInfoService.getInformation();
     }
 
     @Override
     public Information postInformation(String size, String type, String time, String transport, double price, String path) {
 
-        return queueResponseService.postInformation(price, path);
+        return priceAndInfoService.postInformation(price, path);
     }
 }

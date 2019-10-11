@@ -19,7 +19,5 @@ public interface QueueResponseService {
 
     List<RouteList> getRoute(String origin, String destination);
 
-    List<Information> getInformation();
 
-    Information postInformation(double price, String path);
 }

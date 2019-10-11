@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.dijkstra.RouteList;
 import com.javaschool.modelmapper.*;
 import com.javaschool.queue.*;
+import com.javaschool.temp.PriceAndInfoService;
+import com.javaschool.temp.PriceAndInfoServiceImp;
 import com.sun.glass.ui.Application;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -36,7 +38,8 @@ public class BackEndServiceTests {
         rabbitTemplateMock = mock(RabbitTemplate.class);
         QueueSenderService queueSenderService = new QueueSenderServiceImp(rabbitTemplateMock, mapper);
         QueueResponseService queueResponseService = new QueueResponseServiceImp(queueSenderService,mapper);
-        backEndService = new BackEndServiceImp(queueResponseService,responseList);
+        PriceAndInfoService priceAndInfoService = new PriceAndInfoServiceImp(mapper);
+        backEndService = new BackEndServiceImp(queueResponseService,responseList,priceAndInfoService);
     }
 
     @Test
