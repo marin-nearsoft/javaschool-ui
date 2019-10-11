@@ -17,3 +17,4 @@ ui-message:
   transport-types: transportType
   transport-velocity: transportVelocity
   cities: city
+  routeList: routesList

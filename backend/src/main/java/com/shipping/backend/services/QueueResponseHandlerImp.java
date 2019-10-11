@@ -23,7 +23,6 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
     private ObjectMapper mapper;
     private AppConfiguration appConfiguration;
     private ResponseList responseList;
-    private QueueRequestMessage queueRequestMessage = new QueueRequestMessage();
     private RoutesResponseProcessor routesResponseProcessor = new RoutesResponseProcessor();
 
     public QueueResponseHandlerImp(final QueueClient shippingRequestSender,
@@ -38,7 +37,7 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
 
     @Override
     public List<PackageType> getTypes() {
-
+        QueueRequestMessage queueRequestMessage = new QueueRequestMessage();
         queueRequestMessage.setType(appConfiguration.getPackageTypes());
         LOG.info("Generating package type list");
         try {
@@ -54,7 +53,7 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
 
     @Override
     public List<PackageSize> getSizes() {
-
+        QueueRequestMessage queueRequestMessage = new QueueRequestMessage();
         queueRequestMessage.setType(appConfiguration.getPackageSizes());
         LOG.info("Generating package size list");
         try {
@@ -70,7 +69,7 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
 
     @Override
     public List<Transport> getTransports() {
-
+        QueueRequestMessage queueRequestMessage = new QueueRequestMessage();
         queueRequestMessage.setType(appConfiguration.getTransportTypes());
         LOG.info("Generating transport types list");
         try {
@@ -86,7 +85,7 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
 
     @Override
     public List<TransportVelocity> getTransportVelocity() {
-
+        QueueRequestMessage queueRequestMessage = new QueueRequestMessage();
         queueRequestMessage.setType(appConfiguration.getTransportVelocity());
         LOG.info("Generating transport velocity list");
         try {
@@ -102,7 +101,7 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
 
     @Override
     public List getCities() {
-
+        QueueRequestMessage queueRequestMessage = new QueueRequestMessage();
         queueRequestMessage.setType(appConfiguration.getCities());
         LOG.info("Generating cities list");
         try {
@@ -118,7 +117,7 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
 
     @Override
     public List<String> getRoutes(String origin, String destination) {
-
+        QueueRequestMessage queueRequestMessage = new QueueRequestMessage();
         queueRequestMessage.setType(appConfiguration.getRouteList());
         queueRequestMessage.setOrigin(origin);
         queueRequestMessage.setDestination(destination);
@@ -131,10 +130,45 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
             LOG.info("Generating routes list" + routesResponseProcessor.getShortestPathTo(cityVertexMap.get(queueRequestMessage.getDestination())));
             return routesResponseProcessor.getShortestPathTo(cityVertexMap.get(queueRequestMessage.getDestination()));
 
-        }catch (Exception e){
+        } catch (Exception e) {
             LOG.error(e.getMessage());
             throw new CustomException("Service not available, please contact your administrator");
         }
     }
+
+
+    @Override
+    public double getPrice(String size, String type, String time, String transport) {
+
+        double typePrice = responseList.getPackageTypes().stream().filter(currentype -> type.equals(currentype.getDescription()))
+                .mapToDouble(PackageType::getPrice).sum();
+
+        double sizePrice = responseList.getPackageSizes().stream().filter(currensize -> size.equals(currensize.getDescription()))
+                .mapToDouble(PackageSize::getPriceFactor).sum();
+
+        double transportPrice = responseList.getTransports().stream().filter(currenttransport -> transport.equals(currenttransport.getDescription()))
+                .mapToDouble(Transport::getPricePerMile).sum();
+
+        double velocityPrice = responseList.getTransportVelocities().stream().filter(currentvelocity -> time.equals(currentvelocity.getDescription()))
+                .mapToDouble(TransportVelocity::getPriceFactor).sum();
+
+        return (typePrice * (sizePrice / 100)) + (transportPrice * (velocityPrice / 100));
+    }
+
+    @Override
+    public List<ShipmentInformation> getInformation() {
+        //This code is just for testing purpose
+        String mockValues = "[{\"folio\":\"00598\",\"path\":\"Chihuahua, Tampico, Puebla, Tuxtla Gutierrez, Durango, Aguascalientes\",\"price\":\"29.18\"},{\"folio\":\"00666\",\"path\":\"Sonora, Sinaloa\",\"price\":\"99566.6\"}]";
+
+        try {
+            return mapper.readValue(mockValues, mapper.getTypeFactory().constructCollectionType(List.class, ShipmentInformation.class));
+
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
+            throw new CustomException("Service not available, please contact your administrator");
+        }
+
+    }
+
 
 }

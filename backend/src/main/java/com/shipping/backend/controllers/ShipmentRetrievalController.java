@@ -1,9 +1,8 @@
 package com.shipping.backend.controllers;
 
 
-import com.shipping.backend.models.common.City;
-import com.shipping.backend.models.common.PackageSize;
-import com.shipping.backend.models.common.PackageType;
+import com.shipping.backend.models.common.*;
+import com.shipping.backend.models.request.PriceRequest;
 import com.shipping.backend.models.request.RouteRequest;
 import com.shipping.backend.services.QueueResponseHandler;
 import org.springframework.web.bind.annotation.*;
@@ -33,12 +32,12 @@ public class ShipmentRetrievalController {
 
     @GetMapping("/transports")
     public List<String> transports(){
-        return queueResponseHandler.getSizes().stream().map(PackageSize::getDescription).collect(Collectors.toList());
+        return queueResponseHandler.getTransports().stream().map(Transport::getDescription).collect(Collectors.toList());
     }
 
     @GetMapping("/transports/velocities")
     public List<String> transportVelocities(){
-        return queueResponseHandler.getSizes().stream().map(PackageSize::getDescription).collect(Collectors.toList());
+        return queueResponseHandler.getTransportVelocity().stream().map(TransportVelocity::getDescription).collect(Collectors.toList());
     }
 
     @GetMapping("/cities")
@@ -51,5 +50,15 @@ public class ShipmentRetrievalController {
         return queueResponseHandler.getRoutes(values.getOrigin(), values.getDestination());
     }
 
+    @PostMapping("/price")
+    public double getPrice(@RequestBody PriceRequest values) {
+
+        return queueResponseHandler.getPrice(values.getSize(), values.getType(), values.getTime(), values.getTransport());
+    }
+
+    @GetMapping("/information")
+    public List<ShipmentInformation> getInformation() {
+        return queueResponseHandler.getInformation();
+    }
 
 }

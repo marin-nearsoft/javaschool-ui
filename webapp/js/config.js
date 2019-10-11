@@ -8,8 +8,8 @@ const config = {
         "transport" : "/shipment-management/transports",
         "city" : "/shipment-management/cities",
         "cityPath": "/shipment-management/route",
-        "checkPrice" : "",
+        "checkPrice" : "/shipment-management/price",
         "sendShipping": "",
-        "shippingInformation": ""
+        "shippingInformation": "/shipment-management/information"
     }
 };

@@ -21,6 +21,8 @@ public class ResponseList {
 
     List<Route> routes;
 
+    List<ShipmentInformation> information;
+
     public String RoutesToString(List<Route> routeList) {
         String routesString = "[";
         for (int route = 0; route < routeList.size(); route++) {

@@ -17,6 +17,6 @@ public class DefaultExceptionHandler {
     @ExceptionHandler(value = CustomException.class)
     public ResponseEntity<?> handleCustomException( CustomException e){
         log.info("Server response with a null value");
-        return ResponseEntity.status(HttpStatus.OK).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 }

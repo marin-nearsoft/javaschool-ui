@@ -17,4 +17,9 @@ public interface QueueResponseHandler {
     List<City> getCities();
 
     List<String> getRoutes(String origin, String destination);
+
+    double getPrice(String size, String type, String time, String transport);
+
+    List<ShipmentInformation> getInformation();
+
 }
