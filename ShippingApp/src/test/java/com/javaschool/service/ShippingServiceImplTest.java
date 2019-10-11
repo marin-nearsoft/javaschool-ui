@@ -2,14 +2,18 @@ package com.javaschool.service;
 
 import com.javaschool.common.GlobalProperties;
 import com.javaschool.common.QueueException;
+import com.javaschool.common.ShippingPayload;
 import com.javaschool.queue.QueueSender;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.junit.Assert.assertEquals;
@@ -23,11 +27,12 @@ public class ShippingServiceImplTest {
     private GlobalProperties globalProperties;
     private AmqpTemplate amqpTemplateMock;
     private ShippingService shippingService;
-    private static final String PACKAGE_SIZE_REQUEST = "{\"type\":\"packageSize\"}";
-    private static final String PACKAGE_TYPE_REQUEST = "{\"type\":\"packageType\"}";
-    private static final String TRANSPORT_VELOCITY_REQUEST = "{\"type\":\"transportVelocity\"}";
-    private static final String TRANSPORT_TYPE_REQUEST = "{\"type\":\"transportType\"}";
-    private static final String CITY_REQUEST =  "{\"type\":\"city\"}";
+    private ShippingPayload shippingPayload;
+    private static final String PACKAGE_SIZE_REQUEST = "{\"type\":\"packageSize\",\"origin\":null,\"destination\":null}";
+    private static final String PACKAGE_TYPE_REQUEST = "{\"type\":\"packageType\",\"origin\":null,\"destination\":null}";
+    private static final String TRANSPORT_VELOCITY_REQUEST = "{\"type\":\"transportVelocity\",\"origin\":null,\"destination\":null}";
+    private static final String TRANSPORT_TYPE_REQUEST = "{\"type\":\"transportType\",\"origin\":null,\"destination\":null}";
+    private static final String CITY_REQUEST =  "{\"type\":\"city\",\"origin\":null,\"destination\":null}";
     private static final String ROUTE_REQUEST =  "{\"type\":\"routesList\",\"origin\":\"Chihuahua\",\"destination\":\"Cancun\"}";
     private static final String PACKAGE_SIZE_RESPONSE =  "[{\"id\":1,\"description\":\"Small\",\"priceFactor\":5},{\"id\":2,\"description\":\"Medium\",\"priceFactor\":10},{\"id\":3,\"description\":\"Large\",\"priceFactor\":15}]";
     private static final String PACKAGE_TYPE_RESPONSE =  "[{\"id\":2,\"description\":\"Box\",\"price\":10},{\"id\":3,\"description\":\"Envelope\",\"price\":5}]";
@@ -310,6 +315,9 @@ public class ShippingServiceImplTest {
             "\"distance\": 82\n" +
             "}\n" +
             "]";
+    private static final String ORIGIN = "Chihuahua";
+    private static final String DESTINATION = "Cancun";
+    private List<String> shortestPath = Collections.unmodifiableList(Arrays.asList("Chihuahua","La Paz","Durango","San Luis Potosi","Cancun"));
 
     @Before
     public void setup() {
@@ -317,6 +325,9 @@ public class ShippingServiceImplTest {
         globalProperties = new GlobalProperties();
         queueSender = new QueueSender(amqpTemplateMock, globalProperties);
         shippingService = new ShippingServiceImpl(queueSender);
+        shippingPayload = new ShippingPayload();
+        shippingPayload.setOrigin(ORIGIN);
+        shippingPayload.setDestination(DESTINATION);
     }
 
     @Test
@@ -335,7 +346,7 @@ public class ShippingServiceImplTest {
 
     @Test(expected = QueueException.class)
     public void getPackageSizeExceptionTest(){
-        when(amqpTemplateMock.convertSendAndReceive(null, null, PACKAGE_SIZE_REQUEST)).thenReturn(null);
+        when(amqpTemplateMock.convertSendAndReceive(null, null, PACKAGE_SIZE_REQUEST)).thenThrow(QueueException.class);
         shippingService.getPackageSize();
     }
 
@@ -355,7 +366,7 @@ public class ShippingServiceImplTest {
 
     @Test(expected = QueueException.class)
     public void getPackageTypeExceptionTest(){
-        when(amqpTemplateMock.convertSendAndReceive(null, null, PACKAGE_TYPE_REQUEST)).thenReturn(null);
+        when(amqpTemplateMock.convertSendAndReceive(null, null, PACKAGE_TYPE_REQUEST)).thenThrow(QueueException.class);
         shippingService.getPackageType();
     }
 
@@ -375,7 +386,7 @@ public class ShippingServiceImplTest {
 
     @Test(expected = QueueException.class)
     public void getTransportVelocityExceptionTest(){
-        when(amqpTemplateMock.convertSendAndReceive(null, null, TRANSPORT_VELOCITY_REQUEST)).thenReturn(null);
+        when(amqpTemplateMock.convertSendAndReceive(null, null, TRANSPORT_VELOCITY_REQUEST)).thenThrow(QueueException.class);
         shippingService.getTransportVelocity();
     }
 
@@ -395,7 +406,7 @@ public class ShippingServiceImplTest {
 
     @Test(expected = QueueException.class)
     public void geTransportTypeExceptionTest(){
-        when(amqpTemplateMock.convertSendAndReceive(null, null, TRANSPORT_TYPE_REQUEST)).thenReturn(null);
+        when(amqpTemplateMock.convertSendAndReceive(null, null, TRANSPORT_TYPE_REQUEST)).thenThrow(QueueException.class);
         shippingService.getTransportType();
     }
 
@@ -430,34 +441,34 @@ public class ShippingServiceImplTest {
 
     @Test(expected = QueueException.class)
     public void getCityExceptionTest(){
-        when(amqpTemplateMock.convertSendAndReceive(null, null, CITY_REQUEST)).thenReturn(null);
+        when(amqpTemplateMock.convertSendAndReceive(null, null, CITY_REQUEST)).thenThrow(QueueException.class);
         shippingService.getCity();
     }
 
     @Test
     public void getRouteTest() {
         when(amqpTemplateMock.convertSendAndReceive(null, null, ROUTE_REQUEST)).thenReturn(ROUTE_RESPONSE);
-        List<String> routes = shippingService.getRoute();
+        List<String> routes = shippingService.getShippingInformation(shippingPayload).getPath();
         assertEquals(routes.size(), 5);
     }
 
     @Test
     public void getRouteElementsTest() {
         when(amqpTemplateMock.convertSendAndReceive(null, null, ROUTE_REQUEST)).thenReturn(ROUTE_RESPONSE);
-        List<String> routes = shippingService.getRoute();
-        assertThat(routes, hasItems("Chihuahua","La Paz","Durango","San Luis Potosi","Cancun"));
+        List<String> routes = shippingService.getShippingInformation(shippingPayload).getPath();
+        assertThat(routes, equalTo(shortestPath));
     }
 
     @Test(timeout = 1000)
     public void getRouteTimeTest(){
         when(amqpTemplateMock.convertSendAndReceive(null, null, ROUTE_REQUEST)).thenReturn(ROUTE_RESPONSE);
-        List<String> routes = shippingService.getRoute();
-        assertThat(routes, hasItems("Chihuahua","La Paz","Durango","San Luis Potosi","Cancun"));
+        List<String> routes = shippingService.getShippingInformation(shippingPayload).getPath();
+        assertThat(routes, equalTo(shortestPath));
     }
 
     @Test(expected = QueueException.class)
     public void getRouteVelocityExceptionTest() {
-        when(amqpTemplateMock.convertSendAndReceive(null, null, ROUTE_REQUEST)).thenReturn(null);
-        shippingService.getRoute();
+        when(amqpTemplateMock.convertSendAndReceive(null, null, ROUTE_REQUEST)).thenThrow(QueueException.class);
+        shippingService.getShippingInformation(shippingPayload);
     }
 }

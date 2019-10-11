@@ -1,6 +1,9 @@
 package com.javaschool.service;
 
 
+import com.javaschool.common.ShippingInformation;
+import com.javaschool.common.ShippingPayload;
+
 import java.util.List;
 
 public interface ShippingService {
@@ -15,5 +18,5 @@ public interface ShippingService {
 
     List<String> getCity();
 
-    List<String> getRoute();
+    ShippingInformation getShippingInformation(ShippingPayload shippingPayload);
 }

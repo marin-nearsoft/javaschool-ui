@@ -1,5 +1,7 @@
 package com.javaschool.algorithm;
 
+import com.javaschool.common.Route;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,5 +43,31 @@ public class Dijkstra {
         shortestPath.put(path,target.getDistance());
         target.setShortestPath(shortestPath);
         return path;
+    }
+
+    public static List<Node> getShortestPath(List<Route> routes, String origin, String destination){
+        List<Node> nodes = new ArrayList<>();
+        for (Route route : routes) {
+            Node originNode = new Node(route.getFrom());
+            Node destinationNode = new Node(route.getTo());
+
+            if (nodes.contains(originNode)) {
+                originNode = nodes.get(nodes.indexOf(originNode));
+            }
+            if (nodes.contains(destinationNode)) {
+                destinationNode = nodes.get(nodes.indexOf(destinationNode));
+            }
+
+            originNode.addDestination(destinationNode, route.getDistance());
+
+            if (!nodes.contains(originNode)) {
+                nodes.add(originNode);
+            }
+            if (!nodes.contains(destinationNode)) {
+                nodes.add(destinationNode);
+            }
+        }
+        computePaths(nodes.get(nodes.indexOf(new Node(origin))));
+        return setShortestPathTo(nodes.get(nodes.indexOf(new Node(destination))));
     }
 }

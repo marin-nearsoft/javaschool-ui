@@ -1,7 +1,11 @@
 package com.javaschool.controller;
 
+import com.javaschool.common.ShippingInformation;
+import com.javaschool.common.ShippingPayload;
 import com.javaschool.service.ShippingService;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -41,8 +45,8 @@ public class ShippingController {
         return shippingService.getCity();
     }
 
-    @RequestMapping("/checkPrice")
-    public List<String> getRoute(){
-        return shippingService.getRoute();
+    @RequestMapping(name = "/checkPrice", method = RequestMethod.POST)
+    public ShippingInformation getRoute(@RequestBody ShippingPayload payload) {
+        return shippingService.getShippingInformation(payload);
     }
 }
