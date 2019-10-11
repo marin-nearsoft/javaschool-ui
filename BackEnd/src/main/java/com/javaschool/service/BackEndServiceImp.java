@@ -8,7 +8,6 @@ import com.javaschool.modelmapper.*;
 import com.javaschool.queue.QueueResponseService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,7 +59,7 @@ public class BackEndServiceImp implements BackEndService {
     }
 
     @Override
-    public List<String> getRoute(String origin, String destination) {
+    public String getRoute(String origin, String destination) {
         responseList.setRouteresponse(queueResponseService.getRoute(origin, destination));
         HashMap<String, Node> listOfNodes = new HashMap<>();
 
@@ -104,12 +103,12 @@ public class BackEndServiceImp implements BackEndService {
         System.out.println("To " + listOfNodes.get(destination) + ":" + listOfNodes.get(destination).getDistance());
         System.out.println("Path To " + listOfNodes.get(destination) + ":" + shortestPath.getShortestPathTo(listOfNodes.get(destination)));
 
-        List<String> routes = new ArrayList<>();
+        StringBuilder routes= new StringBuilder();
         for (Node node : shortestPath.getShortestPathTo(listOfNodes.get(destination))) {
-            routes.add(String.valueOf(node));
+            routes.append(node.getName()).append(", ");
         }
-
-        return routes;
+        routes.deleteCharAt(routes.length()-2);
+        return routes.toString();
     }
 
     @Override

@@ -44,7 +44,7 @@ public class BackEndControllers {
     }
 
     @PostMapping("/route")
-    public List<String> getRoute(@RequestBody Route values) {
+    public String getRoute(@RequestBody Route values) {
 
         return backEndService.getRoute(values.getOrigin(), values.getDestination());
     }

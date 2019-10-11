@@ -35,29 +35,40 @@ public class BackEndServiceTests {
     public static void setUp() {
         rabbitTemplateMock = mock(RabbitTemplate.class);
         QueueSenderService queueSenderService = new QueueSenderServiceImp(rabbitTemplateMock, mapper);
-        QueueResponseService queueResponseService = new QueueResponseServiceImp(mapper);
+        QueueResponseService queueResponseService = new QueueResponseServiceImp(queueSenderService,mapper);
         backEndService = new BackEndServiceImp(queueResponseService,responseList);
     }
 
     @Test
     public void getTypeTest() throws IOException {
-        ArrayList expected = new ArrayList();
+        ArrayList<String> expected = new ArrayList<>();
         expected.add("Box");
         expected.add("Envelope");
         messageType.setType("packageType");
         messageType.setOrigin(null);
         messageType.setDestination(null);
 
-        PackageType packageTypeResponse = new PackageType();
-        packageTypeResponse.setId(1);
-        packageTypeResponse.setDescription("Box");
-        packageTypeResponse.setPrice(10);
+        PackageType box = new PackageType();
+        box.setId(1);
+        box.setDescription("Box");
+        box.setPrice(10);
 
-        PackageType[] typeResponseArray = new PackageType[]{packageTypeResponse};
+        PackageType envelope = new PackageType();
+        envelope.setId(1);
+        envelope.setDescription("Envelope");
+        envelope.setPrice(10);
 
-        String mockTypes = new ObjectMapper().writeValueAsString(typeResponseArray);
+
+        List<PackageType> packageTypeResponse = new java.util.ArrayList<>(Collections.emptyList());
+        packageTypeResponse.add(box);
+        packageTypeResponse.add(envelope);
+
+        String mockType = new ObjectMapper().writeValueAsString(packageTypeResponse);
+
         String mockRequest = new ObjectMapper().writeValueAsString(messageType);
-        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockTypes);
+        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockType);
+
+
 
         List<String> actual = backEndService.getType();
 
@@ -66,21 +77,29 @@ public class BackEndServiceTests {
 
     @Test
     public void getSizeTest() throws IOException {
-        ArrayList expected = new ArrayList();
+        ArrayList<String> expected = new ArrayList<>();
         expected.add("Big");
         expected.add("Small");
         messageType.setType("packageSize");
         messageType.setOrigin(null);
         messageType.setDestination(null);
 
-        PackageSize packageSizeResponse = new PackageSize();
-        packageSizeResponse.setId(1);
-        packageSizeResponse.setDescription("Small");
-        packageSizeResponse.setPriceFactor(10);
+        PackageSize small = new PackageSize();
+        small.setId(1);
+        small.setDescription("Small");
+        small.setPriceFactor(10);
 
-        PackageSize[] sizeResponseArray = new PackageSize[]{packageSizeResponse};
+        PackageSize big = new PackageSize();
+        big.setId(1);
+        big.setDescription("Big");
+        big.setPriceFactor(12);
 
-        String mockSize = new ObjectMapper().writeValueAsString(sizeResponseArray);
+        List<PackageSize> packageSizeResponse = new java.util.ArrayList<>(Collections.emptyList());
+        packageSizeResponse.add(small);
+        packageSizeResponse.add(big);
+
+        String mockSize = new ObjectMapper().writeValueAsString(packageSizeResponse);
+
         String mockRequest = new ObjectMapper().writeValueAsString(messageType);
         when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockSize);
 
@@ -92,23 +111,34 @@ public class BackEndServiceTests {
 
     @Test
     public void getTransportTest() throws IOException {
-        ArrayList expected = new ArrayList();
+        ArrayList<String> expected = new ArrayList<>();
         expected.add("Air");
         expected.add("Land");
         messageType.setType("transportType");
         messageType.setOrigin(null);
         messageType.setDestination(null);
 
-        TransportType transportTypeResponse = new TransportType();
-        transportTypeResponse.setId(1);
-        transportTypeResponse.setDescription("Land");
-        transportTypeResponse.setPricePerMile(2);
+        TransportType land = new TransportType();
+        land.setId(1);
+        land.setDescription("Land");
+        land.setPricePerMile(2);
 
-        TransportType[] transportResponseArray = new TransportType[]{transportTypeResponse};
+        TransportType air = new TransportType();
+        air.setId(2);
+        air.setDescription("Air");
+        air.setPricePerMile(13);
 
-        String mockTransport = new ObjectMapper().writeValueAsString(transportResponseArray);
+
+        List<TransportType> transportTypeResponse = new java.util.ArrayList<>(Collections.emptyList());
+        transportTypeResponse.add(land);
+        transportTypeResponse.add(air);
+
+        String mockTransport = new ObjectMapper().writeValueAsString(transportTypeResponse);
+
+
         String mockRequest = new ObjectMapper().writeValueAsString(messageType);
         when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockTransport);
+
 
         List<String> actual = backEndService.getTransport();
 
@@ -118,25 +148,35 @@ public class BackEndServiceTests {
 
     @Test
     public void getVelocityTest() throws IOException {
-        ArrayList expected = new ArrayList();
+        ArrayList<String> expected = new ArrayList<>();
         expected.add("Express");
         expected.add("Regular");
         messageType.setType("transportVelocity");
         messageType.setOrigin(null);
         messageType.setDestination(null);
 
-        TransportVelocity transportVelocityResponse = new TransportVelocity();
-        transportVelocityResponse.setId(1);
-        transportVelocityResponse.setDescription("Regular");
-        transportVelocityResponse.setPriceFactor(5);
+        TransportVelocity regular = new TransportVelocity();
+        regular.setId(1);
+        regular.setDescription("Regular");
+        regular.setPriceFactor(5);
 
-        TransportVelocity[] velocityResponseArray = new TransportVelocity[]{transportVelocityResponse};
+        TransportVelocity express = new TransportVelocity();
+        express.setId(2);
+        express.setDescription("Express");
+        express.setPriceFactor(10);
 
-        String mockVelority = new ObjectMapper().writeValueAsString(velocityResponseArray);
+        List<TransportVelocity> transportVelocityResponse = new java.util.ArrayList<>(Collections.emptyList());
+        transportVelocityResponse.add(regular);
+        transportVelocityResponse.add(express);
+
+        String mockVelocity = new ObjectMapper().writeValueAsString(transportVelocityResponse);
+
+
         String mockRequest = new ObjectMapper().writeValueAsString(messageType);
-        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockVelority);
+        when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockVelocity);
 
         List<String> actual = backEndService.getVelocity();
+        Assert.assertEquals(expected, actual);
 
         Assert.assertEquals(expected, actual);
 
@@ -144,7 +184,7 @@ public class BackEndServiceTests {
 
     @Test
     public void getCityTest() throws IOException {
-        ArrayList expected = new ArrayList();
+        ArrayList<String> expected = new ArrayList<>();
         expected.add("Aguascalientes");
         expected.add("Chihuahua");
         expected.add("Leon");
@@ -193,11 +233,7 @@ public class BackEndServiceTests {
 
     @Test
     public void getRouteTest() throws IOException {
-        ArrayList expected = new ArrayList();
-        expected.add("Chihuahua");
-        expected.add("Tampico");
-        expected.add("Puebla");
-        expected.add("Acapulco");
+        String expected = "Chihuahua, Tampico, Puebla, Acapulco ";
 
         messageType.setType("routesList");
         messageType.setOrigin("Chihuahua");
@@ -228,7 +264,7 @@ public class BackEndServiceTests {
         String mockRequest = new ObjectMapper().writeValueAsString(messageType);
         when(rabbitTemplateMock.convertSendAndReceive(mockRequest)).thenReturn(mockRoutes);
 
-        List<String> actual = backEndService.getRoute("Chihuahua","Acapulco");
+        String actual = backEndService.getRoute("Chihuahua","Acapulco");
 
         Assert.assertEquals(expected, actual);
 
