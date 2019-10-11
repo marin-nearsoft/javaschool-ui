@@ -2,6 +2,7 @@ package com.javaschool.queue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaschool.common.GlobalProperties;
+import com.javaschool.common.Mocks;
 import com.javaschool.common.QueueException;
 import com.javaschool.common.QueueMessageRequest;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ public class QueueSender {
     private AmqpTemplate rabbitTemplate;
     private GlobalProperties globalProperties;
     private ObjectMapper objectMapper = new ObjectMapper();
+    private Mocks mocks = new Mocks();
 
     public QueueSender(final AmqpTemplate rabbitTemplate, GlobalProperties globalProperties) {
         this.rabbitTemplate = rabbitTemplate;
@@ -32,12 +34,13 @@ public class QueueSender {
         return message;
     }
 
-    public <T> List<T> messageRequest(String type, T[] typeClass) {
-        QueueMessageRequest messageRequest = new QueueMessageRequest();
+    public <T> List<T> messageRequest(QueueMessageRequest messageRequest, T[] typeClass) {
         List messageResponse;
-        messageRequest.setType(type);
         try {
             String queueResponse = sendMessage(messageRequest);
+            if(queueResponse == null){
+                queueResponse = mocks.messageResponse(messageRequest);
+            }
             messageResponse = Arrays.asList(objectMapper.readValue(queueResponse, typeClass.getClass()));
         } catch (Exception e) {
             logger.error(e.getMessage());
