@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class ShippingInformation implements Serializable {
+
     private String folio;
     private List<String> path;
     private BigDecimal price;

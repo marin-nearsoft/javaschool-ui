@@ -3,6 +3,7 @@ package com.javaschool.common;
 import java.io.Serializable;
 
 public class ShippingPayload implements Serializable {
+
     private String origin;
     private String destination;
     private String size;

@@ -46,7 +46,7 @@ public class ShippingController {
     }
 
     @RequestMapping(name = "/checkPrice", method = RequestMethod.POST)
-    public ShippingInformation getRoute(@RequestBody ShippingPayload payload) {
+    public ShippingInformation getShippingInformation(@RequestBody ShippingPayload payload) {
         return shippingService.getShippingInformation(payload);
     }
 }

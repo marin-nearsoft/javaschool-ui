@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ public class ShippingServiceImpl implements ShippingService {
     private static final Logger logger = LoggerFactory.getLogger(ShippingServiceImpl.class);
     private QueueSender queueSender;
     private QueueMessageRequest messageRequest;
+    private ShippingCharacteristics information = new ShippingCharacteristics();
     private static final String PACKAGE_SIZE = "packageSize";
     private static final String PACKAGE_TYPE = "packageType";
     private static final String TRANSPORT_VELOCITY = "transportVelocity";
@@ -33,6 +35,7 @@ public class ShippingServiceImpl implements ShippingService {
         messageRequest = new QueueMessageRequest();
         messageRequest.setType(PACKAGE_SIZE);
         List<PackageSize> packageSizes = queueSender.messageRequest(messageRequest, new PackageSize[0]);
+        information.setPackageSize(packageSizes);
         List<String> sizes = packageSizes.stream()
                 .map(PackageSize::getDescription)
                 .collect(Collectors.toList());
@@ -44,6 +47,7 @@ public class ShippingServiceImpl implements ShippingService {
         messageRequest = new QueueMessageRequest();
         messageRequest.setType(PACKAGE_TYPE);
         List<PackageType> packageTypes = queueSender.messageRequest(messageRequest, new PackageType[0]);
+        information.setPackageType(packageTypes);
         List<String> types = packageTypes.stream()
                 .map(PackageType::getDescription)
                 .collect(Collectors.toList());
@@ -55,6 +59,7 @@ public class ShippingServiceImpl implements ShippingService {
         messageRequest = new QueueMessageRequest();
         messageRequest.setType(TRANSPORT_VELOCITY);
         List<TransportVelocity> transportVelocities = queueSender.messageRequest(messageRequest, new TransportVelocity[0]);
+        information.setTransportVelocity(transportVelocities);
         List<String> velocities = transportVelocities.stream()
                 .map(TransportVelocity::getDescription)
                 .collect(Collectors.toList());
@@ -66,6 +71,7 @@ public class ShippingServiceImpl implements ShippingService {
         messageRequest = new QueueMessageRequest();
         messageRequest.setType(TRANSPORT_TYPE);
         List<TransportType> transportTypes = queueSender.messageRequest(messageRequest, new TransportType[0]);
+        information.setTransportType(transportTypes);
         List<String> types = transportTypes.stream()
                 .map(TransportType::getDescription)
                 .collect(Collectors.toList());
@@ -88,7 +94,12 @@ public class ShippingServiceImpl implements ShippingService {
     public ShippingInformation getShippingInformation(ShippingPayload shippingPayload) {
         ShippingInformation shippingInformation = new ShippingInformation();
         shippingInformation.setPath(getPath(shippingPayload.getOrigin(), shippingPayload.getDestination()));
+        shippingInformation.setPrice(getPrice(shippingPayload));
         return shippingInformation;
+    }
+
+    private BigDecimal getPrice(ShippingPayload shippingPayload){
+        return BigDecimal.TEN;
     }
 
     private List<String> getPath(String origin, String destination) {
