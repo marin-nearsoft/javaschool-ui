@@ -61,4 +61,11 @@ public class ShipmentRetrievalController {
         return queueResponseHandler.getInformation();
     }
 
+    @PostMapping("/confirmation")
+    public ShipmentInformation postInformation(@RequestBody PriceRequest values) {
+
+        return queueResponseHandler.postInformation(values.getPrice(), values.getPath());
+
+    }
+
 }

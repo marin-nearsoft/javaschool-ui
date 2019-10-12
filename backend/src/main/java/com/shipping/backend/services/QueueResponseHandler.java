@@ -1,7 +1,6 @@
 package com.shipping.backend.services;
 
 import com.shipping.backend.models.common.*;
-import com.shipping.backend.models.dijkstra.CityVertex;
 
 import java.util.List;
 
@@ -21,5 +20,7 @@ public interface QueueResponseHandler {
     double getPrice(String size, String type, String time, String transport);
 
     List<ShipmentInformation> getInformation();
+
+    ShipmentInformation postInformation(double price, String path);
 
 }

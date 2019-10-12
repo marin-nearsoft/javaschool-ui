@@ -170,5 +170,20 @@ public class QueueResponseHandlerImp implements QueueResponseHandler {
 
     }
 
+    @Override
+    public ShipmentInformation postInformation(double price, String path) {
+        try {
+            int random = (int) (Math.random() * ((99999 - 1) + 1)) + 1;
+            ShipmentInformation shipmentInformation = new ShipmentInformation();
+            shipmentInformation.setFolio(random);
+            shipmentInformation.setPath(path);
+            shipmentInformation.setPrice(price);
+            return shipmentInformation;
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+            throw new CustomException("Service not available, please contact your administrator");
+        }
+    }
+
 
 }
