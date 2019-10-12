@@ -1,12 +1,13 @@
 package com.javaschool.common;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class TransportType implements Serializable {
 
     private int id;
     private String description;
-    private int pricePerMile;
+    private BigDecimal pricePerMile;
 
     public int getId() {
         return id;
@@ -24,9 +25,9 @@ public class TransportType implements Serializable {
         this.description = description;
     }
 
-    public int getPricePerMile() { return pricePerMile; }
+    public BigDecimal getPricePerMile() { return pricePerMile; }
 
-    public void setPricePerMile(int pricePerMile) {
+    public void setPricePerMile(BigDecimal pricePerMile) {
         this.pricePerMile = pricePerMile;
     }
 }

@@ -1,20 +1,22 @@
 package com.javaschool.service;
 
-import com.javaschool.common.GlobalProperties;
-import com.javaschool.common.QueueException;
-import com.javaschool.common.ShippingPayload;
+import com.javaschool.common.*;
 import com.javaschool.queue.QueueSender;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -28,16 +30,21 @@ public class ShippingServiceImplTest {
     private AmqpTemplate amqpTemplateMock;
     private ShippingService shippingService;
     private ShippingPayload shippingPayload;
+    private ShippingCharacteristics shippingCharacteristics;
+    private PackageType packageType;
+    private PackageSize packageSize;
+    private TransportType transportType;
+    private TransportVelocity transportVelocity;
     private static final String PACKAGE_SIZE_REQUEST = "{\"type\":\"packageSize\",\"origin\":null,\"destination\":null}";
     private static final String PACKAGE_TYPE_REQUEST = "{\"type\":\"packageType\",\"origin\":null,\"destination\":null}";
     private static final String TRANSPORT_VELOCITY_REQUEST = "{\"type\":\"transportVelocity\",\"origin\":null,\"destination\":null}";
     private static final String TRANSPORT_TYPE_REQUEST = "{\"type\":\"transportType\",\"origin\":null,\"destination\":null}";
-    private static final String CITY_REQUEST =  "{\"type\":\"city\",\"origin\":null,\"destination\":null}";
-    private static final String ROUTE_REQUEST =  "{\"type\":\"routesList\",\"origin\":\"Chihuahua\",\"destination\":\"Cancun\"}";
-    private static final String PACKAGE_SIZE_RESPONSE =  "[{\"id\":1,\"description\":\"Small\",\"priceFactor\":5},{\"id\":2,\"description\":\"Medium\",\"priceFactor\":10},{\"id\":3,\"description\":\"Large\",\"priceFactor\":15}]";
-    private static final String PACKAGE_TYPE_RESPONSE =  "[{\"id\":2,\"description\":\"Box\",\"price\":10},{\"id\":3,\"description\":\"Envelope\",\"price\":5}]";
+    private static final String CITY_REQUEST = "{\"type\":\"city\",\"origin\":null,\"destination\":null}";
+    private static final String ROUTE_REQUEST = "{\"type\":\"routesList\",\"origin\":\"Chihuahua\",\"destination\":\"Cancun\"}";
+    private static final String PACKAGE_SIZE_RESPONSE = "[{\"id\":1,\"description\":\"Small\",\"priceFactor\":5},{\"id\":2,\"description\":\"Medium\",\"priceFactor\":10},{\"id\":3,\"description\":\"Large\",\"priceFactor\":15}]";
+    private static final String PACKAGE_TYPE_RESPONSE = "[{\"id\":2,\"description\":\"Box\",\"price\":10},{\"id\":3,\"description\":\"Envelope\",\"price\":5}]";
     private static final String TRANSPORT_VELOCITY_RESPONSE = "[{\"id\":1,\"description\":\"Regular\",\"priceFactor\":5},{\"id\":2,\"description\":\"Express\",\"priceFactor\":10},{\"id\":3,\"description\":\"Slow\",\"priceFactor\":0}]";
-    private static final String TRANSPORT_TYPE_RESPONSE =  "[{\"id\":2,\"description\":\"Land\",\"pricePerMile\":2},{\"id\":1,\"description\":\"Air\",\"pricePerMile\":5}]";
+    private static final String TRANSPORT_TYPE_RESPONSE = "[{\"id\":2,\"description\":\"Land\",\"pricePerMile\":2},{\"id\":1,\"description\":\"Air\",\"pricePerMile\":5}]";
     private static final String CITY_RESPONSE = "[{\"id\":9,\"name\":\"Leon\",\"tax\":10,\"seaport\":false,\"airport\":false},{\"id\":12," +
             "\"name\":\"Cuernavaca\",\"tax\":0,\"seaport\":false,\"airport\":false},{\"id\":23,\"name\":\"Tuxtla Gutierrez\"" +
             ",\"tax\":5,\"seaport\":false,\"airport\":false},{\"id\":26,\"name\":\"Veracruz\",\"tax\":10,\"seaport\":true,\"" +
@@ -317,7 +324,15 @@ public class ShippingServiceImplTest {
             "]";
     private static final String ORIGIN = "Chihuahua";
     private static final String DESTINATION = "Cancun";
-    private List<String> shortestPath = Collections.unmodifiableList(Arrays.asList("Chihuahua","La Paz","Durango","San Luis Potosi","Cancun"));
+    private static final String TYPE = "Box";
+    private static final BigDecimal TYPE_PRICE = new BigDecimal(10);
+    private static final String SIZE = "Small";
+    private static final BigDecimal SIZE_PRICE = new BigDecimal(5);
+    private static final String TRANSPORT = "Land";
+    private static final BigDecimal TRANSPORT_PRICE = new BigDecimal(2);
+    private static final String TIME = "Regular";
+    private static final BigDecimal TIME_PRICE = new BigDecimal(5);
+    private List<String> shortestPath = Collections.unmodifiableList(Arrays.asList("Chihuahua", "La Paz", "Durango", "San Luis Potosi", "Cancun"));
 
     @Before
     public void setup() {
@@ -328,6 +343,35 @@ public class ShippingServiceImplTest {
         shippingPayload = new ShippingPayload();
         shippingPayload.setOrigin(ORIGIN);
         shippingPayload.setDestination(DESTINATION);
+        shippingPayload.setType(TYPE);
+        shippingPayload.setSize(SIZE);
+        shippingPayload.setTransport(TRANSPORT);
+        shippingPayload.setTime(TIME);
+        shippingCharacteristics = new ShippingCharacteristics();
+        packageType = new PackageType();
+        packageType.setDescription(TYPE);
+        packageType.setPrice(TYPE_PRICE);
+        List<PackageType> packageTypes = new ArrayList<>();
+        packageTypes.add(packageType);
+        shippingCharacteristics.setPackageType(packageTypes);
+        packageSize = new PackageSize();
+        packageSize.setDescription(SIZE);
+        packageSize.setPriceFactor(SIZE_PRICE);
+        List<PackageSize> packageSizes = new ArrayList<>();
+        packageSizes.add(packageSize);
+        shippingCharacteristics.setPackageSize(packageSizes);
+        transportType = new TransportType();
+        transportType.setDescription(TRANSPORT);
+        transportType.setPricePerMile(TRANSPORT_PRICE);
+        List<TransportType> transportTypes = new ArrayList<>();
+        transportTypes.add(transportType);
+        shippingCharacteristics.setTransportType(transportTypes);
+        transportVelocity = new TransportVelocity();
+        transportVelocity.setDescription(TIME);
+        transportVelocity.setPriceFactor(TIME_PRICE);
+        List<TransportVelocity> transportVelocities = new ArrayList<>();
+        transportVelocities.add(transportVelocity);
+        shippingCharacteristics.setTransportVelocity(transportVelocities);
     }
 
     @Test
@@ -345,7 +389,7 @@ public class ShippingServiceImplTest {
     }
 
     @Test(expected = QueueException.class)
-    public void getPackageSizeExceptionTest(){
+    public void getPackageSizeExceptionTest() {
         when(amqpTemplateMock.convertSendAndReceive(null, null, PACKAGE_SIZE_REQUEST)).thenThrow(QueueException.class);
         shippingService.getPackageSize();
     }
@@ -365,7 +409,7 @@ public class ShippingServiceImplTest {
     }
 
     @Test(expected = QueueException.class)
-    public void getPackageTypeExceptionTest(){
+    public void getPackageTypeExceptionTest() {
         when(amqpTemplateMock.convertSendAndReceive(null, null, PACKAGE_TYPE_REQUEST)).thenThrow(QueueException.class);
         shippingService.getPackageType();
     }
@@ -385,7 +429,7 @@ public class ShippingServiceImplTest {
     }
 
     @Test(expected = QueueException.class)
-    public void getTransportVelocityExceptionTest(){
+    public void getTransportVelocityExceptionTest() {
         when(amqpTemplateMock.convertSendAndReceive(null, null, TRANSPORT_VELOCITY_REQUEST)).thenThrow(QueueException.class);
         shippingService.getTransportVelocity();
     }
@@ -405,7 +449,7 @@ public class ShippingServiceImplTest {
     }
 
     @Test(expected = QueueException.class)
-    public void geTransportTypeExceptionTest(){
+    public void geTransportTypeExceptionTest() {
         when(amqpTemplateMock.convertSendAndReceive(null, null, TRANSPORT_TYPE_REQUEST)).thenThrow(QueueException.class);
         shippingService.getTransportType();
     }
@@ -429,7 +473,7 @@ public class ShippingServiceImplTest {
     }
 
     @Test
-    public void getCityElementsOrderTest(){
+    public void getCityElementsOrderTest() {
         when(amqpTemplateMock.convertSendAndReceive(null, null, CITY_REQUEST)).thenReturn(CITY_RESPONSE);
         List<String> cities = shippingService.getCity();
         assertThat(cities, contains("Acapulco", "Aguascalientes", "Cancun", "Cdmx", "Chihuahua",
@@ -440,13 +484,14 @@ public class ShippingServiceImplTest {
     }
 
     @Test(expected = QueueException.class)
-    public void getCityExceptionTest(){
+    public void getCityExceptionTest() {
         when(amqpTemplateMock.convertSendAndReceive(null, null, CITY_REQUEST)).thenThrow(QueueException.class);
         shippingService.getCity();
     }
 
     @Test
     public void getRouteTest() {
+        Whitebox.setInternalState(shippingService, "shippingCharacteristics", shippingCharacteristics);
         when(amqpTemplateMock.convertSendAndReceive(null, null, ROUTE_REQUEST)).thenReturn(ROUTE_RESPONSE);
         List<String> routes = shippingService.getShippingInformation(shippingPayload).getPath();
         assertEquals(routes.size(), 5);
@@ -454,13 +499,15 @@ public class ShippingServiceImplTest {
 
     @Test
     public void getRouteElementsTest() {
+        Whitebox.setInternalState(shippingService, "shippingCharacteristics", shippingCharacteristics);
         when(amqpTemplateMock.convertSendAndReceive(null, null, ROUTE_REQUEST)).thenReturn(ROUTE_RESPONSE);
         List<String> routes = shippingService.getShippingInformation(shippingPayload).getPath();
         assertThat(routes, equalTo(shortestPath));
     }
 
     @Test(timeout = 1000)
-    public void getRouteTimeTest(){
+    public void getRouteTimeTest() {
+        Whitebox.setInternalState(shippingService, "shippingCharacteristics", shippingCharacteristics);
         when(amqpTemplateMock.convertSendAndReceive(null, null, ROUTE_REQUEST)).thenReturn(ROUTE_RESPONSE);
         List<String> routes = shippingService.getShippingInformation(shippingPayload).getPath();
         assertThat(routes, equalTo(shortestPath));
@@ -470,5 +517,13 @@ public class ShippingServiceImplTest {
     public void getRouteVelocityExceptionTest() {
         when(amqpTemplateMock.convertSendAndReceive(null, null, ROUTE_REQUEST)).thenThrow(QueueException.class);
         shippingService.getShippingInformation(shippingPayload);
+    }
+
+    @Test
+    public void getPriceTest() {
+        Whitebox.setInternalState(shippingService, "shippingCharacteristics", shippingCharacteristics);
+        when(amqpTemplateMock.convertSendAndReceive(null, null, ROUTE_REQUEST)).thenReturn(ROUTE_RESPONSE);
+        BigDecimal price = shippingService.getShippingInformation(shippingPayload).getPrice();
+        assertThat(price.doubleValue(), is(0.6));
     }
 }

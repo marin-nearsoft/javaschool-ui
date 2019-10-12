@@ -4,8 +4,6 @@ import com.javaschool.algorithm.Dijkstra;
 import com.javaschool.algorithm.Node;
 import com.javaschool.common.*;
 import com.javaschool.queue.QueueSender;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,10 +13,9 @@ import java.util.stream.Collectors;
 @Service
 public class ShippingServiceImpl implements ShippingService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ShippingServiceImpl.class);
     private QueueSender queueSender;
     private QueueMessageRequest messageRequest;
-    private ShippingCharacteristics information = new ShippingCharacteristics();
+    private ShippingCharacteristics shippingCharacteristics = new ShippingCharacteristics();
     private static final String PACKAGE_SIZE = "packageSize";
     private static final String PACKAGE_TYPE = "packageType";
     private static final String TRANSPORT_VELOCITY = "transportVelocity";
@@ -35,7 +32,7 @@ public class ShippingServiceImpl implements ShippingService {
         messageRequest = new QueueMessageRequest();
         messageRequest.setType(PACKAGE_SIZE);
         List<PackageSize> packageSizes = queueSender.messageRequest(messageRequest, new PackageSize[0]);
-        information.setPackageSize(packageSizes);
+        shippingCharacteristics.setPackageSize(packageSizes);
         List<String> sizes = packageSizes.stream()
                 .map(PackageSize::getDescription)
                 .collect(Collectors.toList());
@@ -47,7 +44,7 @@ public class ShippingServiceImpl implements ShippingService {
         messageRequest = new QueueMessageRequest();
         messageRequest.setType(PACKAGE_TYPE);
         List<PackageType> packageTypes = queueSender.messageRequest(messageRequest, new PackageType[0]);
-        information.setPackageType(packageTypes);
+        shippingCharacteristics.setPackageType(packageTypes);
         List<String> types = packageTypes.stream()
                 .map(PackageType::getDescription)
                 .collect(Collectors.toList());
@@ -59,7 +56,7 @@ public class ShippingServiceImpl implements ShippingService {
         messageRequest = new QueueMessageRequest();
         messageRequest.setType(TRANSPORT_VELOCITY);
         List<TransportVelocity> transportVelocities = queueSender.messageRequest(messageRequest, new TransportVelocity[0]);
-        information.setTransportVelocity(transportVelocities);
+        shippingCharacteristics.setTransportVelocity(transportVelocities);
         List<String> velocities = transportVelocities.stream()
                 .map(TransportVelocity::getDescription)
                 .collect(Collectors.toList());
@@ -71,7 +68,7 @@ public class ShippingServiceImpl implements ShippingService {
         messageRequest = new QueueMessageRequest();
         messageRequest.setType(TRANSPORT_TYPE);
         List<TransportType> transportTypes = queueSender.messageRequest(messageRequest, new TransportType[0]);
-        information.setTransportType(transportTypes);
+        shippingCharacteristics.setTransportType(transportTypes);
         List<String> types = transportTypes.stream()
                 .map(TransportType::getDescription)
                 .collect(Collectors.toList());
@@ -98,8 +95,34 @@ public class ShippingServiceImpl implements ShippingService {
         return shippingInformation;
     }
 
-    private BigDecimal getPrice(ShippingPayload shippingPayload){
-        return BigDecimal.TEN;
+    private BigDecimal getPrice(ShippingPayload shippingPayload) {
+        PackageType packageType = shippingCharacteristics.getPackageType().stream()
+                .filter(type -> shippingPayload.getType().equals(type.getDescription()))
+                .findAny()
+                .orElse(null);
+
+        PackageSize packageSize = shippingCharacteristics.getPackageSize().stream()
+                .filter(size -> shippingPayload.getSize().equals(size.getDescription()))
+                .findAny()
+                .orElse(null);
+
+        TransportType transportType = shippingCharacteristics.getTransportType().stream()
+                .filter(transport -> shippingPayload.getTransport().equals(transport.getDescription()))
+                .findAny()
+                .orElse(null);
+
+        TransportVelocity transportVelocity = shippingCharacteristics.getTransportVelocity().stream()
+                .filter(time -> shippingPayload.getTime().equals(time.getDescription()))
+                .findAny()
+                .orElse(null);
+
+        BigDecimal pricePackageType = packageType.getPrice();
+        BigDecimal pricePackageSize = packageSize.getPriceFactor().divide(new BigDecimal(100));
+        BigDecimal priceTransportType = transportType.getPricePerMile();
+        BigDecimal priceTransportVelocity = transportVelocity.getPriceFactor().divide(new BigDecimal(100));
+
+        return pricePackageType.multiply(pricePackageSize)
+                .add(priceTransportType.multiply(priceTransportVelocity));
     }
 
     private List<String> getPath(String origin, String destination) {

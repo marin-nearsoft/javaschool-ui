@@ -1,12 +1,13 @@
 package com.javaschool.common;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class PackageType implements Serializable {
 
     private int id;
     private String description;
-    private int price;
+    private BigDecimal price;
 
     public int getId() {
         return id;
@@ -24,9 +25,9 @@ public class PackageType implements Serializable {
         this.description = description;
     }
 
-    public int getPrice() { return price; }
+    public BigDecimal getPrice() { return price; }
 
-    public void setPrice(int price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 }
